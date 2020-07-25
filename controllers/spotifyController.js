@@ -1,0 +1,153 @@
+const axios = require('axios');
+const querystring = require('querystring');
+const dotenv = require('dotenv');
+
+dotenv.config({ path: '../config.env' });
+
+const clientId = process.env.CLIENT_ID;
+const clientSecret = process.env.CLIENT_SECRET;
+const redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
+
+const generateRandomString = function (length) {
+  let text = '';
+  const possible =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+  for (let i = 0; i < length; i += 1) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+};
+
+const stateKey = 'spotify_auth_state';
+
+exports.login = (req, res, next) => {
+  const state = generateRandomString(16);
+  res.cookie(stateKey, state);
+
+  // your application requests authorization
+  const scope = 'user-read-private user-read-email';
+
+  const redirectParams = querystring.stringify({
+    response_type: 'code',
+    client_id: clientId,
+    scope: scope,
+    redirect_uri: redirectUri,
+    state: state,
+  });
+
+  res.redirect(`https://accounts.spotify.com/authorize?${redirectParams}`);
+};
+
+exports.callback = async (req, res, next) => {
+  const code = req.query.code || null;
+  const state = req.query.state || null;
+  const storedState = req.cookies ? req.cookies[stateKey] : null;
+
+  if (state === null || state !== storedState) {
+    const stateMismatch = querystring.stringify({
+      error: 'state_mismatch',
+    });
+
+    res.redirect(`/#${stateMismatch}`);
+  } else {
+    res.clearCookie(stateKey);
+
+    const postHeaders = {
+      Accept: 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    try {
+      const response = await axios({
+        url: 'https://accounts.spotify.com/api/token',
+        method: 'post',
+        params: {
+          client_id: clientId,
+          client_secret: clientSecret,
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: redirectUri,
+        },
+        postHeaders,
+      });
+
+      if (response.status === 200) {
+        const accessToken = response.data.access_token;
+        const refreshToken = response.data.refresh_token;
+        const getUrl = 'https://api.spotify.com/v1/me';
+
+        const getHeaders = {
+          Accept: 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        };
+
+        try {
+          const getRes = await axios({
+            method: 'get',
+            url: getUrl,
+            getHeaders,
+            params: {
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            },
+          });
+
+          if (getRes.status === 200) {
+            console.log('LOGIN SUCCESSFUL!', getRes.data);
+          }
+
+          const redirectParams = querystring.stringify({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+
+          res.redirect(`/api/v1/users/#${redirectParams}`);
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        const invalidToken = querystring.stringify({
+          error: 'invalid_token',
+        });
+        res.redirect(`/#${invalidToken}`);
+      }
+    } catch (err) {
+      console.log(err.response);
+    }
+  }
+};
+
+exports.getRefreshToken = async (req, res, next) => {
+  // requesting access token from refresh token
+  const refreshToken = req.query.refresh_token;
+
+  const refreshHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+  };
+
+  try {
+    const refreshRes = await axios({
+      url: 'https://accounts.spotify.com/api/token',
+      method: 'post',
+      params: {
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      },
+      refreshHeaders,
+    });
+
+    if (refreshRes.status === 200) {
+      const accessToken = refreshRes.data.access_token;
+      console.log('REFRESH TOKEN REQUEST SUCCESSFUL!', refreshRes.data);
+      res.send({
+        access_token: accessToken,
+      });
+    }
+  } catch (err) {
+    console.log(err.response);
+  }
+};
