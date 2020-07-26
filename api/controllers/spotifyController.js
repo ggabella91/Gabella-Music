@@ -102,8 +102,6 @@ exports.callback = async (req, res, next) => {
             refresh_token: refreshToken,
           });
 
-          console.log(redirectParams);
-
           res.redirect(`http://localhost:3000?${redirectParams}`);
         } catch (err) {
           console.log(err);
