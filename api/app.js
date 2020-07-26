@@ -45,6 +45,9 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cors());
+
+// Access-Control-Allow-Origin: * (everywhere)
+app.options('*', cors());
 app.use(cookieParser());
 
 // Data sanitization to prevent NoSQL query injection

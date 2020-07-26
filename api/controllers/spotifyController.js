@@ -102,7 +102,9 @@ exports.callback = async (req, res, next) => {
             refresh_token: refreshToken,
           });
 
-          res.redirect(`/api/v1/users/#${redirectParams}`);
+          console.log(redirectParams);
+
+          res.redirect(`http://localhost:3000?${redirectParams}`);
         } catch (err) {
           console.log(err);
         }
