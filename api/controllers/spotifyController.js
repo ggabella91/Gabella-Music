@@ -26,7 +26,8 @@ exports.login = (req, res, next) => {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  const scope = 'user-read-private user-read-email';
+  const scope =
+    'user-read-private user-read-email user-library-read user-top-read user-read-recently-played user-read-playback-position user-read-playback-state user-read-currently-playing playlist-read-collaborative playlist-read-private';
 
   const redirectParams = querystring.stringify({
     response_type: 'code',
@@ -97,12 +98,17 @@ exports.callback = async (req, res, next) => {
             console.log('LOGIN SUCCESSFUL!', getRes.data);
           }
 
-          const redirectParams = querystring.stringify({
-            access_token: accessToken,
-            refresh_token: refreshToken,
+          res.cookie('spotifyAuthToken', accessToken, {
+            httpOnly: true,
+            /*secure: req.secure || req.headers['x-forwarded-proto'] === 'https',*/
           });
 
-          res.redirect(`http://localhost:3000?${redirectParams}`);
+          res.cookie('spotifyRefreshToken', refreshToken, {
+            httpOnly: true,
+            /*secure: req.secure || req.headers['x-forwarded-proto'] === 'https',*/
+          });
+
+          res.redirect('http://localhost:3000/');
         } catch (err) {
           console.log(err);
         }
@@ -120,7 +126,7 @@ exports.callback = async (req, res, next) => {
 
 exports.getRefreshToken = async (req, res, next) => {
   // requesting access token from refresh token
-  const refreshToken = req.query.refresh_token;
+  const refreshToken = req.cookies.spotifyRefreshToken;
 
   const refreshHeaders = {
     Accept: 'application/json',
@@ -142,12 +148,42 @@ exports.getRefreshToken = async (req, res, next) => {
 
     if (refreshRes.status === 200) {
       const accessToken = refreshRes.data.access_token;
+      const newRefreshToken = refreshRes.data.refresh_token;
       console.log('REFRESH TOKEN REQUEST SUCCESSFUL!', refreshRes.data);
       res.send({
         access_token: accessToken,
+        refresh_token: newRefreshToken,
       });
     }
   } catch (err) {
     console.log(err.response);
+  }
+};
+
+exports.getEndpointData = async (req, res, next) => {
+  const accessToken = req.cookies.spotifyAuthToken;
+  const { endpoint } = req.body;
+
+  try {
+    const endpointRes = await axios.get(
+      `https://api.spotify.com/v1/${endpoint}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    if (endpointRes.status === 200) {
+      console.log(endpointRes.data);
+      res.status(200).send({
+        data: endpointRes.data,
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    // res.status(err.).send({
+    //   data: err.message,
+    // });
   }
 };

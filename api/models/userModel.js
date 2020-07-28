@@ -41,9 +41,6 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords do not match!',
     },
   },
-  spotifyAuthToken: String,
-  spotifyAuthExpires: Date,
-  spotifyRefreshToken: String,
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -56,37 +53,22 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', async function (next) {
   // Only run this function if the password or the Spotify auth token were modified
-  if (!this.isModified('password') && !this.isModified('spotifyAuthToken')) {
+  if (!this.isModified('password')) {
     return next();
   }
 
-  if (this.isModified('password')) {
-    // Hash the password with a cost of 12
-    this.password = await bcrypt.hash(this.password, 12);
+  // Hash the password with a cost of 12
+  this.password = await bcrypt.hash(this.password, 12);
 
-    //Delete passwordConfirm field
-    this.passwordConfirm = undefined;
-    next();
-  } else if (this.isModified('spotifyAuthToken')) {
-    // Hash the Spotify auth token with a cost of 12
-    this.spotifyAuthToken = await bcrypt.hash(this.spotifyAuthToken, 12);
-    // Hash the Spotify refresh token with a cost of 12
-    this.spotifyRefreshToken = await bcrypt.hash(this.spotifyRefreshToken, 12);
-    next();
-  }
+  //Delete passwordConfirm field
+  this.passwordConfirm = undefined;
+  next();
 });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
-  next();
-});
-
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('spotifyAuthToken')) return next();
-
-  this.spotifyAuthExpires = Date.now() + 60 * 60 * 1000;
   next();
 });
 

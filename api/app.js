@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
@@ -44,11 +45,27 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
-app.use(cors());
+app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'application/json',
+      'Authorization',
+      'Set-Cookie',
+    ],
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    preflightContinue: true,
+  })
+);
 
 // Access-Control-Allow-Origin: * (everywhere)
-app.options('*', cors());
-app.use(cookieParser());
+// app.options(cors());
+
+app.use(bodyParser.json());
 
 // Data sanitization to prevent NoSQL query injection
 app.use(mongoSanitize());

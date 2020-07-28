@@ -7,6 +7,8 @@ router.get('/login', spotifyController.login);
 
 router.get('/callback', spotifyController.callback);
 
-router.get('/refresh_token', spotifyController.getRefreshToken);
+router.get('/refreshToken', spotifyController.getRefreshToken);
+
+router.post('/getEndpointData', spotifyController.getEndpointData);
 
 module.exports = router;

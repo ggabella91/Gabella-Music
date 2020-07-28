@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
 import axios from 'axios';
-import queryString from 'query-string';
+axios.defaults.withCredentials = true;
+
+//import queryString from 'query-string';
 
 class App extends React.Component {
   state = {
@@ -11,72 +13,55 @@ class App extends React.Component {
   };
 
   componentDidMount = async () => {
-    let parsedQueryString = queryString.parse(window.location.search);
-    let accessToken = parsedQueryString.access_token;
-    let refreshToken = parsedQueryString.refresh_token;
-
-    try {
-      const data = await this.callSpotifyApi(
-        'https://api.spotify.com/v1/me',
-        accessToken,
-        refreshToken
-      );
-      const playlists = await this.callSpotifyApi(
-        'https://api.spotify.com/v1/me/playlists',
-        accessToken,
-        refreshToken
-      );
-      console.log(playlists);
-      this.setState({ user: { name: data.display_name } });
-      if (playlists) {
-        this.setState({
-          playlists: playlists.items.map((item) => ({
-            name: item.name,
-          })),
-        });
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
+    // let parsedQueryString = queryString.parse(window.location.search);
+    // let accessToken = parsedQueryString.access_token;
+    // let refreshToken = parsedQueryString.refresh_token;
+    // try {
+    //   const data = await this.callSpotifyApi('/me');
+    //   const playlists = await this.callSpotifyApi('me/playlists');
+    //   console.log(playlists);
+    //   this.setState({ user: { name: data.display_name } });
+    //   if (playlists) {
+    //     this.setState({
+    //       playlists: playlists.items.map((item) => ({
+    //         name: item.name,
+    //       })),
+    //     });
+    //   }
+    // } catch (err) {
+    //   console.log(err.message);
+    // }
   };
 
-  callSpotifyApi = async (endpointUri, accessToken, refreshToken) => {
+  callSpotifyApi = async (endpoint) => {
     try {
-      const response = await axios.get(endpointUri, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        'http://localhost:8000/api/v1/spotify/getEndpointData',
+
+        {
+          endpoint,
+          withCredentials: true,
+        }
+      );
 
       console.log(response.data);
       return response.data;
     } catch (err) {
-      console.log(err);
+      console.log('ERROR');
     }
   };
 
   handleClickSpotifyButton = async (e) => {
     e.preventDefault();
 
-    const response = await axios.get(
-      'http://localhost:8000/api/v1/spotify/login'
+    const data = await this.callSpotifyApi(
+      'me/top/artists?time_range=long_term'
     );
-
-    const data = response.data;
 
     this.setState({ data });
   };
 
   render() {
-    let spotifyDataToRender =
-      this.state.user.name && this.state.playlists
-        ? this.state.playlists.filter((playlist) =>
-            playlist.name
-              .toLowerCase()
-              .includes(this.state.filterString.toLowerCase())
-          )
-        : [];
-
     return (
       <div className='App'>
         <header className='App-header'>
@@ -104,10 +89,14 @@ class App extends React.Component {
                 <a
                   className='button spotify-button'
                   href='http://localhost:8000/api/v1/spotify/login'
-                  /*onClick={this.handleClickSpotifyButton}*/
                 >
                   Connect to Spotify
                 </a>
+              </div>
+              <div className='button' onClick={this.handleClickSpotifyButton}>
+                <button className='button spotify-button'>
+                  Get Spotify Data
+                </button>
               </div>
             </div>
           )}
