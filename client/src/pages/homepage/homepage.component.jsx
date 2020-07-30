@@ -24,26 +24,29 @@ export const callSpotifyApi = async (endpoint) => {
 export const handleClickSpotifyButton = async (e) => {
   e.preventDefault();
 
-  const data = await callSpotifyApi('me/top/artists?time_range=long_term');
+  await callSpotifyApi('me/top/artists?time_range=long_term');
 };
 
 export const HomePage = () => (
   <div className='homepage'>
     <div>
       <div>
-        <h1>Gabella Music</h1>
-        <br />
-        <p>Created by Giuliano Gabella</p>
-        <div className='button'>
-          <a
-            className='button spotify-button'
-            href='http://localhost:8000/api/v1/spotify/login'
-          >
-            Connect to Spotify
-          </a>
-        </div>
-        <div className='button' onClick={handleClickSpotifyButton}>
-          <button className='button spotify-button'>Get Spotify Data</button>
+        <div className='button-container'>
+          <div className='button'>
+            <button
+              onClick={() =>
+                (window.location = 'http://localhost:8000/api/v1/spotify/login')
+              }
+              className='button spotify-button'
+            >
+              <span>Connect to Spotify</span>
+            </button>
+          </div>
+          <div className='button' onClick={handleClickSpotifyButton}>
+            <button className='button spotify-button'>
+              <span>Get Spotify Data</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

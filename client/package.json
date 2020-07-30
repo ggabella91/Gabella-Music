@@ -40,7 +40,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "",
+  "proxy": "http://localhost:8000/",
   "author": "Giuliano Gabella",
   "license": "ISC"
 }

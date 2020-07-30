@@ -1,0 +1,39 @@
+.button-container {
+  //text-align: floor($number: 1);
+}
+
+.button {
+  border-radius: 15px;
+}
+
+.spotify-button {
+  min-width: 180px;
+  width: auto;
+  height: 60px;
+  letter-spacing: 0.5px;
+  line-height: 50px;
+  padding: 0 35px 0 35px;
+  font-weight: 380;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  text-transform: capitalize;
+  text-decoration: none;
+}
+
+.spotify-button:hover {
+  opacity: 90%;
+}
+
+span {
+  font-size: 20px;
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+  margin: auto;
+  font-family: 'Roboto', sans-serif;
+}
