@@ -1,9 +1,14 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
+import { selectCurrentUser } from '../../redux/user/user.selectors';
+
 import axios from 'axios';
 import './homepage.styles.scss';
 axios.defaults.withCredentials = true;
 
-export const callSpotifyApi = async (endpoint) => {
+const callSpotifyApi = async (endpoint) => {
   try {
     const response = await axios.post(
       'http://localhost:8000/api/v1/spotify/getEndpointData',
@@ -21,13 +26,13 @@ export const callSpotifyApi = async (endpoint) => {
   }
 };
 
-export const handleClickSpotifyButton = async (e) => {
+const handleClickSpotifyButton = async (e) => {
   e.preventDefault();
 
   await callSpotifyApi('me/top/artists?time_range=long_term');
 };
 
-export const HomePage = () => (
+const HomePage = () => (
   <div className='homepage'>
     <div>
       <div>
@@ -52,3 +57,9 @@ export const HomePage = () => (
     </div>
   </div>
 );
+
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+export default connect(mapStateToProps)(HomePage);

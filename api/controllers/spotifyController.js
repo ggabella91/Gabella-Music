@@ -108,7 +108,7 @@ exports.callback = async (req, res, next) => {
             /*secure: req.secure || req.headers['x-forwarded-proto'] === 'https',*/
           });
 
-          res.redirect('http://localhost:3000/');
+          res.redirect('http://localhost:3000/me');
         } catch (err) {
           console.log(err);
         }

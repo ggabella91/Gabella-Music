@@ -2,6 +2,7 @@ import React from 'react';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
+import { setCurrentUser } from '../../redux/user/user.actions';
 
 import './sign-in.styles.scss';
 import axios from 'axios';
@@ -13,7 +14,6 @@ class SignIn extends React.Component {
     this.state = {
       email: '',
       password: '',
-      isLoggedIn: false,
     };
   }
 
@@ -29,10 +29,12 @@ class SignIn extends React.Component {
       });
 
       if (res.status === 200) {
-        this.setState({ isLoggedIn: true });
+        this.setState({ email: '', password: '' });
+        setCurrentUser({ ...res.data.user });
       }
     } catch (err) {
       console.log(err);
+      this.setState({ email: '', password: '' });
     }
   };
 

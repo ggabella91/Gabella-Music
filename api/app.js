@@ -49,7 +49,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: /localhost:3000/,
+    origin: 'http://localhost:3000',
     credentials: true,
     allowedHeaders: [
       'Accept',
@@ -70,7 +70,7 @@ app.use(
 
 // Send 200 OK Status of the request is of the OPTIONS (pre-flight) HTTP method
 app.options('/*', (req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header(
     'Access-Control-Allow-Headers',
