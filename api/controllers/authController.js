@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const { appendFile } = require('fs');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -112,7 +113,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-// Only for rendered pages, no errors!
+// Only for rendered pages
 exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
@@ -125,21 +126,45 @@ exports.isLoggedIn = async (req, res, next) => {
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
       if (!currentUser) {
-        return next();
+        res.status(401).json({
+          status: 'User not found',
+          locals: {
+            user: null,
+          },
+        });
       }
       // 3) Check if user changed password after the token was issued
       if (currentUser.changedPasswordAfter(decoded.iat)) {
-        return next();
+        res.locals.user = '';
+        res.status(200).json({
+          status: 'User changed password',
+          locals: {
+            user: null,
+          },
+        });
       }
 
       // THERE IS A LOGGED IN USER
       res.locals.user = currentUser;
-      return next();
+      res.status(200).json({
+        status: 'success',
+        locals: {
+          user: currentUser,
+        },
+      });
+
+      res.status(200);
     } catch (err) {
-      return next();
+      return next(new AppError('Internal server error', 500));
     }
+  } else {
+    res.status(200).json({
+      status: 'No cookies found',
+      locals: {
+        user: null,
+      },
+    });
   }
-  next();
 };
 
 exports.restrictTo = (...roles) => {

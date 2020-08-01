@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch /*Redirect*/ } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -20,9 +20,9 @@ class App extends React.Component {
       'http://localhost:8000/api/v1/users/isLoggedIn'
     );
 
-    if (res.locals.user && res.locals.user.length > 0) {
+    if (res.data.locals.user) {
       setCurrentUser({
-        ...res.locals.user,
+        ...res.data.locals.user,
       });
     }
   };
@@ -32,7 +32,18 @@ class App extends React.Component {
       <div className='App'>
         <Header />
         <Switch>
-          <Route exact path='/' component={SignUpAndSignUpPage} />
+          <Route
+            exact
+            path='/'
+            render={() =>
+              this.props.currentUser !== null ? (
+                <Redirect to='/me' />
+              ) : (
+                //<SignUpAndSignUpPage />
+                <SignUpAndSignUpPage />
+              )
+            }
+          />
           <Route exact path='/me' component={HomePage} />
         </Switch>
       </div>

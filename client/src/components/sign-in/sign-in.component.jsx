@@ -1,8 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
 import { setCurrentUser } from '../../redux/user/user.actions';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import './sign-in.styles.scss';
 import axios from 'axios';
@@ -17,6 +20,13 @@ class SignIn extends React.Component {
     };
   }
 
+  componentDidUpdate = async (prevProps) => {
+    const { setCurrentUser } = this.props;
+
+    if (selectCurrentUser.name !== undefined) {
+    }
+  };
+
   handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -29,8 +39,8 @@ class SignIn extends React.Component {
       });
 
       if (res.status === 200) {
-        this.setState({ email: '', password: '' });
         setCurrentUser({ ...res.data.user });
+        this.setState({ email: '', password: '' });
       }
     } catch (err) {
       console.log(err);
@@ -83,4 +93,12 @@ class SignIn extends React.Component {
   }
 }
 
-export default SignIn;
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
