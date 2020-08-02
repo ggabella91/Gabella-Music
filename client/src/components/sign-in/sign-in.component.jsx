@@ -38,14 +38,12 @@ class SignIn extends React.Component {
 
       if (res.status === 200) {
         setCurrentUser(res.data.data.user);
-        this.setState({ email: '', password: '' });
       }
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log('Request canceled', err.message);
       } else {
         console.log(err);
-        this.setState({ email: '', password: '' });
       }
     }
   };
