@@ -1,18 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
 import { setCurrentUser } from '../../redux/user/user.actions';
-import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import './sign-in.styles.scss';
 import axios from 'axios';
 
+// NEED TO FIX MEMORY LEAK WARNING WHEN STATE IS CHANGED AND COMPONENT UNMOUNTS
+
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
+
+    this._isMounted = false;
+    this.axiosCancelSource = axios.CancelToken.source();
 
     this.state = {
       email: '',
@@ -20,31 +23,30 @@ class SignIn extends React.Component {
     };
   }
 
-  componentDidUpdate = async (prevProps) => {
-    const { setCurrentUser } = this.props;
-
-    if (selectCurrentUser.name !== undefined) {
-    }
-  };
-
   handleSubmit = async (event) => {
     event.preventDefault();
 
+    const { setCurrentUser } = this.props;
     const { email, password } = this.state;
 
     try {
       const res = await axios.post('http://localhost:8000/api/v1/users/login', {
         email,
         password,
+        cancelToken: this.axiosCancelSource.token,
       });
 
       if (res.status === 200) {
-        setCurrentUser({ ...res.data.user });
+        setCurrentUser(res.data.data.user);
         this.setState({ email: '', password: '' });
       }
     } catch (err) {
-      console.log(err);
-      this.setState({ email: '', password: '' });
+      if (axios.isCancel(err)) {
+        console.log('Request canceled', err.message);
+      } else {
+        console.log(err);
+        this.setState({ email: '', password: '' });
+      }
     }
   };
 
@@ -53,6 +55,16 @@ class SignIn extends React.Component {
 
     this.setState({ [name]: value });
   };
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this.setState({ email: '', password: '' });
+    this._isMounted = false;
+    this.axiosCancelSource.cancel('Component unmounted.');
+  }
 
   render() {
     return (
@@ -93,12 +105,8 @@ class SignIn extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  currentUser: selectCurrentUser,
-});
-
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
+export default connect(null, mapDispatchToProps)(SignIn);

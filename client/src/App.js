@@ -21,9 +21,7 @@ class App extends React.Component {
     );
 
     if (res.data.locals.user) {
-      setCurrentUser({
-        ...res.data.locals.user,
-      });
+      setCurrentUser(res.data.locals.user);
     }
   };
 
@@ -39,12 +37,21 @@ class App extends React.Component {
               this.props.currentUser !== null ? (
                 <Redirect to='/me' />
               ) : (
-                //<SignUpAndSignUpPage />
                 <SignUpAndSignUpPage />
               )
             }
           />
-          <Route exact path='/me' component={HomePage} />
+          <Route
+            exact
+            path='/me'
+            render={() =>
+              this.props.currentUser === null ? (
+                <Redirect to='/' />
+              ) : (
+                <HomePage />
+              )
+            }
+          />
         </Switch>
       </div>
     );
