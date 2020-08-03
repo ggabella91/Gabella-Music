@@ -8,14 +8,9 @@ import { setCurrentUser } from '../../redux/user/user.actions';
 import './sign-in.styles.scss';
 import axios from 'axios';
 
-// NEED TO FIX MEMORY LEAK WARNING WHEN STATE IS CHANGED AND COMPONENT UNMOUNTS
-
 class SignIn extends React.Component {
   constructor(props) {
     super(props);
-
-    this._isMounted = false;
-    this.axiosCancelSource = axios.CancelToken.source();
 
     this.state = {
       email: '',
@@ -33,18 +28,13 @@ class SignIn extends React.Component {
       const res = await axios.post('http://localhost:8000/api/v1/users/login', {
         email,
         password,
-        cancelToken: this.axiosCancelSource.token,
       });
 
       if (res.status === 200) {
         setCurrentUser(res.data.data.user);
       }
     } catch (err) {
-      if (axios.isCancel(err)) {
-        console.log('Request canceled', err.message);
-      } else {
-        console.log(err);
-      }
+      console.log('Error logging in. Please try again.');
     }
   };
 
@@ -53,16 +43,6 @@ class SignIn extends React.Component {
 
     this.setState({ [name]: value });
   };
-
-  componentDidMount() {
-    this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this.setState({ email: '', password: '' });
-    this._isMounted = false;
-    this.axiosCancelSource.cancel('Component unmounted.');
-  }
 
   render() {
     return (
@@ -90,7 +70,7 @@ class SignIn extends React.Component {
 
           <div className='button'>
             <Button
-              className='spotify-button'
+              className='submit-button'
               onSubmit={this.handleSubmit}
               type='submit'
             >

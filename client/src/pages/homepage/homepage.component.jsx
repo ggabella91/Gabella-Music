@@ -3,63 +3,92 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
+import { setCurrentUser } from '../../redux/user/user.actions';
+
+import Button from '../../components/button/button.component';
 
 import axios from 'axios';
 import './homepage.styles.scss';
 axios.defaults.withCredentials = true;
 
-const callSpotifyApi = async (endpoint) => {
-  try {
-    const response = await axios.post(
-      'http://localhost:8000/api/v1/spotify/getEndpointData',
+class HomePage extends React.Component {
+  callSpotifyApi = async (endpoint) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/api/v1/spotify/getEndpointData',
 
-      {
-        endpoint,
-        withCredentials: true,
+        {
+          endpoint,
+          withCredentials: true,
+        }
+      );
+
+      console.log(response.data);
+      return response.data;
+    } catch (err) {
+      console.log('ERROR');
+    }
+  };
+
+  handleConnectToSpotifyButton = () =>
+    (window.location = 'http://localhost:8000/api/v1/spotify/login');
+
+  handleClickSpotifyButton = async (e) => {
+    e.preventDefault();
+
+    await this.callSpotifyApi('me/top/artists?time_range=long_term');
+  };
+
+  handleLogout = async () => {
+    const { setCurrentUser } = this.props;
+
+    try {
+      const res = await axios.get('http://localhost:8000/api/v1/users/logout');
+
+      if (res.status === 200) {
+        setCurrentUser({});
       }
-    );
+    } catch (err) {
+      console.log('Error Logging Out.');
+    }
+  };
 
-    console.log(response.data);
-    return response.data;
-  } catch (err) {
-    console.log('ERROR');
-  }
-};
-
-const handleClickSpotifyButton = async (e) => {
-  e.preventDefault();
-
-  await callSpotifyApi('me/top/artists?time_range=long_term');
-};
-
-const HomePage = () => (
-  <div className='homepage'>
-    <div>
-      <div>
-        <div className='button-container'>
-          <div className='button'>
-            <button
-              onClick={() =>
-                (window.location = 'http://localhost:8000/api/v1/spotify/login')
-              }
-              className='button spotify-button'
-            >
-              <span>Connect to Spotify</span>
-            </button>
-          </div>
-          <div className='button' onClick={handleClickSpotifyButton}>
-            <button className='button spotify-button'>
-              <span>Get Spotify Data</span>
-            </button>
+  render() {
+    return (
+      <div className='homepage'>
+        <div>
+          <div className='button-container'>
+            <div className='button'>
+              <Button
+                onClick={this.handleConnectToSpotifyButton}
+                className='button submit-button'
+              >
+                <span>Connect to Spotify</span>
+              </Button>
+            </div>
+            <div className='button' onClick={this.handleClickSpotifyButton}>
+              <Button className='button submit-button'>
+                <span>Get Spotify Data</span>
+              </Button>
+            </div>
+            <div className='button' onClick={this.handleLogout}>
+              <Button className='button submit-button'>
+                <span>Log Out</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-);
+    );
+  }
+}
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
 
-export default connect(mapStateToProps)(HomePage);
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
