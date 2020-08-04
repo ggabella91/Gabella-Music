@@ -18,7 +18,7 @@ const createSendToken = (user, statusCode, req, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    //httpOnly: true,
+    httpOnly: true,
     secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
   });
 
@@ -70,6 +70,13 @@ exports.logout = (req, res) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
+
+  console.log(req.cookies);
+
+  res.clearCookie('spotifyAuthToken', { path: '/' });
+  res.clearCookie('spotifyRefreshToken', { path: '/' });
+  console.log(res.cookie('spotifyAuthToken'));
+
   res.status(200).json({ status: 'success' });
 };
 

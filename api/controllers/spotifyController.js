@@ -100,12 +100,10 @@ exports.callback = async (req, res, next) => {
 
           res.cookie('spotifyAuthToken', accessToken, {
             httpOnly: true,
-            /*secure: req.secure || req.headers['x-forwarded-proto'] === 'https',*/
           });
 
           res.cookie('spotifyRefreshToken', refreshToken, {
             httpOnly: true,
-            /*secure: req.secure || req.headers['x-forwarded-proto'] === 'https',*/
           });
 
           res.redirect('http://localhost:3000/me');
@@ -175,7 +173,6 @@ exports.getEndpointData = async (req, res, next) => {
     );
 
     if (endpointRes.status === 200) {
-      console.log(endpointRes.data);
       res.status(200).send({
         data: endpointRes.data,
       });

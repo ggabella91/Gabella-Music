@@ -54,9 +54,11 @@ class HomePage extends React.Component {
   };
 
   render() {
+    const firstName = this.props.currentUser.name.split(' ')[0];
     return (
       <div className='homepage'>
         <div>
+          <h2>Welcome, {firstName}!</h2>
           <div className='button-container'>
             <div className='button'>
               <Button
@@ -66,13 +68,19 @@ class HomePage extends React.Component {
                 <span>Connect to Spotify</span>
               </Button>
             </div>
-            <div className='button' onClick={this.handleClickSpotifyButton}>
-              <Button className='button submit-button'>
+            <div className='button'>
+              <Button
+                className='button submit-button'
+                onClick={this.handleClickSpotifyButton}
+              >
                 <span>Get Spotify Data</span>
               </Button>
             </div>
-            <div className='button' onClick={this.handleLogout}>
-              <Button className='button submit-button'>
+            <div className='button'>
+              <Button
+                className='button submit-button'
+                onClick={this.handleLogout}
+              >
                 <span>Log Out</span>
               </Button>
             </div>
