@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { setCurrentUser } from '../../redux/user/user.actions';
+import { setCurrentUser, logOutUser } from '../../redux/user/user.actions';
 
 import Button from '../../components/button/button.component';
 
@@ -40,13 +40,13 @@ class HomePage extends React.Component {
   };
 
   handleLogout = async () => {
-    const { setCurrentUser } = this.props;
+    const { logOutUser } = this.props;
 
     try {
       const res = await axios.get('http://localhost:8000/api/v1/users/logout');
 
       if (res.status === 200) {
-        setCurrentUser({});
+        logOutUser();
       }
     } catch (err) {
       console.log('Error Logging Out.');
@@ -89,6 +89,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  logOutUser: () => dispatch(logOutUser()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
