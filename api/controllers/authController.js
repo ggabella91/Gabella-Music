@@ -71,20 +71,22 @@ exports.logout = (req, res) => {
     httpOnly: true,
   });
 
-  res.cookie('spotifyAuthToken', 'loggedout', {
+  res.cookie('spotifyAuthToken', '', {
     expires: new Date(Date.now() + 2 * 1000),
     httpOnly: true,
   });
 
-  res.cookie('spotifyRefreshToken', 'loggedout', {
+  res.cookie('spotifyRefreshToken', '', {
     expires: new Date(Date.now() + 2 * 1000),
     httpOnly: true,
   });
 
-  res.cookie('spotify_auth_state', 'loggedout', {
+  res.cookie('spotify_auth_state', '', {
     expires: new Date(Date.now() + 2 * 1000),
     httpOnly: true,
   });
+
+  res.clearCookie('spotify_auth_state');
 
   res.status(200).json({ status: 'success' });
 };
@@ -161,15 +163,12 @@ exports.isLoggedIn = async (req, res, next) => {
       }
 
       // THERE IS A LOGGED IN USER
-      res.locals.user = currentUser;
       res.status(200).json({
         status: 'success',
         locals: {
           user: currentUser,
         },
       });
-
-      res.status(200);
     } catch (err) {
       return next(new AppError('Internal server error', 500));
     }
@@ -276,4 +275,24 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, req, res);
+});
+
+// For rendered pages
+exports.isConnectedToSpotify = catchAsync(async (req, res, next) => {
+  // Verify token
+  const decoded = await promisify(jwt.verify)(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser.isConnectedToSpotify) {
+    res.status(401).json({
+      status: 'User not connected to Spotify',
+    });
+  }
+
+  res.status(200).json({
+    status: 'User is connected to Spotify!',
+  });
 });

@@ -1,12 +1,29 @@
 const axios = require('axios');
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
 const querystring = require('querystring');
 const dotenv = require('dotenv');
+const catchAsync = require('../utils/catchAsync');
+
+const User = require('../models/userModel');
 
 dotenv.config({ path: '../config.env' });
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
+
+const markConnectedToSpotify = catchAsync(async (jwtCookie) => {
+  // 1) Verify token
+  const decoded = await promisify(jwt.verify)(
+    jwtCookie,
+    process.env.JWT_SECRET
+  );
+
+  await User.findByIdAndUpdate(decoded.id, {
+    isConnectedToSpotify: true,
+  });
+});
 
 const generateRandomString = function (length) {
   let text = '';
@@ -44,6 +61,8 @@ exports.callback = async (req, res, next) => {
   const code = req.query.code || null;
   const state = req.query.state || null;
   const storedState = req.cookies ? req.cookies[stateKey] : null;
+
+  const jwtCookie = req.cookies.jwt;
 
   if (state === null || state !== storedState) {
     const stateMismatch = querystring.stringify({
@@ -106,7 +125,9 @@ exports.callback = async (req, res, next) => {
             httpOnly: true,
           });
 
-          res.redirect('http://localhost:3000/me');
+          markConnectedToSpotify(jwtCookie);
+
+          res.status(200).redirect('http://localhost:3000/me');
         } catch (err) {
           console.log(err);
         }
@@ -179,8 +200,5 @@ exports.getEndpointData = async (req, res, next) => {
     }
   } catch (err) {
     console.log(err);
-    // res.status(err.).send({
-    //   data: err.message,
-    // });
   }
 };

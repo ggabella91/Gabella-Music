@@ -12,6 +12,21 @@ import './homepage.styles.scss';
 axios.defaults.withCredentials = true;
 
 class HomePage extends React.Component {
+  componentDidMount = async () => {
+    try {
+      const isConnectedToSpotify = await axios.get(
+        'http://localhost:8000/api/v1/users/isConnectedToSpotify'
+      );
+
+      if (isConnectedToSpotify.status === 200) {
+        console.log('User is connected to Spotify!');
+        // UPDATE STATE
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   callSpotifyApi = async (endpoint) => {
     try {
       const response = await axios.post(
@@ -30,8 +45,9 @@ class HomePage extends React.Component {
     }
   };
 
-  handleConnectToSpotifyButton = () =>
-    (window.location = 'http://localhost:8000/api/v1/spotify/login');
+  handleConnectToSpotifyButton = async () => {
+    window.location = 'http://localhost:8000/api/v1/spotify/login';
+  };
 
   handleClickSpotifyButton = async (e) => {
     e.preventDefault();

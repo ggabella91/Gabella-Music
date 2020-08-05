@@ -44,6 +44,15 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,
+  isConnectedToSpotify: {
+    type: Boolean,
+    default: false,
+  },
+  spotifyRefreshToken: {
+    type: String,
+    default: '',
+  },
+  getNewSpotifyAuthToken: Date,
   active: {
     type: Boolean,
     default: true,
