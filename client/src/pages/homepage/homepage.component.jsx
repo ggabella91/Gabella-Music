@@ -4,6 +4,8 @@ import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { setCurrentUser, logOutUser } from '../../redux/user/user.actions';
+import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
+import { markConnected } from '../../redux/spotify/spotify.actions';
 
 import Button from '../../components/button/button.component';
 
@@ -13,14 +15,15 @@ axios.defaults.withCredentials = true;
 
 class HomePage extends React.Component {
   componentDidMount = async () => {
+    const { markConnected } = this.props;
     try {
       const isConnectedToSpotify = await axios.get(
         'http://localhost:8000/api/v1/users/isConnectedToSpotify'
       );
 
       if (isConnectedToSpotify.status === 200) {
+        markConnected();
         console.log('User is connected to Spotify!');
-        // UPDATE STATE
       }
     } catch (err) {
       console.log(err);
@@ -47,6 +50,19 @@ class HomePage extends React.Component {
 
   handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
+  };
+
+  handleRenderSpotifyButton = () => {
+    const { isConnected } = this.props;
+
+    return isConnected ? null : (
+      <Button
+        onClick={this.handleConnectToSpotifyButton}
+        className='button submit-button'
+      >
+        <span>Connect to Spotify</span>
+      </Button>
+    );
   };
 
   handleClickSpotifyButton = async (e) => {
@@ -76,14 +92,7 @@ class HomePage extends React.Component {
         <div>
           <h2>Welcome, {firstName}!</h2>
           <div className='button-container'>
-            <div className='button'>
-              <Button
-                onClick={this.handleConnectToSpotifyButton}
-                className='button submit-button'
-              >
-                <span>Connect to Spotify</span>
-              </Button>
-            </div>
+            <div className='button'>{this.handleRenderSpotifyButton()}</div>
             <div className='button'>
               <Button
                 className='button submit-button'
@@ -109,11 +118,13 @@ class HomePage extends React.Component {
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
+  isConnected: selectIsConnected,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
   logOutUser: () => dispatch(logOutUser()),
+  markConnected: (spotifyState) => dispatch(markConnected(spotifyState)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
