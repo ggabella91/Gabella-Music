@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -13,46 +13,38 @@ import { selectCurrentUser } from './redux/user/user.selectors';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
-class App extends React.Component {
-  componentDidMount = async () => {
-    const { checkUserSession } = this.props;
-
+const App = ({ checkUserSession, currentUser }) => {
+  useEffect(() => {
     checkUserSession();
-  };
+  }, [checkUserSession]);
 
-  render() {
-    return (
-      <div className='App'>
-        <Header />
-        <Switch>
-          <Route
-            exact
-            path='/'
-            render={() =>
-              this.props.currentUser !== null ? (
-                <Redirect to='/me' />
-              ) : (
-                <SignUpAndSignUpPage />
-              )
-            }
-          />
-          <Route
-            exact
-            path='/me'
-            render={() =>
-              this.props.currentUser === null ? (
-                <Redirect to='/' />
-              ) : (
-                <HomePage />
-              )
-            }
-          />
-        </Switch>
-        <Footer />
-      </div>
-    );
-  }
-}
+  return (
+    <div className='App'>
+      <Header />
+      <Switch>
+        <Route
+          exact
+          path='/'
+          render={() =>
+            currentUser !== null ? (
+              <Redirect to='/me' />
+            ) : (
+              <SignUpAndSignUpPage />
+            )
+          }
+        />
+        <Route
+          exact
+          path='/me'
+          render={() =>
+            currentUser === null ? <Redirect to='/' /> : <HomePage />
+          }
+        />
+      </Switch>
+      <Footer />
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,

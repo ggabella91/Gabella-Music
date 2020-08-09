@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { setCurrentUser, signOutStart } from '../../redux/user/user.actions';
+import { signOutStart } from '../../redux/user/user.actions';
 import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
 import { checkConnection } from '../../redux/spotify/spotify.actions';
 
@@ -13,13 +13,17 @@ import axios from 'axios';
 import './homepage.styles.scss';
 axios.defaults.withCredentials = true;
 
-class HomePage extends React.Component {
-  componentDidMount = async () => {
-    const { checkConnection } = this.props;
+const HomePage = ({
+  currentUser,
+  isConnected,
+  checkConnection,
+  signOutStart,
+}) => {
+  useEffect(() => {
     checkConnection();
-  };
+  }, []);
 
-  callSpotifyApi = async (endpoint) => {
+  const callSpotifyApi = async (endpoint) => {
     try {
       const response = await axios.post(
         'http://localhost:8000/api/v1/spotify/getEndpointData',
@@ -37,16 +41,14 @@ class HomePage extends React.Component {
     }
   };
 
-  handleConnectToSpotifyButton = async () => {
+  const handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
   };
 
-  handleRenderSpotifyButton = () => {
-    const { isConnected } = this.props;
-
+  const handleRenderSpotifyButton = () => {
     return isConnected ? null : (
       <Button
-        onClick={this.handleConnectToSpotifyButton}
+        onClick={handleConnectToSpotifyButton}
         className='button submit-button'
       >
         <span>Connect to Spotify</span>
@@ -54,40 +56,37 @@ class HomePage extends React.Component {
     );
   };
 
-  handleClickSpotifyButton = async (e) => {
+  const handleClickSpotifyButton = async (e) => {
     e.preventDefault();
 
-    await this.callSpotifyApi('me/top/artists?time_range=long_term');
+    await callSpotifyApi('me/top/artists?time_range=long_term');
   };
 
-  render() {
-    const firstName = this.props.currentUser.name.split(' ')[0];
-    const { signOutStart } = this.props;
-    return (
-      <div className='homepage'>
-        <div>
-          <h2>Welcome, {firstName}!</h2>
-          <div className='button-container'>
-            <div className='button'>{this.handleRenderSpotifyButton()}</div>
-            <div className='button'>
-              <Button
-                className='button submit-button'
-                onClick={this.handleClickSpotifyButton}
-              >
-                <span>Get Spotify Data</span>
-              </Button>
-            </div>
-            <div className='button'>
-              <Button className='button submit-button' onClick={signOutStart}>
-                <span>Sign Out</span>
-              </Button>
-            </div>
+  const firstName = currentUser.name.split(' ')[0];
+  return (
+    <div className='homepage'>
+      <div>
+        <h2>Welcome, {firstName}!</h2>
+        <div className='button-container'>
+          <div className='button'>{handleRenderSpotifyButton()}</div>
+          <div className='button'>
+            <Button
+              className='button submit-button'
+              onClick={handleClickSpotifyButton}
+            >
+              <span>Get Spotify Data</span>
+            </Button>
+          </div>
+          <div className='button'>
+            <Button className='button submit-button' onClick={signOutStart}>
+              <span>Sign Out</span>
+            </Button>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
@@ -95,7 +94,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
   signOutStart: () => dispatch(signOutStart()),
   checkConnection: () => dispatch(checkConnection()),
 });
