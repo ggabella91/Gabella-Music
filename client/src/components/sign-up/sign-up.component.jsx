@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
-import { setCurrentUser } from '../../redux/user/user.actions';
+import { signUpStart } from '../../redux/user/user.actions';
 
 import './sign-up.styles.scss';
-import axios from 'axios';
 
 class SignUp extends React.Component {
   constructor() {
@@ -24,26 +23,10 @@ class SignUp extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { setCurrentUser } = this.props;
+    const { signUpStart } = this.props;
     const { name, email, password, passwordConfirm } = this.state;
 
-    try {
-      const res = await axios.post(
-        'http://localhost:8000/api/v1/users/signup',
-        {
-          name,
-          email,
-          password,
-          passwordConfirm,
-        }
-      );
-
-      if (res.status === 201) {
-        setCurrentUser(res.data.data.user);
-      }
-    } catch (err) {
-      console.log('Error signing up. Please try again later.');
-    }
+    signUpStart(name, email, password, passwordConfirm);
   };
 
   handleChange = (event) => {
@@ -108,7 +91,8 @@ class SignUp extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  signUpStart: (name, email, password, passwordConfirm) =>
+    dispatch(signUpStart(name, email, password, passwordConfirm)),
 });
 
 export default connect(null, mapDispatchToProps)(SignUp);

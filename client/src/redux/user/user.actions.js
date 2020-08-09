@@ -6,22 +6,18 @@ export const setCurrentUser = (user) => ({
   payload: user,
 });
 
-export const logOutUser = () => ({
-  type: UserActionTypes.LOG_OUT_USER,
+export const signInStart = (email, password) => ({
+  type: UserActionTypes.SIGN_IN_START,
+  payload: { email, password },
 });
 
-export const logInStart = (emailAndPassword) => ({
-  type: UserActionTypes.LOG_IN_START,
-  payload: emailAndPassword,
-});
-
-export const logInSuccess = (user) => ({
-  type: UserActionTypes.LOG_IN_SUCCESS,
+export const signInSuccess = (user) => ({
+  type: UserActionTypes.SIGN_IN_SUCCESS,
   payload: user,
 });
 
-export const logInFailure = (error) => ({
-  type: UserActionTypes.LOG_IN_FAILURE,
+export const signInFailure = (error) => ({
+  type: UserActionTypes.SIGN_IN_FAILURE,
   payload: error,
 });
 
@@ -29,27 +25,27 @@ export const checkUserSession = () => ({
   type: UserActionTypes.CHECK_USER_SESSION,
 });
 
-export const logOutStart = () => ({
-  type: UserActionTypes.LOG_OUT_START,
+export const signOutStart = () => ({
+  type: UserActionTypes.SIGN_OUT_START,
 });
 
-export const logOutSuccess = () => ({
-  type: UserActionTypes.LOG_OUT_SUCCESS,
+export const signOutSuccess = () => ({
+  type: UserActionTypes.SIGN_OUT_SUCCESS,
 });
 
-export const logOutFailure = (error) => ({
-  type: UserActionTypes.LOG_OUT_FAILURE,
+export const signOutFailure = (error) => ({
+  type: UserActionTypes.SIGN_OUT_FAILURE,
   payload: error,
 });
 
-export const signUpStart = (userCredentials) => ({
+export const signUpStart = (name, email, password, passwordConfirm) => ({
   type: UserActionTypes.SIGN_UP_START,
-  payload: userCredentials,
+  payload: { name, email, password, passwordConfirm },
 });
 
-export const signUpSuccess = ({ user, additionalData }) => ({
+export const signUpSuccess = (user) => ({
   type: UserActionTypes.SIGN_UP_SUCCESS,
-  payload: { user, additionalData },
+  payload: user,
 });
 
 export const signUpFailure = (error) => ({

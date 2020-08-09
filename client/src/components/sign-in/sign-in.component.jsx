@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
-import { setCurrentUser } from '../../redux/user/user.actions';
+import { signInStart } from '../../redux/user/user.actions';
 
 import './sign-in.styles.scss';
-import axios from 'axios';
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -21,21 +20,10 @@ class SignIn extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { setCurrentUser } = this.props;
+    const { signInStart } = this.props;
     const { email, password } = this.state;
 
-    try {
-      const res = await axios.post('http://localhost:8000/api/v1/users/login', {
-        email,
-        password,
-      });
-
-      if (res.status === 200) {
-        setCurrentUser(res.data.data.user);
-      }
-    } catch (err) {
-      console.log('Error logging in. Please try again.');
-    }
+    signInStart(email, password);
   };
 
   handleChange = (event) => {
@@ -84,7 +72,7 @@ class SignIn extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  signInStart: (email, password) => dispatch(signInStart(email, password)),
 });
 
 export default connect(null, mapDispatchToProps)(SignIn);

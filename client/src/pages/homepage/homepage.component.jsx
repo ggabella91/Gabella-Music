@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { setCurrentUser, logOutUser } from '../../redux/user/user.actions';
+import { setCurrentUser, signOutStart } from '../../redux/user/user.actions';
 import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
 import { markConnected } from '../../redux/spotify/spotify.actions';
 
@@ -71,22 +71,9 @@ class HomePage extends React.Component {
     await this.callSpotifyApi('me/top/artists?time_range=long_term');
   };
 
-  handleLogout = async () => {
-    const { logOutUser } = this.props;
-
-    try {
-      const res = await axios.get('http://localhost:8000/api/v1/users/logout');
-
-      if (res.status === 200) {
-        logOutUser();
-      }
-    } catch (err) {
-      console.log('Error Logging Out.');
-    }
-  };
-
   render() {
     const firstName = this.props.currentUser.name.split(' ')[0];
+    const { signOutStart } = this.props;
     return (
       <div className='homepage'>
         <div>
@@ -102,11 +89,8 @@ class HomePage extends React.Component {
               </Button>
             </div>
             <div className='button'>
-              <Button
-                className='button submit-button'
-                onClick={this.handleLogout}
-              >
-                <span>Log Out</span>
+              <Button className='button submit-button' onClick={signOutStart}>
+                <span>Sign Out</span>
               </Button>
             </div>
           </div>
@@ -123,7 +107,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-  logOutUser: () => dispatch(logOutUser()),
+  signOutStart: () => dispatch(signOutStart()),
   markConnected: (spotifyState) => dispatch(markConnected(spotifyState)),
 });
 
