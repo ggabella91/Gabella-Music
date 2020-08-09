@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { setCurrentUser, signOutStart } from '../../redux/user/user.actions';
 import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
-import { markConnected } from '../../redux/spotify/spotify.actions';
+import { checkConnection } from '../../redux/spotify/spotify.actions';
 
 import Button from '../../components/button/button.component';
 
@@ -15,19 +15,8 @@ axios.defaults.withCredentials = true;
 
 class HomePage extends React.Component {
   componentDidMount = async () => {
-    const { markConnected } = this.props;
-    try {
-      const isConnectedToSpotify = await axios.get(
-        'http://localhost:8000/api/v1/users/isConnectedToSpotify'
-      );
-
-      if (isConnectedToSpotify.status === 200) {
-        markConnected();
-        console.log('User is connected to Spotify!');
-      }
-    } catch (err) {
-      console.log(err);
-    }
+    const { checkConnection } = this.props;
+    checkConnection();
   };
 
   callSpotifyApi = async (endpoint) => {
@@ -108,7 +97,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
   signOutStart: () => dispatch(signOutStart()),
-  markConnected: (spotifyState) => dispatch(markConnected(spotifyState)),
+  checkConnection: () => dispatch(checkConnection()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

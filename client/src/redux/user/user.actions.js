@@ -1,5 +1,4 @@
 import UserActionTypes from './user.types';
-import { useReducer } from 'react';
 
 export const setCurrentUser = (user) => ({
   type: UserActionTypes.SET_CURRENT_USER,

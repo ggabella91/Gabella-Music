@@ -8,22 +8,16 @@ import HomePage from './pages/homepage/homepage.component';
 import Header from './components/header/header.component';
 import Footer from './components/footer/footer.component';
 import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.component.jsx';
-import { setCurrentUser } from './redux/user/user.actions';
+import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 
 class App extends React.Component {
   componentDidMount = async () => {
-    const { setCurrentUser } = this.props;
+    const { checkUserSession } = this.props;
 
-    const res = await axios.get(
-      'http://localhost:8000/api/v1/users/isLoggedIn'
-    );
-
-    if (res.data.locals.user) {
-      setCurrentUser(res.data.locals.user);
-    }
+    checkUserSession();
   };
 
   render() {
@@ -65,7 +59,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+  checkUserSession: () => dispatch(checkUserSession()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
