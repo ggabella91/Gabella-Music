@@ -8,6 +8,7 @@ import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
 import { checkConnection } from '../../redux/spotify/spotify.actions';
 
 import Button from '../../components/button/button.component';
+import SpotifyContainer from '../../components/spotify-container/spotify-container.component';
 
 import axios from 'axios';
 import './homepage.styles.scss';
@@ -22,24 +23,6 @@ const HomePage = ({
   useEffect(() => {
     checkConnection();
   }, []);
-
-  const callSpotifyApi = async (endpoint) => {
-    try {
-      const response = await axios.post(
-        'http://localhost:8000/api/v1/spotify/getEndpointData',
-
-        {
-          endpoint,
-          withCredentials: true,
-        }
-      );
-
-      console.log(response.data);
-      return response.data;
-    } catch (err) {
-      console.log('ERROR');
-    }
-  };
 
   const handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
@@ -56,10 +39,8 @@ const HomePage = ({
     );
   };
 
-  const handleClickSpotifyButton = async (e) => {
-    e.preventDefault();
-
-    await callSpotifyApi('me/top/artists?time_range=long_term');
+  const handleRenderSpotifyContainer = () => {
+    return isConnected ? <SpotifyContainer /> : null;
   };
 
   const firstName = currentUser.name.split(' ')[0];
@@ -69,14 +50,7 @@ const HomePage = ({
         <h2>Welcome, {firstName}!</h2>
         <div className='button-container'>
           <div className='button'>{handleRenderSpotifyButton()}</div>
-          <div className='button'>
-            <Button
-              className='button submit-button'
-              onClick={handleClickSpotifyButton}
-            >
-              <span>Get Spotify Data</span>
-            </Button>
-          </div>
+          <div className='spotify'>{handleRenderSpotifyContainer()}</div>
           <div className='button'>
             <Button className='button submit-button' onClick={signOutStart}>
               <span>Sign Out</span>

@@ -68,7 +68,7 @@ app.use(
   })
 );
 
-// Send 200 OK Status of the request is of the OPTIONS (pre-flight) HTTP method
+// Send 200 OK Status if the request is of the OPTIONS (pre-flight) HTTP method
 app.options('/*', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
