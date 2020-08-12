@@ -22,6 +22,7 @@ const markConnectedToSpotify = catchAsync(async (jwtCookie) => {
 
   await User.findByIdAndUpdate(decoded.id, {
     isConnectedToSpotify: true,
+    lastSpotifyAuthToken: Date.now(),
   });
 });
 
@@ -169,9 +170,27 @@ exports.getRefreshToken = async (req, res, next) => {
       const accessToken = refreshRes.data.access_token;
       const newRefreshToken = refreshRes.data.refresh_token;
       console.log('REFRESH TOKEN REQUEST SUCCESSFUL!', refreshRes.data);
-      res.send({
-        access_token: accessToken,
-        refresh_token: newRefreshToken,
+      res.cookie('spotifyAuthToken', accessToken, {
+        httpOnly: true,
+      });
+
+      res.cookie('spotifyRefreshToken', newRefreshToken, {
+        httpOnly: true,
+      });
+
+      // Update lastSpotifyAuthToken user property
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      await User.findByIdAndUpdate(decoded.id, {
+        isConnectedToSpotify: true,
+        lastSpotifyAuthToken: Date.now(),
+      });
+
+      res.status(200).send({
+        status: 'success',
       });
     }
   } catch (err) {

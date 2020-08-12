@@ -2,6 +2,8 @@ import SpotifyActionTypes from './spotify.types';
 
 const INITIAL_STATE = {
   isConnected: false,
+  lastTokenRefresh: null,
+  topArtists: null,
   error: null,
 };
 
@@ -12,11 +14,29 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isConnected: true,
         error: null,
+        lastTokenRefresh: new Date(Date.now()),
+      };
+    case SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS:
+      return {
+        ...state,
+        lastTokenRefresh: new Date(Date.now()),
       };
     case SpotifyActionTypes.CONNECT_FAILURE:
       return {
         ...state,
         isConnected: false,
+        error: action.payload,
+      };
+    case SpotifyActionTypes.FETCH_TOP_ARTISTS_SUCCESS:
+      return {
+        ...state,
+        topArtists: action.payload,
+        error: null,
+      };
+    case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:
+    case SpotifyActionTypes.REFRESH_AUTH_TOKEN_FAILURE:
+      return {
+        ...state,
         error: action.payload,
       };
     default:

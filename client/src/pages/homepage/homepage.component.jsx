@@ -5,7 +5,10 @@ import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { signOutStart } from '../../redux/user/user.actions';
 import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
-import { checkConnection } from '../../redux/spotify/spotify.actions';
+import {
+  checkConnection,
+  refreshAuthTokenStart,
+} from '../../redux/spotify/spotify.actions';
 
 import Button from '../../components/button/button.component';
 import SpotifyContainer from '../../components/spotify-container/spotify-container.component';
@@ -18,10 +21,15 @@ const HomePage = ({
   currentUser,
   isConnected,
   checkConnection,
+  refreshAuthTokenStart,
   signOutStart,
 }) => {
   useEffect(() => {
     checkConnection();
+  }, []);
+
+  useEffect(() => {
+    refreshAuthTokenStart();
   }, []);
 
   const handleConnectToSpotifyButton = async () => {
@@ -70,6 +78,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   signOutStart: () => dispatch(signOutStart()),
   checkConnection: () => dispatch(checkConnection()),
+  refreshAuthTokenStart: () => dispatch(refreshAuthTokenStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

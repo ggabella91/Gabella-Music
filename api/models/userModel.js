@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-  getNewSpotifyAuthToken: Date,
+  lastSpotifyAuthToken: Date,
   active: {
     type: Boolean,
     default: true,
