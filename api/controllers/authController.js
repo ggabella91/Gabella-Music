@@ -295,5 +295,6 @@ exports.isConnectedToSpotify = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'User is connected to Spotify!',
+    lastRefresh: currentUser.lastSpotifyAuthToken,
   });
 });

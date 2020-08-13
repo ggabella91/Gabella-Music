@@ -12,7 +12,6 @@ import {
 } from './spotify.actions';
 
 import axios from 'axios';
-// axios.defaults.withCredentials = true;
 
 export function* isConnected() {
   try {
@@ -21,7 +20,7 @@ export function* isConnected() {
     );
 
     if (!userConnectedRes.status) return;
-    yield put(markConnected());
+    yield put(markConnected(userConnectedRes.lastSpotifyAuthToken));
   } catch (err) {
     yield put(connectFailure(err.response.data.status));
   }

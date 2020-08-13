@@ -14,7 +14,7 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isConnected: true,
         error: null,
-        lastTokenRefresh: new Date(Date.now()),
+        lastTokenRefresh: action.payload,
       };
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS:
       return {

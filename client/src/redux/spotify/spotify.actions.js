@@ -1,7 +1,8 @@
 import SpotifyActionTypes from './spotify.types';
 
-export const markConnected = () => ({
+export const markConnected = (latestRefresh) => ({
   type: SpotifyActionTypes.MARK_CONNECTED,
+  payload: latestRefresh,
 });
 
 export const connectFailure = (error) => ({
