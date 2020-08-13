@@ -13,7 +13,7 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
 
-const markConnectedToSpotify = catchAsync(async (jwtCookie) => {
+const markConnectedToSpotify = catchAsync(async (jwtCookie, refreshToken) => {
   // 1) Verify token
   const decoded = await promisify(jwt.verify)(
     jwtCookie,
@@ -23,7 +23,20 @@ const markConnectedToSpotify = catchAsync(async (jwtCookie) => {
   await User.findByIdAndUpdate(decoded.id, {
     isConnectedToSpotify: true,
     lastSpotifyAuthToken: Date.now(),
+    spotifyRefreshToken: refreshToken,
   });
+});
+
+const fetchRefreshToken = catchAsync(async (jwtCookie) => {
+  // 1) Verify token
+  const decoded = await promisify(jwt.verify)(
+    jwtCookie,
+    process.env.JWT_SECRET
+  );
+
+  const user = await User.findById(decoded.id);
+  console.log(user.spotifyRefreshToken);
+  return user.spotifyRefreshToken;
 });
 
 const generateRandomString = function (length) {
@@ -126,7 +139,7 @@ exports.callback = async (req, res, next) => {
             httpOnly: true,
           });
 
-          markConnectedToSpotify(jwtCookie);
+          markConnectedToSpotify(jwtCookie, refreshToken);
 
           res.status(200).redirect('http://localhost:3000/me');
         } catch (err) {
@@ -146,7 +159,10 @@ exports.callback = async (req, res, next) => {
 
 exports.getRefreshToken = async (req, res, next) => {
   // requesting access token from refresh token
-  const refreshToken = req.cookies.spotifyRefreshToken;
+  const jwtCookie = req.cookies.jwt;
+  const refreshToken = fetchRefreshToken(jwtCookie);
+
+  console.log('Token: ', refreshToken);
 
   const refreshHeaders = {
     Accept: 'application/json',
@@ -168,15 +184,14 @@ exports.getRefreshToken = async (req, res, next) => {
 
     if (refreshRes.status === 200) {
       const accessToken = refreshRes.data.access_token;
-      const newRefreshToken = refreshRes.data.refresh_token;
       console.log('REFRESH TOKEN REQUEST SUCCESSFUL!', refreshRes.data);
+
       res.cookie('spotifyAuthToken', accessToken, {
         httpOnly: true,
+        overwrite: true,
       });
 
-      res.cookie('spotifyRefreshToken', newRefreshToken, {
-        httpOnly: true,
-      });
+      console.log(req.cookies);
 
       // Update lastSpotifyAuthToken user property
       const decoded = await promisify(jwt.verify)(
@@ -187,6 +202,7 @@ exports.getRefreshToken = async (req, res, next) => {
       await User.findByIdAndUpdate(decoded.id, {
         isConnectedToSpotify: true,
         lastSpotifyAuthToken: Date.now(),
+        spotifyRefreshToken: refreshToken,
       });
 
       res.status(200).send({

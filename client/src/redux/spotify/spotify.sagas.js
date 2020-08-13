@@ -12,6 +12,7 @@ import {
 } from './spotify.actions';
 
 import axios from 'axios';
+// axios.defaults.withCredentials = true;
 
 export function* isConnected() {
   try {
@@ -28,7 +29,7 @@ export function* isConnected() {
 
 export function* refreshAuthTokenAsync() {
   try {
-    yield axios.get('http://localhost:8000/api/v1/spotify/refreshToken', {
+    yield axios.post('http://localhost:8000/api/v1/spotify/refreshToken', {
       withCredentials: true,
     });
 
@@ -49,7 +50,7 @@ export function* onCheckConnection() {
   yield takeLatest(SpotifyActionTypes.CHECK_CONNECTION, isConnected);
 }
 
-export function* fetchEndpointDataAsync(endpoint, stateProp) {
+export function* fetchEndpointDataAsync(endpoint, stateProps) {
   try {
     const response = yield axios.post(
       'http://localhost:8000/api/v1/spotify/getEndpointData',
@@ -62,22 +63,22 @@ export function* fetchEndpointDataAsync(endpoint, stateProp) {
 
     const endpointData = response.data;
 
-    if (stateProp === 'topArtists') {
+    if (stateProps === 'topArtists') {
       yield put(fetchTopArtistsSuccess(endpointData));
     }
   } catch (err) {
-    if (stateProp === 'topArtists') {
+    if (stateProps === 'topArtists') {
       yield put(fetchTopArtistsFailure(err.message));
     }
   }
 }
 
-export function* fetchTopArtistsStart(endpoint, stateProp = 'topArtists') {
+export function* fetchTopArtistsStart(endpoint, stateProps = 'topArtists') {
   yield takeLatest(
     SpotifyActionTypes.FETCH_TOP_ARTISTS_START,
     fetchEndpointDataAsync,
-    endpoint,
-    stateProp
+    (endpoint = 'me/top/artists?time_range=long_term'),
+    stateProps
   );
 }
 
