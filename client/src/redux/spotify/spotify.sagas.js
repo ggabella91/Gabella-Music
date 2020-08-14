@@ -20,7 +20,7 @@ export function* isConnected() {
     );
 
     if (!userConnectedRes.status) return;
-    yield put(markConnected(userConnectedRes.lastSpotifyAuthToken));
+    yield put(markConnected(userConnectedRes.data.lastRefresh));
   } catch (err) {
     yield put(connectFailure(err.response.data.status));
   }
@@ -28,11 +28,13 @@ export function* isConnected() {
 
 export function* refreshAuthTokenAsync() {
   try {
-    yield axios.post('http://localhost:8000/api/v1/spotify/refreshToken', {
-      withCredentials: true,
-    });
-
-    yield put(refreshAuthTokenSuccess());
+    const refreshUser = yield axios.post(
+      'http://localhost:8000/api/v1/spotify/refreshToken',
+      {
+        withCredentials: true,
+      }
+    );
+    yield put(refreshAuthTokenSuccess(refreshUser.data.lastRefresh));
   } catch (err) {
     yield put(refreshAuthTokenFailure(err));
   }

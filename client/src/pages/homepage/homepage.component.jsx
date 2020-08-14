@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -28,24 +28,18 @@ const HomePage = ({
   signOutStart,
   lastTokenRefresh,
 }) => {
-  const [lastRefresh, setLastRefresh] = useState(lastTokenRefresh);
-
   useEffect(() => {
     checkConnection();
   }, []);
 
   useEffect(() => {
-    if (isConnected === true) {
-      setLastRefresh(new Date(Date.now()));
-    }
-  }, [isConnected]);
-
-  useEffect(() => {
-    if (
-      lastRefresh !== null &&
-      lastRefresh.getTime() + 60 * 60 * 1000 < new Date(Date.now()).getTime()
-    ) {
-      refreshAuthTokenStart();
+    if (lastTokenRefresh !== null) {
+      if (
+        Date.parse(lastTokenRefresh) + 60 * 60 * 1000 <
+        new Date(Date.now()).getTime()
+      ) {
+        refreshAuthTokenStart();
+      }
     }
   });
 

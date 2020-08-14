@@ -10,34 +10,30 @@ import { fetchTopArtistsStart } from '../../redux/spotify/spotify.actions';
 import './spotify-container.styles.scss';
 
 const SpotifyContainer = ({ fetchTopArtistsStart, topArtists }) => {
-  const [artists, setArtists] = useState({ artistArray: [] });
+  const [artists, setArtists] = useState([]);
 
   useEffect(() => {
     fetchTopArtistsStart('me/top/artists?time_range=long_term');
   }, []);
 
   useEffect(() => {
-    if (topArtists !== null) {
-      setArtists(topArtists.data.items);
-      console.log(artists);
+    if (topArtists.data) {
+      if (topArtists.data.items.length > 0) {
+        setArtists(topArtists.data.items);
+        console.log(artists);
+      }
     }
   });
 
-  let artistElementArray = [];
-
-  const handleBuildTopArtistsElements = () => {
-    if (artists !== null) {
-      for (let i = 0; i < artists.length; i += 1) {
-        artistElementArray.push(<SpotifyElement key={i} item={artists[i]} />);
-      }
-    }
-  };
-
-  handleBuildTopArtistsElements();
-  console.log(artistElementArray[0]);
   return (
     <SpotifyElement className='spotify-element'>
-      <div>{artistElementArray[0]}</div>
+      <div>
+        {artists.artistArray
+          ? artists.artistArray.map((artist, idx) => (
+              <div>{artist.idx.name}</div>
+            ))
+          : null}
+      </div>
     </SpotifyElement>
   );
 };

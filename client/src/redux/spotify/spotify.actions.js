@@ -14,8 +14,9 @@ export const refreshAuthTokenStart = () => ({
   type: SpotifyActionTypes.REFRESH_AUTH_TOKEN_START,
 });
 
-export const refreshAuthTokenSuccess = () => ({
+export const refreshAuthTokenSuccess = (latestRefresh) => ({
   type: SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS,
+  payload: latestRefresh,
 });
 
 export const refreshAuthTokenFailure = (error) => ({

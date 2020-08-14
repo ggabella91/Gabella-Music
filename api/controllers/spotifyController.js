@@ -20,11 +20,13 @@ const markConnectedToSpotify = catchAsync(async (jwtCookie, refreshToken) => {
     process.env.JWT_SECRET
   );
 
-  await User.findByIdAndUpdate(decoded.id, {
+  const user = await User.findByIdAndUpdate(decoded.id, {
     isConnectedToSpotify: true,
-    lastSpotifyAuthToken: Date.now(),
+    lastSpotifyAuthToken: new Date(Date.now()),
     spotifyRefreshToken: refreshToken,
   });
+
+  return user;
 });
 
 const fetchRefreshToken = catchAsync(async (jwtCookie) => {
@@ -139,9 +141,12 @@ exports.callback = async (req, res, next) => {
             httpOnly: true,
           });
 
-          markConnectedToSpotify(jwtCookie, refreshToken);
+          const user = markConnectedToSpotify(jwtCookie, refreshToken);
 
-          res.status(200).redirect('http://localhost:3000/me');
+          res.redirect('http://localhost:3000/me').json({
+            status: 'success',
+            lastRefresh: user.lastSpotifyAuthToken,
+          });
         } catch (err) {
           console.log(err);
         }
@@ -149,7 +154,7 @@ exports.callback = async (req, res, next) => {
         const invalidToken = querystring.stringify({
           error: 'invalid_token',
         });
-        res.redirect(`/#${invalidToken}`);
+        res.redirect(400, `/#${invalidToken}`);
       }
     } catch (err) {
       console.log(err.response);
@@ -199,14 +204,15 @@ exports.getRefreshToken = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      await User.findByIdAndUpdate(decoded.id, {
+      const user = await User.findByIdAndUpdate(decoded.id, {
         isConnectedToSpotify: true,
-        lastSpotifyAuthToken: Date.now(),
+        lastSpotifyAuthToken: new Date(Date.now()),
         spotifyRefreshToken: refreshToken,
       });
 
-      res.status(200).send({
+      res.status(200).json({
         status: 'success',
+        lastRefresh: user.lastSpotifyAuthToken,
       });
     }
   } catch (err) {
