@@ -5,7 +5,10 @@ import { createStructuredSelector } from 'reselect';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import { selectTopArtists } from '../../redux/spotify/spotify.selectors';
-import { fetchTopArtistsStart } from '../../redux/spotify/spotify.actions';
+import {
+  fetchTopArtistsStart,
+  fetchTopArtistsSuccess,
+} from '../../redux/spotify/spotify.actions';
 
 import './spotify-container.styles.scss';
 
@@ -26,15 +29,17 @@ const SpotifyContainer = ({ fetchTopArtistsStart, topArtists }) => {
   });
 
   return (
-    <SpotifyElement className='spotify-element'>
-      <div>
-        {artists.artistArray
-          ? artists.artistArray.map((artist, idx) => (
-              <div>{artist.idx.name}</div>
-            ))
-          : null}
-      </div>
-    </SpotifyElement>
+    <div>
+      {artists
+        ? artists.map((artist, idx) => (
+            <SpotifyElement
+              className='spotify-element'
+              key={idx}
+              item={artist}
+            />
+          ))
+        : null}
+    </div>
   );
 };
 

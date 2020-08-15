@@ -152,9 +152,7 @@ exports.callback = async (req, res, next) => {
 
 exports.getRefreshToken = async (req, res, next) => {
   // requesting access token from refresh token
-  console.log(req.cookies);
   const jwtCookie = req.cookies.jwt;
-  console.log(jwtCookie);
 
   // 1) Verify token
   const decoded = await promisify(jwt.verify)(
@@ -163,10 +161,7 @@ exports.getRefreshToken = async (req, res, next) => {
   );
 
   const userRefresh = await User.findById(decoded.id);
-
   const refreshToken = userRefresh.spotifyRefreshToken;
-
-  console.log('Token: ', refreshToken);
 
   const refreshHeaders = {
     Accept: 'application/json',
