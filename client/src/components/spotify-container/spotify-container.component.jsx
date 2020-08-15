@@ -30,15 +30,18 @@ const SpotifyContainer = ({ fetchTopArtistsStart, topArtists }) => {
 
   return (
     <div>
-      {artists
-        ? artists.map((artist, idx) => (
-            <SpotifyElement
-              className='spotify-element'
-              key={idx}
-              item={artist}
-            />
-          ))
-        : null}
+      <h2 className='top-artists'>Your Top Artists On Spotify</h2>
+      <div className='spotify-container'>
+        {artists
+          ? artists.map((artist, idx) => (
+              <SpotifyElement
+                className='spotify-element'
+                key={idx}
+                item={artist}
+              />
+            ))
+          : null}
+      </div>
     </div>
   );
 };

@@ -6,12 +6,18 @@
   padding: 0 35px 0 35px;
   font-weight: 380;
   display: grid;
-  grid-template-columns: min-content;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
   grid-template-rows: auto;
-  background-color: #ffc107;
   color: black;
   border: none;
   margin-top: 20px;
   text-transform: capitalize;
   text-decoration: none;
+}
+
+.top-artists {
+  margin-top: 60px;
+  grid-column: 1 / 4;
 }
