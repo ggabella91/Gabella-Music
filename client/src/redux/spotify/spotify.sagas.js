@@ -28,7 +28,7 @@ export function* isConnected() {
 
 export function* refreshAuthTokenAsync() {
   try {
-    const refreshUser = yield axios.post(
+    const refreshUser = yield axios.get(
       'http://localhost:8000/api/v1/spotify/refreshToken',
       {
         withCredentials: true,

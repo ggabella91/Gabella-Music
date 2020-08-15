@@ -29,18 +29,6 @@ const markConnectedToSpotify = catchAsync(async (jwtCookie, refreshToken) => {
   return user;
 });
 
-const fetchRefreshToken = catchAsync(async (jwtCookie) => {
-  // 1) Verify token
-  const decoded = await promisify(jwt.verify)(
-    jwtCookie,
-    process.env.JWT_SECRET
-  );
-
-  const user = await User.findById(decoded.id);
-  console.log(user.spotifyRefreshToken);
-  return user.spotifyRefreshToken;
-});
-
 const generateRandomString = function (length) {
   let text = '';
   const possible =
@@ -164,8 +152,19 @@ exports.callback = async (req, res, next) => {
 
 exports.getRefreshToken = async (req, res, next) => {
   // requesting access token from refresh token
+  console.log(req.cookies);
   const jwtCookie = req.cookies.jwt;
-  const refreshToken = fetchRefreshToken(jwtCookie);
+  console.log(jwtCookie);
+
+  // 1) Verify token
+  const decoded = await promisify(jwt.verify)(
+    jwtCookie,
+    process.env.JWT_SECRET
+  );
+
+  const userRefresh = await User.findById(decoded.id);
+
+  const refreshToken = userRefresh.spotifyRefreshToken;
 
   console.log('Token: ', refreshToken);
 
@@ -196,15 +195,13 @@ exports.getRefreshToken = async (req, res, next) => {
         overwrite: true,
       });
 
-      console.log(req.cookies);
-
       // Update lastSpotifyAuthToken user property
-      const decoded = await promisify(jwt.verify)(
+      const decodedRefresh = await promisify(jwt.verify)(
         req.cookies.jwt,
         process.env.JWT_SECRET
       );
 
-      const user = await User.findByIdAndUpdate(decoded.id, {
+      const user = await User.findByIdAndUpdate(decodedRefresh.id, {
         isConnectedToSpotify: true,
         lastSpotifyAuthToken: new Date(Date.now()),
         spotifyRefreshToken: refreshToken,
