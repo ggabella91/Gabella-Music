@@ -9,6 +9,8 @@ import {
   refreshAuthTokenFailure,
   fetchTopArtistsSuccess,
   fetchTopArtistsFailure,
+  fetchTopTracksSuccess,
+  fetchTopTracksFailure,
 } from './spotify.actions';
 
 import axios from 'axios';
@@ -66,10 +68,14 @@ export function* fetchEndpointDataAsync(endpoint, stateProps) {
 
     if (stateProps === 'topArtists') {
       yield put(fetchTopArtistsSuccess(endpointData));
+    } else if (stateProps === 'topTracks') {
+      yield put(fetchTopTracksSuccess(endpointData));
     }
   } catch (err) {
     if (stateProps === 'topArtists') {
       yield put(fetchTopArtistsFailure(err.message));
+    } else if (stateProps === 'topTracks') {
+      yield put(fetchTopTracksFailure(err.message));
     }
   }
 }
@@ -83,10 +89,20 @@ export function* fetchTopArtistsStart(endpoint, stateProps = 'topArtists') {
   );
 }
 
+export function* fetchTopTracksStart(endpoint, stateProps = 'topTracks') {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_TOP_TRACKS_START,
+    fetchEndpointDataAsync,
+    (endpoint = 'me/top/tracks?time_range=long_term'),
+    stateProps
+  );
+}
+
 export function* spotifySagas() {
   yield all([
     call(onCheckConnection),
     call(refreshAuthTokenStart),
     call(fetchTopArtistsStart),
+    call(fetchTopTracksStart),
   ]);
 }

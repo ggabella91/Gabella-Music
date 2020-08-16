@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   isConnected: false,
   lastTokenRefresh: null,
   topArtists: [],
+  topTracks: [],
   error: null,
 };
 
@@ -33,7 +34,14 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         topArtists: action.payload,
         error: null,
       };
+    case SpotifyActionTypes.FETCH_TOP_TRACKS_SUCCESS:
+      return {
+        ...state,
+        topTracks: action.payload,
+        error: null,
+      };
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:
+    case SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE:
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_FAILURE:
       return {
         ...state,

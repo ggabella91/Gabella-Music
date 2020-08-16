@@ -16,3 +16,8 @@ export const selectTopArtists = createSelector(
   [selectSpotifyState],
   (spotifyState) => spotifyState.topArtists
 );
+
+export const selectTopTracks = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.topTracks
+);

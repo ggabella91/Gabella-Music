@@ -4,8 +4,9 @@
   letter-spacing: 0.5px;
   line-height: 50px;
   padding: 20px 35px 20px 35px;
-  font-weight: 380;
+  font-weight: 420;
   display: inline-flex;
+  justify-content: space-evenly;
   border-radius: 15px;
   background-color: #ffc107;
   color: white;
@@ -13,9 +14,32 @@
   margin-top: 20px;
   text-transform: capitalize;
   text-decoration: none;
+
+  .details-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    margin-left: 20px;
+
+    .main-text {
+    }
+
+    .small-text {
+      font-size: medium;
+      font-weight: 320;
+    }
+  }
+
+  span {
+    font-size: x-large;
+    font-weight: 400;
+    padding: 0;
+    margin: none;
+  }
 }
 
-.artist-image {
+.artist-image,
+.album-image {
   height: 160px;
   width: auto;
 }

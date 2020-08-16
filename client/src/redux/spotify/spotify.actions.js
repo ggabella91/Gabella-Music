@@ -42,3 +42,18 @@ export const fetchTopArtistsFailure = (error) => ({
   type: SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE,
   payload: error,
 });
+
+export const fetchTopTracksStart = (endpoint) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_START,
+  payload: endpoint,
+});
+
+export const fetchTopTracksSuccess = (endpointData) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_SUCCESS,
+  payload: endpointData,
+});
+
+export const fetchTopTracksFailure = (error) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE,
+  payload: error,
+});
