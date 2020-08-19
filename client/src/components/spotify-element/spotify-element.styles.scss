@@ -48,7 +48,7 @@
   .details-container {
     display: flex;
     flex-direction: column;
-    max-width: 70%;
+    max-width: 90%;
     margin-left: 20px;
 
     @include respond-extra-wide() {
