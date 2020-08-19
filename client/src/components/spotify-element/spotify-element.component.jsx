@@ -22,9 +22,11 @@ const SpotifyElement = ({ type, item }) => {
       <div className='spotify-element'>
         <img className='album-image' src={album.images[0].url} />
         <div className='details-container'>
-          <span className='main-text'>{name}</span>
-          <span className='small-text'>{album.name}</span>
-          <span className='small-text'>{artistString}</span>
+          <ul>
+            <li className='main-text'>{name}</li>
+            <li className='small-text'>{album.name}</li>
+            <li className='small-text'>{artistString}</li>
+          </ul>
         </div>
       </div>
     );

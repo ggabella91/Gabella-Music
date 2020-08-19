@@ -1,11 +1,29 @@
+@mixin respond-extra-wide {
+  @media (max-width: 1640px) {
+    @content;
+  }
+}
+
+@mixin respond-medium {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin respond-narrow {
+  @media (max-width: 376px) {
+    @content;
+  }
+}
+
 .spotify-element {
   min-width: 180px;
   width: auto;
   letter-spacing: 0.5px;
   line-height: 50px;
-  padding: 20px 35px 20px 35px;
+  padding: 20px 35px;
   font-weight: 420;
-  display: inline-flex;
+  display: flex;
   justify-content: space-evenly;
   border-radius: 15px;
   background-color: #ffc107;
@@ -15,23 +33,50 @@
   text-transform: capitalize;
   text-decoration: none;
 
+  @include respond-extra-wide() {
+    justify-content: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @include respond-narrow() {
+    width: 160px;
+    padding: 20px 0px;
+  }
+
   .details-container {
     display: flex;
     flex-direction: column;
     max-width: 70%;
     margin-left: 20px;
 
+    @include respond-extra-wide() {
+      margin: 0px 0px;
+      padding: none;
+    }
+
+    ul {
+      padding: unset;
+      line-height: 1.6;
+    }
+
+    li {
+      list-style: none;
+    }
     .main-text {
+      font-size: 22px;
+      margin-bottom: 10px;
     }
 
     .small-text {
-      font-size: medium;
-      font-weight: 320;
+      font-size: 18px;
+      font-weight: 380;
     }
   }
 
   span {
-    font-size: x-large;
+    font-size: 28px;
     font-weight: 400;
     padding: 0;
     margin: none;
@@ -40,6 +85,10 @@
 
 .artist-image,
 .album-image {
-  height: 160px;
-  width: auto;
+  width: 164px;
+  height: auto;
+
+  @include respond-narrow() {
+    width: 120px;
+  }
 }

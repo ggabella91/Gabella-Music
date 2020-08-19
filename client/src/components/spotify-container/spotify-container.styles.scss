@@ -1,3 +1,21 @@
+@mixin respond-wide {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin respond-medium {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin respond-narrow {
+  @media (max-width: 376px) {
+    @content;
+  }
+}
+
 .spotify-container {
   min-width: 180px;
   width: auto;
@@ -15,6 +33,14 @@
   margin-top: 20px;
   text-transform: capitalize;
   text-decoration: none;
+
+  @include respond-wide() {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @include respond-medium() {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .top-artists {

@@ -44,7 +44,6 @@ const SpotifyContainer = ({
     if (topTracks.data) {
       if (topTracks.data.items.length > 0) {
         setTracks(topTracks.data.items);
-        console.log(tracks);
       }
     }
   });

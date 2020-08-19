@@ -41,7 +41,7 @@ const HomePage = ({
         refreshAuthTokenStart();
       }
     }
-  });
+  }, []);
 
   const handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
@@ -59,7 +59,9 @@ const HomePage = ({
   };
 
   const handleRenderSpotifyContainer = () => {
-    return isConnected ? <SpotifyContainer /> : null;
+    return isConnected && lastTokenRefresh !== null ? (
+      <SpotifyContainer />
+    ) : null;
   };
 
   const firstName = currentUser.name.split(' ')[0];
