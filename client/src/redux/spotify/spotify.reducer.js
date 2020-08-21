@@ -3,6 +3,7 @@ import SpotifyActionTypes from './spotify.types';
 const INITIAL_STATE = {
   isConnected: false,
   lastTokenRefresh: null,
+  photo: '',
   topArtists: [],
   topTracks: [],
   error: null,
@@ -15,7 +16,8 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isConnected: true,
         error: null,
-        lastTokenRefresh: action.payload,
+        lastTokenRefresh: action.payload.latestRefresh,
+        photo: action.payload.photo,
       };
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS:
       return {

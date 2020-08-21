@@ -13,21 +13,24 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
 
-const markConnectedToSpotify = catchAsync(async (jwtCookie, refreshToken) => {
-  // 1) Verify token
-  const decoded = await promisify(jwt.verify)(
-    jwtCookie,
-    process.env.JWT_SECRET
-  );
+const markConnectedToSpotify = catchAsync(
+  async (jwtCookie, refreshToken, photo) => {
+    // 1) Verify token
+    const decoded = await promisify(jwt.verify)(
+      jwtCookie,
+      process.env.JWT_SECRET
+    );
 
-  const user = await User.findByIdAndUpdate(decoded.id, {
-    isConnectedToSpotify: true,
-    lastSpotifyAuthToken: new Date(Date.now()),
-    spotifyRefreshToken: refreshToken,
-  });
+    const user = await User.findByIdAndUpdate(decoded.id, {
+      isConnectedToSpotify: true,
+      lastSpotifyAuthToken: new Date(Date.now()),
+      spotifyRefreshToken: refreshToken,
+      photo,
+    });
 
-  return user;
-});
+    return user;
+  }
+);
 
 const generateRandomString = function (length) {
   let text = '';
@@ -117,8 +120,13 @@ exports.callback = async (req, res, next) => {
             },
           });
 
+          let photo = '';
           if (getRes.status === 200) {
             console.log('LOGIN SUCCESSFUL!', getRes.data);
+
+            if (getRes.data.images) {
+              photo = getRes.data.images[0].url;
+            }
           }
 
           res.cookie('spotifyAuthToken', accessToken, {
@@ -129,7 +137,7 @@ exports.callback = async (req, res, next) => {
             httpOnly: true,
           });
 
-          const user = markConnectedToSpotify(jwtCookie, refreshToken);
+          const user = markConnectedToSpotify(jwtCookie, refreshToken, photo);
 
           res.redirect('http://localhost:3000/me').json({
             status: 'success',

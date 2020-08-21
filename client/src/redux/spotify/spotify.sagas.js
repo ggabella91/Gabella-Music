@@ -22,7 +22,12 @@ export function* isConnected() {
     );
 
     if (!userConnectedRes.status) return;
-    yield put(markConnected(userConnectedRes.data.lastRefresh));
+    yield put(
+      markConnected(
+        userConnectedRes.data.lastRefresh,
+        userConnectedRes.data.photo
+      )
+    );
   } catch (err) {
     yield put(connectFailure(err.response.data.status));
   }

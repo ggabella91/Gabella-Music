@@ -7,6 +7,11 @@ export const selectIsConnected = createSelector(
   (spotifyState) => spotifyState.isConnected
 );
 
+export const selectPhoto = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.photo
+);
+
 export const selectLastTokenRefresh = createSelector(
   [selectSpotifyState],
   (spotifyState) => spotifyState.lastTokenRefresh

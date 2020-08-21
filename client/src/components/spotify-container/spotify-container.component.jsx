@@ -5,8 +5,10 @@ import { createStructuredSelector } from 'reselect';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import {
+  selectPhoto,
   selectTopArtists,
   selectTopTracks,
+  photo,
 } from '../../redux/spotify/spotify.selectors';
 import {
   fetchTopArtistsStart,
@@ -16,11 +18,13 @@ import {
 import './spotify-container.styles.scss';
 
 const SpotifyContainer = ({
+  photo,
   fetchTopArtistsStart,
   fetchTopTracksStart,
   topArtists,
   topTracks,
 }) => {
+  const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
 
@@ -31,6 +35,12 @@ const SpotifyContainer = ({
   useEffect(() => {
     fetchTopTracksStart();
   }, []);
+
+  useEffect(() => {
+    if (photo) {
+      setUserPhoto(photo);
+    }
+  });
 
   useEffect(() => {
     if (topArtists.data) {
@@ -50,6 +60,9 @@ const SpotifyContainer = ({
 
   return (
     <div>
+      <div>
+        {userPhoto ? <img className='user-photo' src={userPhoto} /> : null}
+      </div>
       <h2 className='top-artists'>Your Top Artists On Spotify</h2>
       <div className='spotify-container'>
         {artists
@@ -81,6 +94,7 @@ const SpotifyContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
+  photo: selectPhoto,
   topArtists: selectTopArtists,
   topTracks: selectTopTracks,
 });
