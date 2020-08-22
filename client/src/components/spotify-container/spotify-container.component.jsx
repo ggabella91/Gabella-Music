@@ -6,9 +6,9 @@ import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import {
   selectPhoto,
+  selectLastTokenRefresh,
   selectTopArtists,
   selectTopTracks,
-  photo,
 } from '../../redux/spotify/spotify.selectors';
 import {
   fetchTopArtistsStart,
@@ -19,6 +19,7 @@ import './spotify-container.styles.scss';
 
 const SpotifyContainer = ({
   photo,
+  lastTokenRefresh,
   fetchTopArtistsStart,
   fetchTopTracksStart,
   topArtists,
@@ -29,11 +30,25 @@ const SpotifyContainer = ({
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    fetchTopArtistsStart();
+    if (lastTokenRefresh !== null) {
+      if (
+        Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
+        new Date(Date.now()).getTime()
+      ) {
+        fetchTopArtistsStart();
+      }
+    }
   }, []);
 
   useEffect(() => {
-    fetchTopTracksStart();
+    if (lastTokenRefresh !== null) {
+      if (
+        Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
+        new Date(Date.now()).getTime()
+      ) {
+        fetchTopTracksStart();
+      }
+    }
   }, []);
 
   useEffect(() => {
@@ -95,6 +110,7 @@ const SpotifyContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   photo: selectPhoto,
+  lastTokenRefresh: selectLastTokenRefresh,
   topArtists: selectTopArtists,
   topTracks: selectTopTracks,
 });
