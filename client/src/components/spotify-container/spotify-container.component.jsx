@@ -5,6 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import {
+  selectIsConnected,
   selectPhoto,
   selectLastTokenRefresh,
   selectTopArtists,
@@ -18,6 +19,7 @@ import {
 import './spotify-container.styles.scss';
 
 const SpotifyContainer = ({
+  isConnected,
   photo,
   lastTokenRefresh,
   fetchTopArtistsStart,
@@ -30,19 +32,18 @@ const SpotifyContainer = ({
   const [tracks, setTracks] = useState([]);
 
   useEffect(() => {
-    if (lastTokenRefresh !== null) {
+    if (isConnected && lastTokenRefresh !== null) {
       if (
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
-        console.log('Got here');
         fetchTopArtistsStart();
       }
     }
   }, []);
 
   useEffect(() => {
-    if (lastTokenRefresh !== null) {
+    if (isConnected && lastTokenRefresh !== null) {
       if (
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
@@ -110,6 +111,7 @@ const SpotifyContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
+  isConnected: selectIsConnected,
   photo: selectPhoto,
   lastTokenRefresh: selectLastTokenRefresh,
   topArtists: selectTopArtists,

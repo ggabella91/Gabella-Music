@@ -41,7 +41,7 @@ const HomePage = ({
         refreshAuthTokenStart();
       }
     }
-  }, [isConnected]);
+  }, []);
 
   const handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
