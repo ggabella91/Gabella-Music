@@ -35,6 +35,7 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
+        console.log('Got here');
         fetchTopArtistsStart();
       }
     }
