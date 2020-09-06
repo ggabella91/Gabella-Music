@@ -9,6 +9,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const enforce = require('express-sslify');
 
 const AppError = require('./utils/appError');
 const userRouter = require('./routes/userRoutes');
@@ -27,6 +28,16 @@ app.use('*', helmet());
 // Development logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
+}
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  // All remaining requests return the React app, so it can handle routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  });
 }
 
 // Limit requests from the same IP
@@ -105,11 +116,6 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 // ROUTES
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/spotify', spotifyRouter);
-
-// All remaining requests return the React app, so it can handle routing
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-});
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
