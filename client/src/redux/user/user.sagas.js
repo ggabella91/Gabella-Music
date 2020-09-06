@@ -15,7 +15,7 @@ import {
 import axios from 'axios';
 
 let origin;
-if ((process.NODE_ENV = 'development')) {
+if (process.NODE_ENV === 'development') {
   origin = 'http://localhost:8000/';
 } else {
   origin = '/';
