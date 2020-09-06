@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
   redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
   redirectToHomepage = 'http://localhost:8000/me';
 } else {
-  redirectUri = '/api/v1/spotify/callback';
+  redirectUri = 'api/v1/spotify/callback';
   redirectToHomepage = '/me';
 }
 const markConnectedToSpotify = catchAsync(
