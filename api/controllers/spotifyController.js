@@ -132,8 +132,10 @@ exports.callback = async (req, res, next) => {
           if (getRes.status === 200) {
             console.log('LOGIN SUCCESSFUL!');
 
-            if (getRes.data.images) {
+            if (getRes.data.images.length) {
               photo = getRes.data.images[0].url;
+            } else {
+              photo = '';
             }
           }
 
