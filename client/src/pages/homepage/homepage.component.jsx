@@ -44,7 +44,7 @@ const HomePage = ({
     if (process.env.NODE_ENV === 'development') {
       window.location = 'http://localhost:8000/api/v1/spotify/login';
     } else {
-      window.location = `${__dirname}/api/v1/spotify/login`;
+      window.location = '/api/v1/spotify/login';
     }
   };
 
