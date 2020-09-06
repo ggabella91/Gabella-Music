@@ -33,11 +33,6 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
   app.use(express.static(path.join(__dirname, 'client/build')));
-
-  // All remaining requests return the React app, so it can handle routing
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
-  });
 }
 
 // Limit requests from the same IP
@@ -59,15 +54,15 @@ app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 let origin;
-if (process.NODE_ENV === 'development') {
-  origin = 'http://localhost:3000/';
+if (process.env.NODE_ENV === 'development') {
+  origin = 'http://localhost:3000';
 } else {
   origin = '/';
 }
 
 app.use(
   cors({
-    origin,
+    origin: origin,
     credentials: true,
     allowedHeaders: [
       'Accept',
@@ -116,6 +111,13 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 // ROUTES
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/spotify', spotifyRouter);
+
+// All remaining requests return the React app, so it can handle routing
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  });
+}
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

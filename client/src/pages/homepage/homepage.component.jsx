@@ -29,6 +29,8 @@ const HomePage = ({
   lastTokenRefresh,
 }) => {
   useEffect(() => {
+    console.log(process.env.NODE_ENV);
+
     checkConnection();
   }, []);
 
@@ -39,10 +41,10 @@ const HomePage = ({
   }, [lastTokenRefresh, refreshAuthTokenStart]);
 
   const handleConnectToSpotifyButton = async () => {
-    if (process.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
       window.location = 'http://localhost:8000/api/v1/spotify/login';
     } else {
-      window.location = '/api/v1/spotify/login';
+      window.location = `${__dirname}/api/v1/spotify/login`;
     }
   };
 
