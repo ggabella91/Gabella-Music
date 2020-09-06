@@ -175,7 +175,6 @@ exports.isLoggedIn = async (req, res, next) => {
         },
       });
     } catch (err) {
-      console.log(err);
       return next(new AppError('Internal server error', 500));
     }
   } else {
