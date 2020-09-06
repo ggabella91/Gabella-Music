@@ -122,7 +122,7 @@ exports.callback = async (req, res, next) => {
 
           let photo = '';
           if (getRes.status === 200) {
-            console.log('LOGIN SUCCESSFUL!', getRes.data);
+            console.log('LOGIN SUCCESSFUL!');
 
             if (getRes.data.images) {
               photo = getRes.data.images[0].url;
@@ -144,7 +144,7 @@ exports.callback = async (req, res, next) => {
             lastRefresh: user.lastSpotifyAuthToken,
           });
         } catch (err) {
-          console.log(err);
+          console.log(err.message);
         }
       } else {
         const invalidToken = querystring.stringify({
@@ -153,7 +153,7 @@ exports.callback = async (req, res, next) => {
         res.redirect(400, `/#${invalidToken}`);
       }
     } catch (err) {
-      console.log(err.response);
+      console.log(err.message);
     }
   }
 };
@@ -191,7 +191,7 @@ exports.getRefreshToken = async (req, res, next) => {
 
     if (refreshRes.status === 200) {
       const accessToken = refreshRes.data.access_token;
-      console.log('REFRESH TOKEN REQUEST SUCCESSFUL!', refreshRes.data);
+      console.log('REFRESH TOKEN REQUEST SUCCESSFUL!');
 
       res.cookie('spotifyAuthToken', accessToken, {
         httpOnly: true,
@@ -216,7 +216,7 @@ exports.getRefreshToken = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err.response);
+    console.log(err.message);
   }
 };
 
@@ -240,6 +240,6 @@ exports.getEndpointData = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 };

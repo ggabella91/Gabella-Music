@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -21,7 +22,7 @@ app.enable('trust proxy');
 // GLOBAL MIDDLEWARE
 
 // Set security HTTP headers
-app.use('/api', helmet());
+app.use('*', helmet());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -35,7 +36,7 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour.',
 });
 
-app.use('/api', limiter);
+app.use('*', limiter);
 
 // Body parser, reading data from body into req.body
 app.use(
@@ -91,9 +92,17 @@ app.use(xss());
 
 app.use(hpp()); // ADD WHITELIST ARRAY LATER
 
+// Serve any static files from the React app
+app.use(express.static(path.resolve(__dirname, '../client/build')));
+
 // ROUTES
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/spotify', spotifyRouter);
+
+// All remaining requests return the React app, so it can handle routing
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

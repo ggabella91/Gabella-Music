@@ -34,14 +34,9 @@ const HomePage = ({
 
   useEffect(() => {
     if (lastTokenRefresh !== null) {
-      if (
-        Date.parse(lastTokenRefresh) + 60 * 60 * 1000 <
-        new Date(Date.now()).getTime()
-      ) {
-        refreshAuthTokenStart();
-      }
+      refreshAuthTokenStart();
     }
-  }, [isConnected]);
+  }, [lastTokenRefresh]);
 
   const handleConnectToSpotifyButton = async () => {
     window.location = 'http://localhost:8000/api/v1/spotify/login';
