@@ -15,10 +15,17 @@ import {
 
 import axios from 'axios';
 
+let origin;
+if ((process.NODE_ENV = 'development')) {
+  origin = 'http://localhost:8000/';
+} else {
+  origin = '/';
+}
+
 export function* isConnected() {
   try {
     const userConnectedRes = yield axios.get(
-      'http://localhost:8000/api/v1/users/isConnectedToSpotify'
+      `${origin}api/v1/users/isConnectedToSpotify`
     );
 
     if (!userConnectedRes.status) return;
@@ -36,7 +43,7 @@ export function* isConnected() {
 export function* refreshAuthTokenAsync() {
   try {
     const refreshUser = yield axios.get(
-      'http://localhost:8000/api/v1/spotify/refreshToken',
+      `${origin}api/v1/spotify/refreshToken`,
       {
         withCredentials: true,
       }
@@ -61,7 +68,7 @@ export function* onCheckConnection() {
 export function* fetchEndpointDataAsync(endpoint, stateProps) {
   try {
     const response = yield axios.post(
-      'http://localhost:8000/api/v1/spotify/getEndpointData',
+      `${origin}api/v1/spotify/getEndpointData`,
 
       {
         endpoint,

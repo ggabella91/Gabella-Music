@@ -14,15 +14,19 @@ import {
 
 import axios from 'axios';
 
+let origin;
+if ((process.NODE_ENV = 'development')) {
+  origin = 'http://localhost:8000/';
+} else {
+  origin = '/';
+}
+
 export function* signIn({ payload: { email, password } }) {
   try {
-    const { data } = yield axios.post(
-      'http://localhost:8000/api/v1/users/login',
-      {
-        email,
-        password,
-      }
-    );
+    const { data } = yield axios.post(`${origin}api/v1/users/login`, {
+      email,
+      password,
+    });
 
     yield put(signInSuccess(data.data.user));
   } catch (err) {
@@ -32,9 +36,7 @@ export function* signIn({ payload: { email, password } }) {
 
 export function* isLoggedIn() {
   try {
-    const userLoggedIn = yield axios.get(
-      'http://localhost:8000/api/v1/users/isLoggedIn'
-    );
+    const userLoggedIn = yield axios.get(`${origin}api/v1/users/isLoggedIn`);
 
     if (!userLoggedIn.data.locals.user) return;
     yield put(setCurrentUser(userLoggedIn.data.locals.user));
@@ -45,7 +47,7 @@ export function* isLoggedIn() {
 
 export function* signOut() {
   try {
-    yield axios.get('http://localhost:8000/api/v1/users/logout');
+    yield axios.get(`${origin}api/v1/users/logout`);
     yield put(signOutSuccess());
   } catch (err) {
     yield put(signOutFailure(err));
@@ -56,15 +58,12 @@ export function* signUp({
   payload: { name, email, password, passwordConfirm },
 }) {
   try {
-    const { data } = yield axios.post(
-      'http://localhost:8000/api/v1/users/signup',
-      {
-        name,
-        email,
-        password,
-        passwordConfirm,
-      }
-    );
+    const { data } = yield axios.post(`${origin}api/v1/users/signup`, {
+      name,
+      email,
+      password,
+      passwordConfirm,
+    });
 
     yield put(signUpSuccess(data.data.user));
   } catch (err) {

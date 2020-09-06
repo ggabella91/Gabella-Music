@@ -36,10 +36,14 @@ const HomePage = ({
     if (lastTokenRefresh !== null) {
       refreshAuthTokenStart();
     }
-  }, [lastTokenRefresh]);
+  }, [lastTokenRefresh, refreshAuthTokenStart]);
 
   const handleConnectToSpotifyButton = async () => {
-    window.location = 'http://localhost:8000/api/v1/spotify/login';
+    if ((process.NODE_ENV = 'development')) {
+      window.location = 'http://localhost:8000/api/v1/spotify/login';
+    } else {
+      window.location = '/api/v1/spotify/login';
+    }
   };
 
   const handleRenderSpotifyButton = () => {

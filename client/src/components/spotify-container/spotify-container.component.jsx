@@ -57,7 +57,7 @@ const SpotifyContainer = ({
     if (photo) {
       setUserPhoto(photo);
     }
-  });
+  }, [photo]);
 
   useEffect(() => {
     if (topArtists.data) {
@@ -65,7 +65,7 @@ const SpotifyContainer = ({
         setArtists(topArtists.data.items);
       }
     }
-  });
+  }, [topArtists.data]);
 
   useEffect(() => {
     if (topTracks.data) {
@@ -73,12 +73,14 @@ const SpotifyContainer = ({
         setTracks(topTracks.data.items);
       }
     }
-  });
+  }, [topTracks.data]);
 
   return (
     <div>
       <div>
-        {userPhoto ? <img className='user-photo' src={userPhoto} /> : null}
+        {userPhoto ? (
+          <img className='user-photo' src={userPhoto} alt='' />
+        ) : null}
       </div>
       <h2 className='top-artists'>Your Top Artists On Spotify</h2>
       <div className='spotify-container'>
