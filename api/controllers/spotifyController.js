@@ -18,8 +18,8 @@ if (process.env.NODE_ENV === 'development') {
   redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
   redirectToHomepage = 'http://localhost:8000/me';
 } else {
-  redirectUri = 'api/v1/spotify/callback';
-  redirectToHomepage = '/me';
+  redirectUri = 'https://gabellamusic.herokuapp.com/api/v1/spotify/callback';
+  redirectToHomepage = 'https://gabellamusic.herokuapp.com/me';
 }
 const markConnectedToSpotify = catchAsync(
   async (jwtCookie, refreshToken, photo) => {
