@@ -11,8 +11,16 @@ dotenv.config({ path: '../config.env' });
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
 
+let redirectUri;
+let redirectToHomepage;
+if (process.env.NODE_ENV === 'development') {
+  redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
+  redirectToHomepage = 'http://localhost:8000/me';
+} else {
+  redirectUri = '/api/v1/spotify/callback';
+  redirectToHomepage = '/me';
+}
 const markConnectedToSpotify = catchAsync(
   async (jwtCookie, refreshToken, photo) => {
     // 1) Verify token
@@ -139,7 +147,7 @@ exports.callback = async (req, res, next) => {
 
           const user = markConnectedToSpotify(jwtCookie, refreshToken, photo);
 
-          res.redirect('http://localhost:3000/me').json({
+          res.redirect(redirectToHomepage).json({
             status: 'success',
             lastRefresh: user.lastSpotifyAuthToken,
           });
