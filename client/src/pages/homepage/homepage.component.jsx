@@ -29,8 +29,6 @@ const HomePage = ({
   lastTokenRefresh,
 }) => {
   useEffect(() => {
-    console.log(process.env.NODE_ENV);
-
     checkConnection();
   }, []);
 

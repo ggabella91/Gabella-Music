@@ -16,7 +16,7 @@ let redirectUri;
 let redirectToHomepage;
 if (process.env.NODE_ENV === 'development') {
   redirectUri = 'http://localhost:8000/api/v1/spotify/callback';
-  redirectToHomepage = 'http://localhost:8000/me';
+  redirectToHomepage = 'http://localhost:3000/me';
 } else {
   redirectUri = 'https://gabellamusic.herokuapp.com/api/v1/spotify/callback';
   redirectToHomepage = 'https://gabellamusic.herokuapp.com/me';
@@ -86,7 +86,10 @@ exports.callback = async (req, res, next) => {
 
     res.redirect(`/#${stateMismatch}`);
   } else {
-    res.clearCookie(stateKey);
+    res.cookie(stateKey, '', {
+      expires: new Date(Date.now() + 1000),
+      httpOnly: true,
+    });
 
     const postHeaders = {
       Accept: 'application/json',

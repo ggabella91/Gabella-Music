@@ -77,17 +77,17 @@ exports.logout = (req, res) => {
   });
 
   res.cookie('spotifyAuthToken', '', {
-    expires: new Date(Date.now() + 2 * 1000),
+    expires: new Date(Date.now()),
     httpOnly: true,
   });
 
   res.cookie('spotifyRefreshToken', '', {
-    expires: new Date(Date.now() + 2 * 1000),
+    expires: new Date(Date.now()),
     httpOnly: true,
   });
 
   res.cookie('spotify_auth_state', '', {
-    expires: new Date(Date.now() + 2 * 1000),
+    expires: new Date(Date.now()),
     httpOnly: true,
   });
 
