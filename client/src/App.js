@@ -10,6 +10,7 @@ import Footer from './components/footer/footer.component';
 import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.component.jsx';
 import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 

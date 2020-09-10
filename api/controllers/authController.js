@@ -148,23 +148,18 @@ exports.isLoggedIn = async (req, res, next) => {
 
       // 2) Check if user still exists
       const currentUser = await User.findById(decoded.id);
-      if (!currentUser) {
-        res.status(401).json({
-          status: 'User not found',
-          locals: {
-            user: null,
-          },
-        });
-      }
+
       // 3) Check if user changed password after the token was issued
-      if (currentUser.changedPasswordAfter(decoded.iat)) {
-        res.locals.user = '';
-        res.status(200).json({
-          status: 'User changed password',
-          locals: {
-            user: null,
-          },
-        });
+      if (currentUser) {
+        if (currentUser.changedPasswordAfter(decoded.iat)) {
+          res.locals.user = '';
+          res.status(200).json({
+            status: 'User changed password',
+            locals: {
+              user: null,
+            },
+          });
+        }
       }
 
       // THERE IS A LOGGED IN USER
