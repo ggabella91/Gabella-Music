@@ -7,7 +7,9 @@ import {
   connectFailure,
   refreshAuthTokenSuccess,
   refreshAuthTokenFailure,
-  fetchTopArtistsSuccess,
+  fetchTopArtistsLongTermSuccess,
+  fetchTopArtistsMediumTermSuccess,
+  fetchTopArtistsShortTermSuccess,
   fetchTopArtistsFailure,
   fetchTopTracksSuccess,
   fetchTopTracksFailure,
@@ -78,25 +80,56 @@ export function* fetchEndpointDataAsync(endpoint, stateProps) {
 
     const endpointData = response.data;
 
-    if (stateProps === 'topArtists') {
-      yield put(fetchTopArtistsSuccess(endpointData));
+    if (stateProps === 'topArtistsLongTerm') {
+      yield put(fetchTopArtistsLongTermSuccess(endpointData));
+    } else if (stateProps === 'topArtistsMediumTerm') {
+      yield put(fetchTopArtistsMediumTermSuccess(endpointData));
+    } else if (stateProps === 'topArtistsShortTerm') {
+      yield put(fetchTopArtistsShortTermSuccess(endpointData));
     } else if (stateProps === 'topTracks') {
       yield put(fetchTopTracksSuccess(endpointData));
     }
   } catch (err) {
-    if (stateProps === 'topArtists') {
+    if (stateProps.match(/topArtists/)) {
       yield put(fetchTopArtistsFailure(err.message));
-    } else if (stateProps === 'topTracks') {
+    } else if (stateProps.match(/topTracks/)) {
       yield put(fetchTopTracksFailure(err.message));
     }
   }
 }
 
-export function* fetchTopArtistsStart(endpoint, stateProps = 'topArtists') {
+export function* fetchTopArtistsLongTermStart(
+  endpoint,
+  stateProps = 'topArtistsLongTerm'
+) {
   yield takeLatest(
-    SpotifyActionTypes.FETCH_TOP_ARTISTS_START,
+    SpotifyActionTypes.FETCH_TOP_ARTISTS_LONG_TERM_START,
     fetchEndpointDataAsync,
     (endpoint = 'me/top/artists?time_range=long_term'),
+    stateProps
+  );
+}
+
+export function* fetchTopArtistsMediumTermStart(
+  endpoint,
+  stateProps = 'topArtistsMediumTerm'
+) {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_TOP_ARTISTS_MEDIUM_TERM_START,
+    fetchEndpointDataAsync,
+    (endpoint = 'me/top/artists?time_range=medium_term'),
+    stateProps
+  );
+}
+
+export function* fetchTopArtistsShortTermStart(
+  endpoint,
+  stateProps = 'topArtistsShortTerm'
+) {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_TOP_ARTISTS_SHORT_TERM_START,
+    fetchEndpointDataAsync,
+    (endpoint = 'me/top/artists?time_range=short_term'),
     stateProps
   );
 }
@@ -114,7 +147,9 @@ export function* spotifySagas() {
   yield all([
     call(onCheckConnection),
     call(refreshAuthTokenStart),
-    call(fetchTopArtistsStart),
+    call(fetchTopArtistsLongTermStart),
+    call(fetchTopArtistsMediumTermStart),
+    call(fetchTopArtistsShortTermStart),
     call(fetchTopTracksStart),
   ]);
 }

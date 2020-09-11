@@ -4,7 +4,9 @@ const INITIAL_STATE = {
   isConnected: false,
   lastTokenRefresh: null,
   photo: '',
-  topArtists: [],
+  topArtistsLongTerm: [],
+  topArtistsMediumTerm: [],
+  topArtistsShortTerm: [],
   topTracks: [],
   error: null,
 };
@@ -30,10 +32,22 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         isConnected: false,
         error: action.payload,
       };
-    case SpotifyActionTypes.FETCH_TOP_ARTISTS_SUCCESS:
+    case SpotifyActionTypes.FETCH_TOP_ARTISTS_LONG_TERM_SUCCESS:
       return {
         ...state,
-        topArtists: action.payload,
+        topArtistsLongTerm: action.payload,
+        error: null,
+      };
+    case SpotifyActionTypes.FETCH_TOP_ARTISTS_MEDIUM_TERM_SUCCESS:
+      return {
+        ...state,
+        topArtistsMediumTerm: action.payload,
+        error: null,
+      };
+    case SpotifyActionTypes.FETCH_TOP_ARTISTS_SHORT_TERM_SUCCESS:
+      return {
+        ...state,
+        topArtistsShortTerm: action.payload,
         error: null,
       };
     case SpotifyActionTypes.FETCH_TOP_TRACKS_SUCCESS:

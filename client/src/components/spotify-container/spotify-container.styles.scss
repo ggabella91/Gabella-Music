@@ -43,6 +43,35 @@
   }
 }
 
+.dropdown-container {
+  display: block;
+  grid-column: 1/4;
+}
+
+.dropdown {
+  min-width: 180px;
+  height: 60px;
+  border-radius: 15px;
+  letter-spacing: 0.5px;
+  line-height: 50px;
+  padding: 0 35px 0 35px;
+  font-weight: 380;
+  cursor: pointer;
+  display: inline-block;
+  justify-content: center;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  text-transform: capitalize;
+  text-decoration: none;
+}
+
+.dropdown:hover {
+  opacity: 0.9;
+  background-color: #ffc107;
+}
+
 .user-photo {
   width: 200px;
   height: auto;
@@ -51,4 +80,9 @@
 .top-artists {
   margin-top: 60px;
   grid-column: 1 / 4;
+}
+
+h4 {
+  grid-column: 1 / 4;
+  align-content: center;
 }

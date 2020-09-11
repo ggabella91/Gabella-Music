@@ -17,9 +17,19 @@ export const selectLastTokenRefresh = createSelector(
   (spotifyState) => spotifyState.lastTokenRefresh
 );
 
-export const selectTopArtists = createSelector(
+export const selectTopArtistsLongTerm = createSelector(
   [selectSpotifyState],
-  (spotifyState) => spotifyState.topArtists
+  (spotifyState) => spotifyState.topArtistsLongTerm
+);
+
+export const selectTopArtistsMediumTerm = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.topArtistsMediumTerm
+);
+
+export const selectTopArtistsShortTerm = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.topArtistsShortTerm
 );
 
 export const selectTopTracks = createSelector(

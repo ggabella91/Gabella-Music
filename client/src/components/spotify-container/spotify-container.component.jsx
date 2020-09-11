@@ -2,17 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import Dropdown from 'react-bootstrap/Dropdown';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import {
   selectIsConnected,
   selectPhoto,
   selectLastTokenRefresh,
-  selectTopArtists,
+  selectTopArtistsLongTerm,
+  selectTopArtistsMediumTerm,
+  selectTopArtistsShortTerm,
   selectTopTracks,
 } from '../../redux/spotify/spotify.selectors';
 import {
-  fetchTopArtistsStart,
+  fetchTopArtistsLongTermStart,
+  fetchTopArtistsMediumTermStart,
+  fetchTopArtistsShortTermStart,
   fetchTopTracksStart,
 } from '../../redux/spotify/spotify.actions';
 
@@ -22,14 +27,20 @@ const SpotifyContainer = ({
   isConnected,
   photo,
   lastTokenRefresh,
-  fetchTopArtistsStart,
+  fetchTopArtistsLongTermStart,
+  fetchTopArtistsMediumTermStart,
+  fetchTopArtistsShortTermStart,
   fetchTopTracksStart,
-  topArtists,
+  topArtistsLongTerm,
+  topArtistsMediumTerm,
+  topArtistsShortTerm,
   topTracks,
 }) => {
   const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
+  const [artistsTimeRange, setArtistsTimeRange] = useState('long-term');
+  const [tracksTimeRange, setTracksTimeRange] = useState('long-term');
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
@@ -37,7 +48,9 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
-        fetchTopArtistsStart();
+        fetchTopArtistsLongTermStart();
+        fetchTopArtistsMediumTermStart();
+        fetchTopArtistsShortTermStart();
       }
     }
   }, []);
@@ -60,12 +73,34 @@ const SpotifyContainer = ({
   }, [photo]);
 
   useEffect(() => {
-    if (topArtists.data) {
-      if (topArtists.data.items.length > 0) {
-        setArtists(topArtists.data.items);
+    setArtistsTimeRange(artistsTimeRange);
+  }, [artistsTimeRange]);
+
+  useEffect(() => {
+    if (artistsTimeRange === 'long-term') {
+      if (topArtistsLongTerm.data) {
+        if (topArtistsLongTerm.data.items.length > 0) {
+          setArtists(topArtistsLongTerm.data.items);
+        }
+      }
+    } else if (artistsTimeRange === 'medium-term') {
+      if (topArtistsMediumTerm.data) {
+        if (topArtistsMediumTerm.data.items.length > 0) {
+          setArtists(topArtistsMediumTerm.data.items);
+        }
+      }
+    } else if (artistsTimeRange === 'short-term') {
+      if (topArtistsShortTerm.data) {
+        if (topArtistsShortTerm.data.items.length > 0) {
+          setArtists(topArtistsShortTerm.data.items);
+        }
       }
     }
-  }, [topArtists.data]);
+  }, [
+    topArtistsLongTerm.data,
+    topArtistsMediumTerm.data,
+    topArtistsShortTerm.data,
+  ]);
 
   useEffect(() => {
     if (topTracks.data) {
@@ -84,6 +119,42 @@ const SpotifyContainer = ({
       </div>
       <h2 className='top-artists'>Your Top Artists On Spotify</h2>
       <div className='spotify-container'>
+        <h4>{artistsTimeRange}</h4>
+        <div className='dropdown-container'>
+          <Dropdown>
+            <Dropdown.Toggle as='dropdown' id='dropdown-artists'>
+              Time Range
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                eventKey='long-term'
+                onSelect={(eventKey) => {
+                  console.log('long-term');
+                  setArtistsTimeRange(eventKey);
+                }}
+              >
+                Long-term
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey='medium-term'
+                onSelect={(eventKey) => {
+                  setArtistsTimeRange(eventKey);
+                }}
+              >
+                Medium-term
+              </Dropdown.Item>
+              <Dropdown.Item
+                eventKey='short-term'
+                onSelect={(eventKey) => {
+                  setArtistsTimeRange(eventKey);
+                }}
+              >
+                Short-term
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
         {artists
           ? artists.map((artist, idx) => (
               <SpotifyElement
@@ -97,6 +168,42 @@ const SpotifyContainer = ({
       </div>
       <h2 className='top-artists'>Your Top Spotify Tracks</h2>
       <div className='spotify-container'>
+        <h4>{tracksTimeRange}</h4>
+
+        <div className='dropdown-container'>
+          <Dropdown>
+            <Dropdown.Toggle as='dropdown' id='dropdown-tracks'>
+              Time Range
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item
+                value='long-term'
+                onClick={() => {
+                  setTracksTimeRange('long-term');
+                }}
+              >
+                Long-term
+              </Dropdown.Item>
+              <Dropdown.Item
+                value='medium-term'
+                onClick={() => {
+                  setTracksTimeRange('medium-term');
+                }}
+              >
+                Medium-term
+              </Dropdown.Item>
+              <Dropdown.Item
+                value='short-term'
+                onClick={() => {
+                  setTracksTimeRange('short-term');
+                }}
+              >
+                Short-term
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
         {tracks
           ? tracks.map((track, idx) => (
               <SpotifyElement
@@ -116,12 +223,18 @@ const mapStateToProps = createStructuredSelector({
   isConnected: selectIsConnected,
   photo: selectPhoto,
   lastTokenRefresh: selectLastTokenRefresh,
-  topArtists: selectTopArtists,
+  topArtistsLongTerm: selectTopArtistsLongTerm,
+  topArtistsMediumTerm: selectTopArtistsMediumTerm,
+  topArtistsShortTerm: selectTopArtistsShortTerm,
   topTracks: selectTopTracks,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchTopArtistsStart: () => dispatch(fetchTopArtistsStart()),
+  fetchTopArtistsLongTermStart: () => dispatch(fetchTopArtistsLongTermStart()),
+  fetchTopArtistsMediumTermStart: () =>
+    dispatch(fetchTopArtistsMediumTermStart()),
+  fetchTopArtistsShortTermStart: () =>
+    dispatch(fetchTopArtistsShortTermStart()),
   fetchTopTracksStart: () => dispatch(fetchTopTracksStart()),
 });
 
