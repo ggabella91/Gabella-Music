@@ -39,7 +39,7 @@ const SpotifyContainer = ({
   const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
-  const [artistsTimeRange, setArtistsTimeRange] = useState('long-term');
+  const [artistsTimeRange, setArtistsTimeRange] = useState('');
   const [tracksTimeRange, setTracksTimeRange] = useState('long-term');
 
   useEffect(() => {
@@ -73,10 +73,6 @@ const SpotifyContainer = ({
   }, [photo]);
 
   useEffect(() => {
-    setArtistsTimeRange(artistsTimeRange);
-  }, [artistsTimeRange]);
-
-  useEffect(() => {
     if (artistsTimeRange === 'long-term') {
       if (topArtistsLongTerm.data) {
         if (topArtistsLongTerm.data.items.length > 0) {
@@ -96,11 +92,7 @@ const SpotifyContainer = ({
         }
       }
     }
-  }, [
-    topArtistsLongTerm.data,
-    topArtistsMediumTerm.data,
-    topArtistsShortTerm.data,
-  ]);
+  }, [artistsTimeRange]);
 
   useEffect(() => {
     if (topTracks.data) {
@@ -119,35 +111,34 @@ const SpotifyContainer = ({
       </div>
       <h2 className='top-artists'>Your Top Artists On Spotify</h2>
       <div className='spotify-container'>
-        <h4>{artistsTimeRange}</h4>
+        <h4>Time Range: {artistsTimeRange}</h4>
         <div className='dropdown-container'>
           <Dropdown>
             <Dropdown.Toggle as='dropdown' id='dropdown-artists'>
-              Time Range
+              Select Time Range
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Dropdown.Item
-                eventKey='long-term'
-                onSelect={(eventKey) => {
-                  console.log('long-term');
-                  setArtistsTimeRange(eventKey);
+                value='long-term'
+                onClick={() => {
+                  setArtistsTimeRange('long-term');
                 }}
               >
                 Long-term
               </Dropdown.Item>
               <Dropdown.Item
-                eventKey='medium-term'
-                onSelect={(eventKey) => {
-                  setArtistsTimeRange(eventKey);
+                value='medium-term'
+                onClick={() => {
+                  setArtistsTimeRange('medium-term');
                 }}
               >
                 Medium-term
               </Dropdown.Item>
               <Dropdown.Item
-                eventKey='short-term'
-                onSelect={(eventKey) => {
-                  setArtistsTimeRange(eventKey);
+                value='short-term'
+                onClick={() => {
+                  setArtistsTimeRange('short-term');
                 }}
               >
                 Short-term
@@ -168,12 +159,12 @@ const SpotifyContainer = ({
       </div>
       <h2 className='top-artists'>Your Top Spotify Tracks</h2>
       <div className='spotify-container'>
-        <h4>{tracksTimeRange}</h4>
+        <h4>Time Range: {tracksTimeRange}</h4>
 
         <div className='dropdown-container'>
           <Dropdown>
             <Dropdown.Toggle as='dropdown' id='dropdown-tracks'>
-              Time Range
+              Select Time Range
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
