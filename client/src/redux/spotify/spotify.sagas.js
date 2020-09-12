@@ -11,7 +11,9 @@ import {
   fetchTopArtistsMediumTermSuccess,
   fetchTopArtistsShortTermSuccess,
   fetchTopArtistsFailure,
-  fetchTopTracksSuccess,
+  fetchTopTracksLongTermSuccess,
+  fetchTopTracksMediumTermSuccess,
+  fetchTopTracksShortTermSuccess,
   fetchTopTracksFailure,
 } from './spotify.actions';
 
@@ -86,8 +88,12 @@ export function* fetchEndpointDataAsync(endpoint, stateProps) {
       yield put(fetchTopArtistsMediumTermSuccess(endpointData));
     } else if (stateProps === 'topArtistsShortTerm') {
       yield put(fetchTopArtistsShortTermSuccess(endpointData));
-    } else if (stateProps === 'topTracks') {
-      yield put(fetchTopTracksSuccess(endpointData));
+    } else if (stateProps === 'topTracksLongTerm') {
+      yield put(fetchTopTracksLongTermSuccess(endpointData));
+    } else if (stateProps === 'topTracksMediumTerm') {
+      yield put(fetchTopTracksMediumTermSuccess(endpointData));
+    } else if (stateProps === 'topTracksShortTerm') {
+      yield put(fetchTopTracksShortTermSuccess(endpointData));
     }
   } catch (err) {
     if (stateProps.match(/topArtists/)) {
@@ -134,11 +140,38 @@ export function* fetchTopArtistsShortTermStart(
   );
 }
 
-export function* fetchTopTracksStart(endpoint, stateProps = 'topTracks') {
+export function* fetchTopTracksLongTermStart(
+  endpoint,
+  stateProps = 'topTracksLongTerm'
+) {
   yield takeLatest(
-    SpotifyActionTypes.FETCH_TOP_TRACKS_START,
+    SpotifyActionTypes.FETCH_TOP_TRACKS_LONG_TERM_START,
     fetchEndpointDataAsync,
     (endpoint = 'me/top/tracks?time_range=long_term'),
+    stateProps
+  );
+}
+
+export function* fetchTopTracksMediumTermStart(
+  endpoint,
+  stateProps = 'topTracksMediumTerm'
+) {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_TOP_TRACKS_MEDIUM_TERM_START,
+    fetchEndpointDataAsync,
+    (endpoint = 'me/top/tracks?time_range=medium_term'),
+    stateProps
+  );
+}
+
+export function* fetchTopTracksShortTermStart(
+  endpoint,
+  stateProps = 'topTracksShortTerm'
+) {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_TOP_TRACKS_SHORT_TERM_START,
+    fetchEndpointDataAsync,
+    (endpoint = 'me/top/tracks?time_range=short_term'),
     stateProps
   );
 }
@@ -150,6 +183,8 @@ export function* spotifySagas() {
     call(fetchTopArtistsLongTermStart),
     call(fetchTopArtistsMediumTermStart),
     call(fetchTopArtistsShortTermStart),
-    call(fetchTopTracksStart),
+    call(fetchTopTracksLongTermStart),
+    call(fetchTopTracksMediumTermStart),
+    call(fetchTopTracksShortTermStart),
   ]);
 }

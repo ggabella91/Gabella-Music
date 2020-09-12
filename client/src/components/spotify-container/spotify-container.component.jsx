@@ -12,13 +12,17 @@ import {
   selectTopArtistsLongTerm,
   selectTopArtistsMediumTerm,
   selectTopArtistsShortTerm,
-  selectTopTracks,
+  selectTopTracksLongTerm,
+  selectTopTracksMediumTerm,
+  selectTopTracksShortTerm,
 } from '../../redux/spotify/spotify.selectors';
 import {
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
   fetchTopArtistsShortTermStart,
-  fetchTopTracksStart,
+  fetchTopTracksLongTermStart,
+  fetchTopTracksMediumTermStart,
+  fetchTopTracksShortTermStart,
 } from '../../redux/spotify/spotify.actions';
 
 import './spotify-container.styles.scss';
@@ -30,17 +34,21 @@ const SpotifyContainer = ({
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
   fetchTopArtistsShortTermStart,
-  fetchTopTracksStart,
+  fetchTopTracksLongTermStart,
+  fetchTopTracksMediumTermStart,
+  fetchTopTracksShortTermStart,
   topArtistsLongTerm,
   topArtistsMediumTerm,
   topArtistsShortTerm,
-  topTracks,
+  topTracksLongTerm,
+  topTracksMediumTerm,
+  topTracksShortTerm,
 }) => {
   const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [artistsTimeRange, setArtistsTimeRange] = useState('');
-  const [tracksTimeRange, setTracksTimeRange] = useState('long-term');
+  const [tracksTimeRange, setTracksTimeRange] = useState('');
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
@@ -61,7 +69,9 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
-        fetchTopTracksStart();
+        fetchTopTracksLongTermStart();
+        fetchTopTracksMediumTermStart();
+        fetchTopTracksShortTermStart();
       }
     }
   }, []);
@@ -95,12 +105,26 @@ const SpotifyContainer = ({
   }, [artistsTimeRange]);
 
   useEffect(() => {
-    if (topTracks.data) {
-      if (topTracks.data.items.length > 0) {
-        setTracks(topTracks.data.items);
+    if (tracksTimeRange === 'long-term') {
+      if (topTracksLongTerm.data) {
+        if (topTracksLongTerm.data.items.length > 0) {
+          setTracks(topTracksLongTerm.data.items);
+        }
+      }
+    } else if (tracksTimeRange === 'medium-term') {
+      if (topTracksMediumTerm.data) {
+        if (topTracksMediumTerm.data.items.length > 0) {
+          setTracks(topTracksMediumTerm.data.items);
+        }
+      }
+    } else if (tracksTimeRange === 'short-term') {
+      if (topTracksShortTerm.data) {
+        if (topTracksShortTerm.data.items.length > 0) {
+          setTracks(topTracksShortTerm.data.items);
+        }
       }
     }
-  }, [topTracks.data]);
+  }, [tracksTimeRange]);
 
   return (
     <div>
@@ -217,7 +241,9 @@ const mapStateToProps = createStructuredSelector({
   topArtistsLongTerm: selectTopArtistsLongTerm,
   topArtistsMediumTerm: selectTopArtistsMediumTerm,
   topArtistsShortTerm: selectTopArtistsShortTerm,
-  topTracks: selectTopTracks,
+  topTracksLongTerm: selectTopTracksLongTerm,
+  topTracksMediumTerm: selectTopTracksMediumTerm,
+  topTracksShortTerm: selectTopTracksShortTerm,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -226,7 +252,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(fetchTopArtistsMediumTermStart()),
   fetchTopArtistsShortTermStart: () =>
     dispatch(fetchTopArtistsShortTermStart()),
-  fetchTopTracksStart: () => dispatch(fetchTopTracksStart()),
+  fetchTopTracksLongTermStart: () => dispatch(fetchTopTracksLongTermStart()),
+  fetchTopTracksMediumTermStart: () =>
+    dispatch(fetchTopTracksMediumTermStart()),
+  fetchTopTracksShortTermStart: () => dispatch(fetchTopTracksShortTermStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SpotifyContainer);

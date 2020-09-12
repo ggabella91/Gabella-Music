@@ -7,7 +7,9 @@ const INITIAL_STATE = {
   topArtistsLongTerm: [],
   topArtistsMediumTerm: [],
   topArtistsShortTerm: [],
-  topTracks: [],
+  topTracksLongTerm: [],
+  topTracksMediumTerm: [],
+  topTracksShortTerm: [],
   error: null,
 };
 
@@ -50,10 +52,22 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         topArtistsShortTerm: action.payload,
         error: null,
       };
-    case SpotifyActionTypes.FETCH_TOP_TRACKS_SUCCESS:
+    case SpotifyActionTypes.FETCH_TOP_TRACKS_LONG_TERM_SUCCESS:
       return {
         ...state,
-        topTracks: action.payload,
+        topTracksLongTerm: action.payload,
+        error: null,
+      };
+    case SpotifyActionTypes.FETCH_TOP_TRACKS_MEDIUM_TERM_SUCCESS:
+      return {
+        ...state,
+        topTracksMediumTerm: action.payload,
+        error: null,
+      };
+    case SpotifyActionTypes.FETCH_TOP_TRACKS_SHORT_TERM_SUCCESS:
+      return {
+        ...state,
+        topTracksShortTerm: action.payload,
         error: null,
       };
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:

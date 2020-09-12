@@ -63,13 +63,33 @@ export const fetchTopArtistsFailure = (error) => ({
   payload: error,
 });
 
-export const fetchTopTracksStart = (endpoint) => ({
-  type: SpotifyActionTypes.FETCH_TOP_TRACKS_START,
+export const fetchTopTracksLongTermStart = (endpoint) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_LONG_TERM_START,
   payload: endpoint,
 });
 
-export const fetchTopTracksSuccess = (endpointData) => ({
-  type: SpotifyActionTypes.FETCH_TOP_TRACKS_SUCCESS,
+export const fetchTopTracksMediumTermStart = (endpoint) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_MEDIUM_TERM_START,
+  payload: endpoint,
+});
+
+export const fetchTopTracksShortTermStart = (endpoint) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_SHORT_TERM_START,
+  payload: endpoint,
+});
+
+export const fetchTopTracksLongTermSuccess = (endpointData) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_LONG_TERM_SUCCESS,
+  payload: endpointData,
+});
+
+export const fetchTopTracksMediumTermSuccess = (endpointData) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_MEDIUM_TERM_SUCCESS,
+  payload: endpointData,
+});
+
+export const fetchTopTracksShortTermSuccess = (endpointData) => ({
+  type: SpotifyActionTypes.FETCH_TOP_TRACKS_SHORT_TERM_SUCCESS,
   payload: endpointData,
 });
 

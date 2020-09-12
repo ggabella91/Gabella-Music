@@ -32,7 +32,17 @@ export const selectTopArtistsShortTerm = createSelector(
   (spotifyState) => spotifyState.topArtistsShortTerm
 );
 
-export const selectTopTracks = createSelector(
+export const selectTopTracksLongTerm = createSelector(
   [selectSpotifyState],
-  (spotifyState) => spotifyState.topTracks
+  (spotifyState) => spotifyState.topTracksLongTerm
+);
+
+export const selectTopTracksMediumTerm = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.topTracksMediumTerm
+);
+
+export const selectTopTracksShortTerm = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.topTracksShortTerm
 );
