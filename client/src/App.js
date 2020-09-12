@@ -8,6 +8,7 @@ import HomePage from './pages/homepage/homepage.component';
 import Header from './components/header/header.component';
 import Footer from './components/footer/footer.component';
 import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.component.jsx';
+import ForgotPasswordPage from './pages/forgot-password/forgot-password.component';
 import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -40,6 +41,11 @@ const App = ({ checkUserSession, currentUser }) => {
           render={() =>
             currentUser === null ? <Redirect to='/' /> : <HomePage />
           }
+        />
+        <Route
+          exact
+          path='/forgot-password'
+          render={() => <ForgotPasswordPage />}
         />
       </Switch>
       <Footer />

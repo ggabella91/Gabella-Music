@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -85,6 +86,11 @@ const SignIn = ({ signInStart, signInError }) => {
           >
             Sign In
           </Button>
+        </div>
+        <div className='link-container'>
+          <NavLink className='link' to='/forgot-password'>
+            Forgot your password?
+          </NavLink>
         </div>
       </form>
     </div>

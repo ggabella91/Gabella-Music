@@ -8,7 +8,15 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   font-family: 'Roboto', sans-serif;
+  text-decoration: none;
+
+  &:hover,
+  &:active {
+    color: white;
+    text-decoration: none;
+  }
 }
+
 h1 {
   font-weight: 400;
 }
