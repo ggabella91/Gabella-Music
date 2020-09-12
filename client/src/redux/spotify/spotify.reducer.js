@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   topTracksMediumTerm: [],
   topTracksShortTerm: [],
   error: null,
+  isLoading: false,
 };
 
 const SpotifyReducer = (state = INITIAL_STATE, action) => {

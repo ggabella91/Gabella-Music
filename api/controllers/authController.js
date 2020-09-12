@@ -205,7 +205,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   const resetToken = user.createPasswordResetToken();
   await user.save({ validateBeforeSave: false });
 
-  // 3) Send it to user's email -- NEED TO IMPLEMENT EMAIL CLASS
+  // 3) Send it to user's email
   try {
     const resetURL = `${req.protocol}://${req.get(
       'host'
