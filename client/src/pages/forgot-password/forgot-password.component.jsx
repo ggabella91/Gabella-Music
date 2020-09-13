@@ -28,6 +28,7 @@ const ForgotPasswordPage = ({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     forgotPasswordStart(email);
   };
 
@@ -49,7 +50,7 @@ const ForgotPasswordPage = ({
     } else if (type === 'success' && show) {
       return (
         <Alert variant='success' onClose={() => setShow(false)} dismissible>
-          Link sent successfully!
+          {message}
         </Alert>
       );
     }

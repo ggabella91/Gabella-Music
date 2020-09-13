@@ -87,7 +87,7 @@ export function* forgotPassword({ payload: email }) {
   }
 }
 
-export function* resetPassword({ payload: password, passwordConfirm }) {
+export function* resetPassword({ payload: { password, passwordConfirm } }) {
   try {
     yield axios.post(`${origin}api/v1/users/resetPassword`, {
       password,
@@ -140,5 +140,6 @@ export function* userSagas() {
     call(onSignUpStart),
     call(onSignUpSuccess),
     call(onForgotPasswordStart),
+    call(onResetPasswordStart),
   ]);
 }

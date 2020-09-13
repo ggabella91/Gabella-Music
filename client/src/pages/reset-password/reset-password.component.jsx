@@ -1,33 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+
 import FormInput from '../../components/form-input/form-input.component';
+import Button from '../../components/button/button.component';
 
 import Alert from 'react-bootstrap/Alert';
 
+import {
+  selectForgotOrResetError,
+  selectForgotOrResetConfirm,
+} from '../../redux/user/user.selectors';
+import { resetPasswordStart } from '../../redux/user/user.actions';
+
 import './reset-password.styles.scss';
 
-const ResetPasswordPage = () => {
+const ResetPasswordPage = ({
+  resetError,
+  resetConfirm,
+  resetPasswordStart,
+}) => {
   const [userPassword, setUserPassword] = useState({
     password: '',
     passwordConfirm: '',
   });
-
   const [show, setShow] = useState(true);
+  const [status, setStatus] = useState({ success: false, error: false });
 
   const { password, passwordConfirm } = userPassword;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // signUpStart(name, email, password, passwordConfirm);
+    resetPasswordStart(password, passwordConfirm);
   };
 
-  const [error, setError] = useState(false);
-
-  //   useEffect(() => {
-  //     if (signUpError) {
-  //       setError(true);
-  //     }
-  //   }, [signUpError]);
+  useEffect(() => {
+    if (resetError) {
+      setStatus({ ...status, error: true });
+    } else if (resetConfirm) {
+      setStatus({ ...status, success: true });
+    }
+  }, [resetError, resetConfirm]);
 
   const handleRenderAlert = (type, message) => {
     if (type === 'error' && show) {
@@ -36,21 +50,27 @@ const ResetPasswordPage = () => {
           {message}
         </Alert>
       );
+    } else if (type === 'success' && show) {
+      return (
+        <Alert variant='success' onClose={() => setShow(false)} dismissible>
+          {message}
+        </Alert>
+      );
     }
   };
 
   const handleChange = (event) => {
-    const email = event.target;
+    const { value, name } = event.target;
 
-    // setUserEmail(email);
+    setUserPassword({ ...userPassword, [name]: value });
   };
 
   return (
     <div className='reset-password'>
-      <span className='reset-text'>Set your new password below</span>
       <form>
+        <span>Set your new password below</span>
         <FormInput
-          type='text'
+          type='password'
           name='password'
           value={password}
           onChange={handleChange}
@@ -65,9 +85,36 @@ const ResetPasswordPage = () => {
           label='confirm password'
           required
         />
+        <div className='button'>
+          <Button
+            className='submit-button reset-button'
+            onSubmit={handleSubmit}
+            type='submit'
+          >
+            Change Password
+          </Button>
+        </div>
       </form>
+      <div className='alert'>
+        {status.error
+          ? handleRenderAlert('error', 'Token is incorrect or has expired.')
+          : null}
+        {status.success
+          ? handleRenderAlert('success', 'Password reset successfully!')
+          : null}
+      </div>
     </div>
   );
 };
 
-export default ResetPasswordPage;
+const mapStateToProps = createStructuredSelector({
+  resetError: selectForgotOrResetError,
+  resetConfirm: selectForgotOrResetConfirm,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  resetPasswordStart: (password, passwordConfirm) =>
+    dispatch(resetPasswordStart(password, passwordConfirm)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordPage);
