@@ -10,6 +10,10 @@ import {
   signOutFailure,
   signUpSuccess,
   signUpFailure,
+  forgotPasswordSuccess,
+  forgotPasswordFailure,
+  resetPasswordSuccess,
+  resetPasswordFailure,
 } from './user.actions';
 
 import axios from 'axios';
@@ -71,6 +75,31 @@ export function* signUp({
   }
 }
 
+export function* forgotPassword({ payload: email }) {
+  try {
+    yield axios.post(`${origin}api/v1/users/forgotPassword`, {
+      email,
+    });
+
+    yield put(forgotPasswordSuccess('Password reset link sent!'));
+  } catch (err) {
+    yield put(forgotPasswordFailure(err));
+  }
+}
+
+export function* resetPassword({ payload: password, passwordConfirm }) {
+  try {
+    yield axios.post(`${origin}api/v1/users/resetPassword`, {
+      password,
+      passwordConfirm,
+    });
+
+    yield put(resetPasswordSuccess('Password reset successfully!'));
+  } catch (err) {
+    yield put(resetPasswordFailure(err));
+  }
+}
+
 export function* signInAfterSignUp({ payload: user }) {
   yield put(setCurrentUser(user));
 }
@@ -95,6 +124,14 @@ export function* onSignUpSuccess() {
   yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
 }
 
+export function* onForgotPasswordStart() {
+  yield takeLatest(UserActionTypes.FORGOT_PASSWORD_START, forgotPassword);
+}
+
+export function* onResetPasswordStart() {
+  yield takeLatest(UserActionTypes.RESET_PASSWORD_START, resetPassword);
+}
+
 export function* userSagas() {
   yield all([
     call(onSignInStart),
@@ -102,5 +139,6 @@ export function* userSagas() {
     call(onSignOutStart),
     call(onSignUpStart),
     call(onSignUpSuccess),
+    call(onForgotPasswordStart),
   ]);
 }

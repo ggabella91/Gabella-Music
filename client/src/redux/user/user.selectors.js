@@ -16,3 +16,13 @@ export const selectUserSignUpError = createSelector(
   [selectUser],
   (user) => user.signUpError
 );
+
+export const selectForgotOrResetError = createSelector(
+  [selectUser],
+  (user) => user.forgotOrResetError
+);
+
+export const selectForgotOrResetConfirm = createSelector(
+  [selectUser],
+  (user) => user.forgotOrResetConfirm
+);

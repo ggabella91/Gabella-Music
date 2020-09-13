@@ -4,6 +4,8 @@ const INITIAL_STATE = {
   currentUser: null,
   signInOrOutError: null,
   signUpError: null,
+  forgotOrResetConfirm: null,
+  forgotOrResetError: null,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -14,6 +16,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         currentUser: action.payload,
         signInOrOutError: null,
         signUpError: null,
+        forgotOrResetError: null,
       };
     case UserActionTypes.SIGN_IN_SUCCESS:
       return {
@@ -21,6 +24,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
         currentUser: action.payload,
         signInOrOutError: null,
         signUpError: null,
+        forgotOrResetError: null,
       };
     case UserActionTypes.SIGN_OUT_SUCCESS:
       return {
@@ -28,6 +32,14 @@ const userReducer = (state = INITIAL_STATE, action) => {
         currentUser: null,
         signInOrOutError: null,
         signUpError: null,
+        forgotOrResetError: null,
+      };
+    case UserActionTypes.FORGOT_PASSWORD_SUCCESS:
+    case UserActionTypes.RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        forgotOrResetConfirm: action.payload,
+        forgotOrResetError: null,
       };
     case UserActionTypes.SIGN_IN_FAILURE:
     case UserActionTypes.SIGN_OUT_FAILURE:
@@ -39,6 +51,13 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         signUpError: action.payload,
+      };
+    case UserActionTypes.FORGOT_PASSWORD_FAILURE:
+    case UserActionTypes.RESET_PASSWORD_FAILURE:
+      return {
+        ...state,
+        forgotOrResetConfirm: null,
+        forgotOrResetError: action.payload,
       };
     default:
       return state;

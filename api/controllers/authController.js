@@ -207,9 +207,14 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 3) Send it to user's email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      'host'
-    )}/api/v1/users/resetPassword/${resetToken}`;
+    let host;
+    if (process.env.NODE_ENV === 'development') {
+      host = 'localhost:3000';
+    } else {
+      host = 'gabellamusic.herokuapp.com';
+    }
+
+    const resetURL = `${req.protocol}://${host}/reset-password/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({

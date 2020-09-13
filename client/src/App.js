@@ -9,6 +9,7 @@ import Header from './components/header/header.component';
 import Footer from './components/footer/footer.component';
 import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.component.jsx';
 import ForgotPasswordPage from './pages/forgot-password/forgot-password.component';
+import ResetPasswordPage from './pages/reset-password/reset-password.component';
 import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -47,6 +48,7 @@ const App = ({ checkUserSession, currentUser }) => {
           path='/forgot-password'
           render={() => <ForgotPasswordPage />}
         />
+        <Route path='/reset-password' render={() => <ResetPasswordPage />} />
       </Switch>
       <Footer />
     </div>
