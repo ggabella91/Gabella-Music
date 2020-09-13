@@ -42,12 +42,20 @@ const ForgotPasswordPage = ({
 
   const handleRenderAlert = (type, message) => {
     if (type === 'error' && show) {
+      setTimeout(() => {
+        setUserEmail({ email: '' });
+        setStatus({ success: false, error: false });
+      }, 5000);
       return (
         <Alert variant='danger' onClose={() => setShow(false)} dismissible>
           {message}
         </Alert>
       );
     } else if (type === 'success' && show) {
+      setTimeout(() => {
+        setUserEmail({ email: '' });
+        setStatus({ success: false, error: false });
+      }, 5000);
       return (
         <Alert variant='success' onClose={() => setShow(false)} dismissible>
           {message}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -29,6 +30,8 @@ const ResetPasswordPage = ({
   const [status, setStatus] = useState({ success: false, error: false });
   const { token } = useParams();
 
+  let history = useHistory();
+
   const { password, passwordConfirm } = userPassword;
 
   const handleSubmit = async (event) => {
@@ -47,12 +50,21 @@ const ResetPasswordPage = ({
 
   const handleRenderAlert = (type, message) => {
     if (type === 'error' && show) {
+      setTimeout(() => {
+        setUserPassword({ password: '', passwordConfirm: '' });
+        setStatus({ success: false, error: false });
+      }, 5000);
       return (
         <Alert variant='danger' onClose={() => setShow(false)} dismissible>
           {message}
         </Alert>
       );
     } else if (type === 'success' && show) {
+      setTimeout(() => {
+        setUserPassword({ password: '', passwordConfirm: '' });
+        setStatus({ success: false, error: false });
+        history.push('/');
+      }, 3000);
       return (
         <Alert variant='success' onClose={() => setShow(false)} dismissible>
           {message}
