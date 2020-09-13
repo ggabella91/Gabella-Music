@@ -48,7 +48,10 @@ const App = ({ checkUserSession, currentUser }) => {
           path='/forgot-password'
           render={() => <ForgotPasswordPage />}
         />
-        <Route path='/reset-password' render={() => <ResetPasswordPage />} />
+        <Route
+          path='/reset-password/:token'
+          render={() => <ResetPasswordPage />}
+        />
       </Switch>
       <Footer />
     </div>

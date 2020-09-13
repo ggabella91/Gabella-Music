@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -26,13 +27,14 @@ const ResetPasswordPage = ({
   });
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState({ success: false, error: false });
+  const { token } = useParams();
 
   const { password, passwordConfirm } = userPassword;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    resetPasswordStart(password, passwordConfirm);
+    resetPasswordStart(password, passwordConfirm, token);
   };
 
   useEffect(() => {
@@ -66,9 +68,9 @@ const ResetPasswordPage = ({
   };
 
   return (
-    <div className='reset-password'>
-      <form>
-        <span>Set your new password below</span>
+    <div className='reset-page'>
+      <form className='reset-password' onSubmit={handleSubmit}>
+        <span>Set your new password below.</span>
         <FormInput
           type='password'
           name='password'
@@ -113,8 +115,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  resetPasswordStart: (password, passwordConfirm) =>
-    dispatch(resetPasswordStart(password, passwordConfirm)),
+  resetPasswordStart: (password, passwordConfirm, token) =>
+    dispatch(resetPasswordStart(password, passwordConfirm, token)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPasswordPage);

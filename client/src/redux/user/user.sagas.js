@@ -87,9 +87,11 @@ export function* forgotPassword({ payload: email }) {
   }
 }
 
-export function* resetPassword({ payload: { password, passwordConfirm } }) {
+export function* resetPassword({
+  payload: { password, passwordConfirm, token },
+}) {
   try {
-    yield axios.post(`${origin}api/v1/users/resetPassword`, {
+    yield axios.patch(`${origin}api/v1/users/resetPassword/${token}`, {
       password,
       passwordConfirm,
     });
