@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'development') {
   redirectToHomepage = 'https://gabellamusic.herokuapp.com/me';
 }
 const markConnectedToSpotify = catchAsync(
-  async (jwtCookie, refreshToken, photo) => {
+  async (jwtCookie, refreshToken) => {
     // 1) Verify token
     const decoded = await promisify(jwt.verify)(
       jwtCookie,
@@ -33,7 +33,6 @@ const markConnectedToSpotify = catchAsync(
       isConnectedToSpotify: true,
       lastSpotifyAuthToken: new Date(Date.now()),
       spotifyRefreshToken: refreshToken,
-      photo,
     });
 
     return user;
@@ -57,7 +56,23 @@ exports.login = (req, res, next) => {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
+  if (req.cookies.io) {
+    res.clearCookie('io');
+  }
+  if (req.cookies.spotifyAuthToken) {
+    console.log('Spotify auth token found.')
+    res.clearCookie('spotifyAuthToken');
+  }
+  if (req.cookies.spotifyRefreshToken) {
+    console.log('Spotify refresh token found.')
+    res.clearCookie('spotifyRefreshToken');
+  }
+  if (req.cookies.spotify_auth_state) {
+    console.log('Spotify auth state found.');
+    res.clearCookie('spotify_auth_state');
+  }
+
+  // Application requests authorization
   const scope =
     'user-read-private user-read-email user-library-read user-top-read user-read-recently-played user-read-playback-position user-read-playback-state user-read-currently-playing playlist-read-collaborative playlist-read-private';
 
@@ -131,15 +146,8 @@ exports.callback = async (req, res, next) => {
             },
           });
 
-          let photo = '';
           if (getRes.status === 200) {
             console.log('LOGIN SUCCESSFUL!');
-
-            if (getRes.data.images.length) {
-              photo = getRes.data.images[0].url;
-            } else {
-              photo = '';
-            }
           }
 
           res.cookie('spotifyAuthToken', accessToken, {
@@ -150,7 +158,7 @@ exports.callback = async (req, res, next) => {
             httpOnly: true,
           });
 
-          const user = markConnectedToSpotify(jwtCookie, refreshToken, photo);
+          const user = markConnectedToSpotify(jwtCookie, refreshToken);
 
           res.redirect(redirectToHomepage).json({
             status: 'success',

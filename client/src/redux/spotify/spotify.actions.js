@@ -2,7 +2,7 @@ import SpotifyActionTypes from './spotify.types';
 
 export const markConnected = (latestRefresh, photo) => ({
   type: SpotifyActionTypes.MARK_CONNECTED,
-  payload: { latestRefresh, photo },
+  payload: { latestRefresh },
 });
 
 export const connectFailure = (error) => ({
@@ -26,6 +26,20 @@ export const refreshAuthTokenFailure = (error) => ({
 
 export const checkConnection = () => ({
   type: SpotifyActionTypes.CHECK_CONNECTION,
+});
+
+export const fetchUserInfoStart = () => ({
+  type: SpotifyActionTypes.FETCH_USER_INFO_START
+});
+
+export const fetchUserInfoSuccess = (userInfo) => ({
+  type: SpotifyActionTypes.FETCH_USER_INFO_SUCCESS,
+  payload: userInfo
+});
+
+export const fetchUserInfoFailure = (error) => ({
+  type: SpotifyActionTypes.FETCH_USER_INFO_FAILURE,
+  payload: error
 });
 
 export const fetchTopArtistsLongTermStart = (endpoint) => ({

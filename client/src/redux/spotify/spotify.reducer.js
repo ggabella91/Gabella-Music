@@ -3,7 +3,7 @@ import SpotifyActionTypes from './spotify.types';
 const INITIAL_STATE = {
   isConnected: false,
   lastTokenRefresh: null,
-  photo: '',
+  userInfo: {},
   topArtistsLongTerm: [],
   topArtistsMediumTerm: [],
   topArtistsShortTerm: [],
@@ -22,12 +22,12 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         isConnected: true,
         error: null,
         lastTokenRefresh: action.payload.latestRefresh,
-        photo: action.payload.photo,
       };
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS:
       return {
         ...state,
         lastTokenRefresh: action.payload,
+        error: null
       };
     case SpotifyActionTypes.CONNECT_FAILURE:
       return {
@@ -35,6 +35,12 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         isConnected: false,
         error: action.payload,
       };
+    case SpotifyActionTypes.FETCH_USER_INFO_SUCCESS:
+      return {
+        ...state,
+        userInfo: action.payload,
+        error: null
+      }
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_LONG_TERM_SUCCESS:
       return {
         ...state,
@@ -71,6 +77,7 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         topTracksShortTerm: action.payload,
         error: null,
       };
+    case SpotifyActionTypes.FETCH_USER_INFO_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE:
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_FAILURE:

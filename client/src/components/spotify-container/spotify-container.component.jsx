@@ -8,7 +8,7 @@ import withSpinner from '../with-spinner/with-spinner.component';
 
 import {
   selectIsConnected,
-  selectPhoto,
+  selectUserInfo,
   selectLastTokenRefresh,
   selectTopArtistsLongTerm,
   selectTopArtistsMediumTerm,
@@ -18,6 +18,7 @@ import {
   selectTopTracksShortTerm,
 } from '../../redux/spotify/spotify.selectors';
 import {
+  fetchUserInfoStart,
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
   fetchTopArtistsShortTermStart,
@@ -30,8 +31,9 @@ import './spotify-container.styles.scss';
 
 const SpotifyContainer = ({
   isConnected,
-  photo,
+  userInfo,
   lastTokenRefresh,
+  fetchUserInfoStart,
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
   fetchTopArtistsShortTermStart,
@@ -57,6 +59,7 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
+
         fetchTopArtistsLongTermStart();
         fetchTopArtistsMediumTermStart();
         fetchTopArtistsShortTermStart();
@@ -70,6 +73,7 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
+        fetchUserInfoStart();
         fetchTopTracksLongTermStart();
         fetchTopTracksMediumTermStart();
         fetchTopTracksShortTermStart();
@@ -78,10 +82,12 @@ const SpotifyContainer = ({
   }, []);
 
   useEffect(() => {
-    if (photo) {
-      setUserPhoto(photo);
+    if (userInfo.data) {
+      if (userInfo.data.images.length) {
+        setUserPhoto(userInfo.data.images[0].url);
+      }
     }
-  }, [photo]);
+  }, [userInfo]);
 
   useEffect(() => {
     if (artistsTimeRange === 'long-term') {
@@ -173,13 +179,13 @@ const SpotifyContainer = ({
         </div>
         {artists
           ? artists.map((artist, idx) => (
-              <SpotifyElement
-                className='spotify-element'
-                type='artist'
-                key={idx}
-                item={artist}
-              />
-            ))
+            <SpotifyElement
+              className='spotify-element'
+              type='artist'
+              key={idx}
+              item={artist}
+            />
+          ))
           : null}
       </div>
       <h2 className='top-artists'>Your Top Spotify Tracks</h2>
@@ -222,13 +228,13 @@ const SpotifyContainer = ({
         </div>
         {tracks
           ? tracks.map((track, idx) => (
-              <SpotifyElement
-                className='spotify-element'
-                type='track'
-                key={idx}
-                item={track}
-              />
-            ))
+            <SpotifyElement
+              className='spotify-element'
+              type='track'
+              key={idx}
+              item={track}
+            />
+          ))
           : null}
       </div>
     </div>
@@ -237,7 +243,7 @@ const SpotifyContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   isConnected: selectIsConnected,
-  photo: selectPhoto,
+  userInfo: selectUserInfo,
   lastTokenRefresh: selectLastTokenRefresh,
   topArtistsLongTerm: selectTopArtistsLongTerm,
   topArtistsMediumTerm: selectTopArtistsMediumTerm,
@@ -248,6 +254,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  fetchUserInfoStart: () => dispatch(fetchUserInfoStart()),
   fetchTopArtistsLongTermStart: () => dispatch(fetchTopArtistsLongTermStart()),
   fetchTopArtistsMediumTermStart: () =>
     dispatch(fetchTopArtistsMediumTermStart()),

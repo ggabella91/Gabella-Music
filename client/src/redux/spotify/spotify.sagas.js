@@ -7,6 +7,8 @@ import {
   connectFailure,
   refreshAuthTokenSuccess,
   refreshAuthTokenFailure,
+  fetchUserInfoSuccess,
+  fetchUserInfoFailure,
   fetchTopArtistsLongTermSuccess,
   fetchTopArtistsMediumTermSuccess,
   fetchTopArtistsShortTermSuccess,
@@ -36,7 +38,6 @@ export function* isConnected() {
     yield put(
       markConnected(
         userConnectedRes.data.lastRefresh,
-        userConnectedRes.data.photo
       )
     );
   } catch (err) {
@@ -69,6 +70,7 @@ export function* onCheckConnection() {
   yield takeLatest(SpotifyActionTypes.CHECK_CONNECTION, isConnected);
 }
 
+
 export function* fetchEndpointDataAsync(endpoint, stateProps) {
   try {
     const response = yield axios.post(
@@ -82,7 +84,9 @@ export function* fetchEndpointDataAsync(endpoint, stateProps) {
 
     const endpointData = response.data;
 
-    if (stateProps === 'topArtistsLongTerm') {
+    if (stateProps === 'me') {
+      yield put(fetchUserInfoSuccess(endpointData))
+    } else if (stateProps === 'topArtistsLongTerm') {
       yield put(fetchTopArtistsLongTermSuccess(endpointData));
     } else if (stateProps === 'topArtistsMediumTerm') {
       yield put(fetchTopArtistsMediumTermSuccess(endpointData));
@@ -96,12 +100,23 @@ export function* fetchEndpointDataAsync(endpoint, stateProps) {
       yield put(fetchTopTracksShortTermSuccess(endpointData));
     }
   } catch (err) {
-    if (stateProps.match(/topArtists/)) {
+    if (stateProps === '/me') {
+      yield put(fetchUserInfoFailure(err.message))
+    } else if (stateProps.match(/topArtists/)) {
       yield put(fetchTopArtistsFailure(err.message));
     } else if (stateProps.match(/topTracks/)) {
       yield put(fetchTopTracksFailure(err.message));
     }
   }
+}
+
+export function* fetchUserInfoStart(stateProps = 'me') {
+  yield takeLatest(
+    SpotifyActionTypes.FETCH_USER_INFO_START,
+    fetchEndpointDataAsync,
+    'me',
+    stateProps
+  );
 }
 
 export function* fetchTopArtistsLongTermStart(
@@ -180,6 +195,7 @@ export function* spotifySagas() {
   yield all([
     call(onCheckConnection),
     call(refreshAuthTokenStart),
+    call(fetchUserInfoStart),
     call(fetchTopArtistsLongTermStart),
     call(fetchTopArtistsMediumTermStart),
     call(fetchTopArtistsShortTermStart),
