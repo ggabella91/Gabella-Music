@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import Dropdown from 'react-bootstrap/Dropdown';
+import Button from '../../components/button/button.component';
 import SpotifyElement from '../spotify-element/spotify-element.component';
-import withSpinner from '../with-spinner/with-spinner.component';
 
 import {
   selectIsConnected,
@@ -18,6 +18,7 @@ import {
   selectTopTracksShortTerm,
 } from '../../redux/spotify/spotify.selectors';
 import {
+  disconnectStart,
   fetchUserInfoStart,
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
@@ -33,6 +34,7 @@ const SpotifyContainer = ({
   isConnected,
   userInfo,
   lastTokenRefresh,
+  disconnectStart,
   fetchUserInfoStart,
   fetchTopArtistsLongTermStart,
   fetchTopArtistsMediumTermStart,
@@ -237,6 +239,9 @@ const SpotifyContainer = ({
           ))
           : null}
       </div>
+      <div>
+        <Button className='button submit-button' onClick={disconnectStart}>Disconnect From Spotify</Button>
+      </div>
     </div>
   );
 };
@@ -254,6 +259,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  disconnectStart: () => dispatch(disconnectStart()),
   fetchUserInfoStart: () => dispatch(fetchUserInfoStart()),
   fetchTopArtistsLongTermStart: () => dispatch(fetchTopArtistsLongTermStart()),
   fetchTopArtistsMediumTermStart: () =>

@@ -5,6 +5,8 @@ import SpotifyActionTypes from './spotify.types';
 import {
   markConnected,
   connectFailure,
+  disconnectSuccess,
+  disconnectFailure,
   refreshAuthTokenSuccess,
   refreshAuthTokenFailure,
   fetchUserInfoSuccess,
@@ -16,7 +18,7 @@ import {
   fetchTopTracksLongTermSuccess,
   fetchTopTracksMediumTermSuccess,
   fetchTopTracksShortTermSuccess,
-  fetchTopTracksFailure,
+  fetchTopTracksFailure
 } from './spotify.actions';
 
 import axios from 'axios';
@@ -45,6 +47,18 @@ export function* isConnected() {
   }
 }
 
+export function* disconnect() {
+  try {
+    const disconnectRes = yield axios.patch(
+      `${origin}api/v1/spotify/disconnect`
+    );
+
+    yield put(disconnectSuccess(disconnectRes.data));
+  } catch (err) {
+    yield put(disconnectFailure(err.message));
+  }
+}
+
 export function* refreshAuthTokenAsync() {
   try {
     const refreshUser = yield axios.get(
@@ -70,6 +84,9 @@ export function* onCheckConnection() {
   yield takeLatest(SpotifyActionTypes.CHECK_CONNECTION, isConnected);
 }
 
+export function* onDisconnectStart() {
+  yield takeLatest(SpotifyActionTypes.DISCONNECT_START, disconnect);
+}
 
 export function* fetchEndpointDataAsync(endpoint, stateProps) {
   try {
@@ -194,6 +211,7 @@ export function* fetchTopTracksShortTermStart(
 export function* spotifySagas() {
   yield all([
     call(onCheckConnection),
+    call(onDisconnectStart),
     call(refreshAuthTokenStart),
     call(fetchUserInfoStart),
     call(fetchTopArtistsLongTermStart),

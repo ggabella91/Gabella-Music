@@ -14,4 +14,6 @@ router.get('/refreshToken', spotifyController.getRefreshToken);
 
 router.post('/getEndpointData', spotifyController.getEndpointData);
 
+router.patch('/disconnect', spotifyController.disconnect);
+
 module.exports = router;

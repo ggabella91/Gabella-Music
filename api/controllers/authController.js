@@ -76,22 +76,26 @@ exports.logout = (req, res) => {
     httpOnly: true,
   });
 
-  res.cookie('spotifyAuthToken', '', {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
-
-  res.cookie('spotifyRefreshToken', '', {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
-
-  res.cookie('spotify_auth_state', '', {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-  });
-
-  res.clearCookie('spotify_auth_state');
+  if (req.cookies.spotify_auth_state) {
+    res.clearCookie('spotify_auth_state', {
+      httpOnly: true,
+      expires: new Date(Date.now())
+    });
+  }
+  if (req.cookies.spotifyAuthToken) {
+    console.log('Spotify auth token found.')
+    res.clearCookie('spotifyAuthToken', {
+      httpOnly: true,
+      expires: new Date(Date.now())
+    });
+  }
+  if (req.cookies.spotifyRefreshToken) {
+    console.log('Spotify refresh token found.')
+    res.clearCookie('spotifyRefreshToken', {
+      httpOnly: true,
+      expires: new Date(Date.now())
+    });
+  }
 
   res.status(200).json({ status: 'success' });
 };

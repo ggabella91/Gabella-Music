@@ -111,3 +111,17 @@ export const fetchTopTracksFailure = (error) => ({
   type: SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE,
   payload: error,
 });
+
+export const disconnectStart = () => ({
+  type: SpotifyActionTypes.DISCONNECT_START
+});
+
+export const disconnectSuccess = (isConnected) => ({
+  type: SpotifyActionTypes.DISCONNECT_SUCCESS,
+  payload: isConnected
+});
+
+export const disconnectFailure = (error) => ({
+  type: SpotifyActionTypes.DISCONNECT_FAILURE,
+  payload: error
+});

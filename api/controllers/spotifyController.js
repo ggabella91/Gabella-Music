@@ -56,21 +56,7 @@ exports.login = (req, res, next) => {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  if (req.cookies.io) {
-    res.clearCookie('io');
-  }
-  if (req.cookies.spotifyAuthToken) {
-    console.log('Spotify auth token found.')
-    res.clearCookie('spotifyAuthToken');
-  }
-  if (req.cookies.spotifyRefreshToken) {
-    console.log('Spotify refresh token found.')
-    res.clearCookie('spotifyRefreshToken');
-  }
-  if (req.cookies.spotify_auth_state) {
-    console.log('Spotify auth state found.');
-    res.clearCookie('spotify_auth_state');
-  }
+  console.log(req.cookies);
 
   // Application requests authorization
   const scope =
@@ -152,10 +138,12 @@ exports.callback = async (req, res, next) => {
 
           res.cookie('spotifyAuthToken', accessToken, {
             httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 60 * 60)
           });
 
           res.cookie('spotifyRefreshToken', refreshToken, {
             httpOnly: true,
+            expires: new Date(Date.now() + 1000 * 60 * 60)
           });
 
           const user = markConnectedToSpotify(jwtCookie, refreshToken);
@@ -264,3 +252,26 @@ exports.getEndpointData = async (req, res, next) => {
     console.log(err.message);
   }
 };
+
+exports.disconnect = catchAsync(async (req, res, next) => {
+  // requesting access token from refresh token
+  const jwtCookie = req.cookies.jwt;
+
+  // 1) Verify token
+  const decoded = await promisify(jwt.verify)(
+    jwtCookie,
+    process.env.JWT_SECRET
+  );
+
+  const userRes = await User.findByIdAndUpdate(decoded.id, {
+    isConnectedToSpotify: false,
+    spotifyRefreshToken: '',
+    lastSpotifyAuthToken: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365 * 10)
+  });
+
+  console.log('Disconnected from Spotify successfully.');
+
+  res.status(200).send({
+    data: userRes.isConnectedToSpotify
+  });
+});

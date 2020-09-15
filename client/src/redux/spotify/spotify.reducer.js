@@ -77,10 +77,17 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         topTracksShortTerm: action.payload,
         error: null,
       };
+    case SpotifyActionTypes.DISCONNECT_SUCCESS:
+      return {
+        ...state,
+        isConnected: false,
+        error: null
+      }
     case SpotifyActionTypes.FETCH_USER_INFO_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE:
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_FAILURE:
+    case SpotifyActionTypes.DISCONNECT_FAILURE:
       return {
         ...state,
         error: action.payload,
