@@ -21,23 +21,21 @@ if (process.env.NODE_ENV === 'development') {
   redirectUri = 'https://gabellamusic.herokuapp.com/api/v1/spotify/callback';
   redirectToHomepage = 'https://gabellamusic.herokuapp.com/me';
 }
-const markConnectedToSpotify = catchAsync(
-  async (jwtCookie, refreshToken) => {
-    // 1) Verify token
-    const decoded = await promisify(jwt.verify)(
-      jwtCookie,
-      process.env.JWT_SECRET
-    );
+const markConnectedToSpotify = catchAsync(async (jwtCookie, refreshToken) => {
+  // 1) Verify token
+  const decoded = await promisify(jwt.verify)(
+    jwtCookie,
+    process.env.JWT_SECRET
+  );
 
-    const user = await User.findByIdAndUpdate(decoded.id, {
-      isConnectedToSpotify: true,
-      lastSpotifyAuthToken: new Date(Date.now()),
-      spotifyRefreshToken: refreshToken,
-    });
+  const user = await User.findByIdAndUpdate(decoded.id, {
+    isConnectedToSpotify: true,
+    lastSpotifyAuthToken: new Date(Date.now()),
+    spotifyRefreshToken: refreshToken,
+  });
 
-    return user;
-  }
-);
+  return user;
+});
 
 const generateRandomString = function (length) {
   let text = '';
@@ -138,12 +136,12 @@ exports.callback = async (req, res, next) => {
 
           res.cookie('spotifyAuthToken', accessToken, {
             httpOnly: true,
-            expires: new Date(Date.now() + 1000 * 60 * 60)
+            expires: new Date(Date.now() + 1000 * 60 * 60),
           });
 
           res.cookie('spotifyRefreshToken', refreshToken, {
             httpOnly: true,
-            expires: new Date(Date.now() + 1000 * 60 * 60)
+            expires: new Date(Date.now() + 1000 * 60 * 60),
           });
 
           const user = markConnectedToSpotify(jwtCookie, refreshToken);
@@ -266,12 +264,12 @@ exports.disconnect = catchAsync(async (req, res, next) => {
   const userRes = await User.findByIdAndUpdate(decoded.id, {
     isConnectedToSpotify: false,
     spotifyRefreshToken: '',
-    lastSpotifyAuthToken: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365 * 10)
+    lastSpotifyAuthToken: new Date(Date.now() - 1000 * 60 * 60 * 24 * 365 * 10),
   });
 
   console.log('Disconnected from Spotify successfully.');
 
   res.status(200).send({
-    data: userRes.isConnectedToSpotify
+    data: userRes.isConnectedToSpotify,
   });
 });

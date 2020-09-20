@@ -61,7 +61,6 @@ const SpotifyContainer = ({
         Date.parse(lastTokenRefresh) + 60 * 60 * 1000 >
         new Date(Date.now()).getTime()
       ) {
-
         fetchTopArtistsLongTermStart();
         fetchTopArtistsMediumTermStart();
         fetchTopArtistsShortTermStart();
@@ -181,13 +180,13 @@ const SpotifyContainer = ({
         </div>
         {artists
           ? artists.map((artist, idx) => (
-            <SpotifyElement
-              className='spotify-element'
-              type='artist'
-              key={idx}
-              item={artist}
-            />
-          ))
+              <SpotifyElement
+                className='spotify-element'
+                type='artist'
+                key={idx}
+                item={artist}
+              />
+            ))
           : null}
       </div>
       <h2 className='top-artists'>Your Top Spotify Tracks</h2>
@@ -230,17 +229,19 @@ const SpotifyContainer = ({
         </div>
         {tracks
           ? tracks.map((track, idx) => (
-            <SpotifyElement
-              className='spotify-element'
-              type='track'
-              key={idx}
-              item={track}
-            />
-          ))
+              <SpotifyElement
+                className='spotify-element'
+                type='track'
+                key={idx}
+                item={track}
+              />
+            ))
           : null}
       </div>
       <div>
-        <Button className='button submit-button' onClick={disconnectStart}>Disconnect From Spotify</Button>
+        <Button className='button submit-button' onClick={disconnectStart}>
+          Disconnect From Spotify
+        </Button>
       </div>
     </div>
   );
