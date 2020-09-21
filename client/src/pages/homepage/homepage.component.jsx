@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { signOutStart } from '../../redux/user/user.actions';
 import {
   selectIsConnected,
   selectLastTokenRefresh,
@@ -71,11 +70,6 @@ const HomePage = ({
         <div className='button-container'>
           <div className='button'>{handleRenderSpotifyButton()}</div>
           <div className='spotify'>{handleRenderSpotifyContainer()}</div>
-          <div className='button'>
-            <Button className='button submit-button' onClick={signOutStart}>
-              <span>Sign Out</span>
-            </Button>
-          </div>
         </div>
       </div>
     </div>
@@ -89,7 +83,6 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  signOutStart: () => dispatch(signOutStart()),
   checkConnection: () => dispatch(checkConnection()),
   refreshAuthTokenStart: () => dispatch(refreshAuthTokenStart()),
 });
