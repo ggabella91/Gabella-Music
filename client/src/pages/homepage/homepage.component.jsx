@@ -24,7 +24,6 @@ const HomePage = ({
   isConnected,
   checkConnection,
   refreshAuthTokenStart,
-  signOutStart,
   lastTokenRefresh,
 }) => {
   useEffect(() => {
@@ -35,7 +34,7 @@ const HomePage = ({
     if (lastTokenRefresh !== null) {
       refreshAuthTokenStart();
     }
-  }, [lastTokenRefresh, refreshAuthTokenStart]);
+  }, [lastTokenRefresh]);
 
   const handleConnectToSpotifyButton = async () => {
     if (process.env.NODE_ENV === 'development') {

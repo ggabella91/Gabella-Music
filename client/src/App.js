@@ -10,6 +10,7 @@ import Footer from './components/footer/footer.component';
 import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.component.jsx';
 import ForgotPasswordPage from './pages/forgot-password/forgot-password.component';
 import ResetPasswordPage from './pages/reset-password/reset-password.component';
+import SettingsPage from './pages/settings-page/settings-page.component.jsx';
 import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,14 +28,20 @@ const App = ({ checkUserSession, currentUser }) => {
       <Switch>
         <Route
           exact
-          path='/'
+          path='/settings'
           render={() =>
-            currentUser !== null ? (
-              <Redirect to='/me' />
-            ) : (
-              <SignUpAndSignUpPage />
-            )
+            currentUser !== null ? <SettingsPage /> : <Redirect to='/' />
           }
+        />
+
+        <Route
+          exact
+          path='/forgot-password'
+          render={() => <ForgotPasswordPage />}
+        />
+        <Route
+          path='/reset-password/:token'
+          render={() => <ResetPasswordPage />}
         />
         <Route
           exact
@@ -45,12 +52,14 @@ const App = ({ checkUserSession, currentUser }) => {
         />
         <Route
           exact
-          path='/forgot-password'
-          render={() => <ForgotPasswordPage />}
-        />
-        <Route
-          path='/reset-password/:token'
-          render={() => <ResetPasswordPage />}
+          path='/'
+          render={() =>
+            currentUser !== null ? (
+              <Redirect to='/me' />
+            ) : (
+              <SignUpAndSignUpPage />
+            )
+          }
         />
       </Switch>
       <Footer />

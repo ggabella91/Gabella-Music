@@ -35,9 +35,9 @@ const Header = ({ currentUser, signOutStart }) => {
 
   return (
     <div className='header-container'>
-      <NavLink className='header' to='/'>
+      <div className='header'>
         <h1>Gabella Music</h1>
-      </NavLink>
+      </div>
       <div className='dropdown-settings-container'>
         {handleRenderSettingsDropdown()}
       </div>

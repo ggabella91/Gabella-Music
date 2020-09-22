@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import Dropdown from 'react-bootstrap/Dropdown';
-import Button from '../../components/button/button.component';
+import Button from '../button/button.component';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 
 import {
