@@ -213,7 +213,7 @@ exports.getRefreshToken = async (req, res, next) => {
 
       const user = await User.findByIdAndUpdate(decodedRefresh.id, {
         isConnectedToSpotify: true,
-        lastSpotifyAuthToken: new Date(Date.now()),
+        lastSpotifyAuthToken: new Date(Date.now() + 10 * 1000),
         spotifyRefreshToken: refreshToken,
       });
 

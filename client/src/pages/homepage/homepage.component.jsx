@@ -32,9 +32,11 @@ const HomePage = ({
 
   useEffect(() => {
     if (lastTokenRefresh !== null) {
-      refreshAuthTokenStart();
+      if (lastTokenRefresh + 60 * 60 * 1000 < Date.now()) {
+        refreshAuthTokenStart();
+      }
     }
-  }, [lastTokenRefresh]);
+  }, [isConnected]);
 
   const handleConnectToSpotifyButton = async () => {
     if (process.env.NODE_ENV === 'development') {

@@ -1,0 +1,43 @@
+.settings {
+  width: 25%;
+  min-width: 200px;
+  // max-width: 250px;
+
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+  margin-left: 50%;
+  transform: translate(-50%);
+}
+
+.disconnect-button {
+  min-width: 220px;
+  width: auto;
+  height: 80px;
+  letter-spacing: 0.5px;
+  // line-height: 50px;
+  padding: 0 20px 0 20px;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  text-transform: capitalize;
+  text-decoration: none;
+  overflow: visible;
+
+  span {
+    font-weight: 400;
+    font-size: 18px;
+  }
+}
+
+.submit-button:hover {
+  opacity: 0.9;
+}

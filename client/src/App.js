@@ -20,19 +20,13 @@ axios.defaults.withCredentials = true;
 const App = ({ checkUserSession, currentUser }) => {
   useEffect(() => {
     checkUserSession();
-  }, [checkUserSession]);
+  }, []);
 
   return (
     <div className='App'>
       <Header />
       <Switch>
-        <Route
-          exact
-          path='/settings'
-          render={() =>
-            currentUser !== null ? <SettingsPage /> : <Redirect to='/' />
-          }
-        />
+        <Route exact path='/settings' render={() => <SettingsPage />} />
 
         <Route
           exact

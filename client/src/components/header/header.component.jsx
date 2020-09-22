@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
@@ -9,6 +9,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import './header.styles.scss';
 
 const Header = ({ currentUser, signOutStart }) => {
+  let history = useHistory();
+
   const handleRenderSettingsDropdown = () => {
     return currentUser !== null ? (
       <Dropdown>
@@ -17,7 +19,10 @@ const Header = ({ currentUser, signOutStart }) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item value='settings' onClick={() => {}}>
+          <Dropdown.Item
+            value='settings'
+            onClick={() => history.push('/settings')}
+          >
             Settings
           </Dropdown.Item>
           <Dropdown.Item
@@ -35,9 +40,9 @@ const Header = ({ currentUser, signOutStart }) => {
 
   return (
     <div className='header-container'>
-      <div className='header'>
+      <NavLink className='header' to='/'>
         <h1>Gabella Music</h1>
-      </div>
+      </NavLink>
       <div className='dropdown-settings-container'>
         {handleRenderSettingsDropdown()}
       </div>

@@ -21,13 +21,13 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
         ...state,
         isConnected: true,
         error: null,
-        lastTokenRefresh: action.payload.latestRefresh,
+        lastTokenRefresh: Date.parse(action.payload),
       };
     case SpotifyActionTypes.REFRESH_AUTH_TOKEN_SUCCESS:
       return {
         ...state,
-        lastTokenRefresh: action.payload,
-        error: null
+        lastTokenRefresh: Date.parse(action.payload),
+        error: null,
       };
     case SpotifyActionTypes.CONNECT_FAILURE:
       return {
@@ -39,8 +39,8 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         userInfo: action.payload,
-        error: null
-      }
+        error: null,
+      };
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_LONG_TERM_SUCCESS:
       return {
         ...state,
@@ -81,8 +81,8 @@ const SpotifyReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         isConnected: false,
-        error: null
-      }
+        error: null,
+      };
     case SpotifyActionTypes.FETCH_USER_INFO_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_ARTISTS_FAILURE:
     case SpotifyActionTypes.FETCH_TOP_TRACKS_FAILURE:
