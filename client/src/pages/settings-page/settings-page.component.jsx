@@ -42,13 +42,26 @@ const SettingsPage = ({
 
   const handleRenderDisconnectButton = () =>
     isConnected ? (
-      <Button className='button disconnect-button' onClick={disconnectStart}>
+      <Button className='button settings-button' onClick={disconnectStart}>
         <span>Disconnect From Spotify</span>
       </Button>
     ) : null;
 
+  const handleBackToHomePage = () => {
+    history.push('/me');
+  };
+
   return (
     <div className='settings'>
+      <Button
+        className='button settings-button'
+        onClick={(e) => {
+          e.preventDefault();
+          handleBackToHomePage();
+        }}
+      >
+        <span>Back to Home</span>
+      </Button>
       <div>{handleRenderDisconnectButton()}</div>
     </div>
   );
