@@ -12,6 +12,7 @@ import {
   disconnectStart,
 } from '../../redux/spotify/spotify.actions.js';
 
+import FormInput from '../../components/form-input/form-input.component';
 import Button from '../../components/button/button.component';
 import './settings-page.styles.scss';
 
@@ -62,6 +63,30 @@ const SettingsPage = ({
       >
         <span>Back to Home</span>
       </Button>
+      <form className='change-info' onSubmit=''>
+        <span>Update your info</span>
+        <FormInput
+          type='text'
+          name='name'
+          value=''
+          onChange=''
+          label='name'
+          required
+        />
+        <FormInput
+          type='email'
+          name='email'
+          value=''
+          onChange=''
+          label='email'
+          required
+        />
+        <div className='button'>
+          <Button className='button submit-button' onSubmit='' type='submit'>
+            Change Name
+          </Button>
+        </div>
+      </form>
       <div>{handleRenderDisconnectButton()}</div>
     </div>
   );

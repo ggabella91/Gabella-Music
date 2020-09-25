@@ -2,14 +2,14 @@
   width: 25%;
   min-width: 200px;
   // max-width: 250px;
-
-  height: 400px;
+  padding-top: 0px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   justify-items: center;
   align-items: center;
   justify-content: center;
-  margin-top: 100px;
+  margin-top: 60px;
   margin-left: 50%;
   transform: translate(-50%);
 }
@@ -27,7 +27,7 @@
   background-color: #ffc107;
   color: white;
   border: none;
-  margin-top: 20px;
+  margin-top: 30px;
   text-transform: capitalize;
   text-decoration: none;
   overflow: visible;
@@ -35,6 +35,23 @@
   span {
     font-weight: 400;
     font-size: 18px;
+  }
+}
+
+.change-info {
+  width: 25%;
+  min-width: 200px;
+  max-width: 250px;
+  height: 300px;
+  justify-items: center;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px 40px 0px;
+
+  span {
+    font-weight: 400;
+    margin: 0px;
+    width: 300px;
   }
 }
 
