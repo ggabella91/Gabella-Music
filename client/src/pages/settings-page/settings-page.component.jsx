@@ -43,7 +43,10 @@ const SettingsPage = ({
 
   const handleRenderDisconnectButton = () =>
     isConnected ? (
-      <Button className='button settings-button' onClick={disconnectStart}>
+      <Button
+        className='button settings-button disconnect'
+        onClick={disconnectStart}
+      >
         <span>Disconnect From Spotify</span>
       </Button>
     ) : null;
@@ -53,7 +56,7 @@ const SettingsPage = ({
   };
 
   return (
-    <div className='settings'>
+    <div className='settings home'>
       <Button
         className='button settings-button'
         onClick={(e) => {
@@ -82,8 +85,32 @@ const SettingsPage = ({
           required
         />
         <div className='button'>
-          <Button className='button submit-button' onSubmit='' type='submit'>
-            Change Name
+          <Button className='button settings-button' onSubmit='' type='submit'>
+            <span>Update Info</span>
+          </Button>
+        </div>
+      </form>
+      <form className='change-info' onSubmit=''>
+        <span>Change your password</span>
+        <FormInput
+          type='password'
+          name='password'
+          value=''
+          onChange=''
+          label='password'
+          required
+        />
+        <FormInput
+          type='password'
+          name='passwordConfirm'
+          value=''
+          onChange=''
+          label='confirm password'
+          required
+        />
+        <div className='button'>
+          <Button className='button settings-button' onSubmit='' type='submit'>
+            <span>Change Password</span>
           </Button>
         </div>
       </form>
