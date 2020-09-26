@@ -79,21 +79,21 @@ exports.logout = (req, res) => {
   if (req.cookies.spotify_auth_state) {
     res.clearCookie('spotify_auth_state', {
       httpOnly: true,
-      expires: new Date(Date.now())
+      expires: new Date(Date.now()),
     });
   }
   if (req.cookies.spotifyAuthToken) {
-    console.log('Spotify auth token found.')
+    console.log('Spotify auth token found.');
     res.clearCookie('spotifyAuthToken', {
       httpOnly: true,
-      expires: new Date(Date.now())
+      expires: new Date(Date.now()),
     });
   }
   if (req.cookies.spotifyRefreshToken) {
-    console.log('Spotify refresh token found.')
+    console.log('Spotify refresh token found.');
     res.clearCookie('spotifyRefreshToken', {
       httpOnly: true,
-      expires: new Date(Date.now())
+      expires: new Date(Date.now()),
     });
   }
 
@@ -280,7 +280,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   await user.save();
-  // ^User.findByIdAndUpdate() will NOT work as inteded!^
+  // ^User.findByIdAndUpdate() will NOT work as intended!^
 
   // 4) Log user in, send JWT
   createSendToken(user, 200, req, res);

@@ -81,7 +81,7 @@ export function* signUp({
 
 export function* changeInfo({ payload: { name, email } }) {
   try {
-    yield axios.post(`${origin}api/v1/users/updateMe`, {
+    yield axios.patch(`${origin}api/v1/users/updateMe`, {
       name,
       email,
     });
@@ -92,9 +92,12 @@ export function* changeInfo({ payload: { name, email } }) {
   }
 }
 
-export function* changePassword({ payload: { password, passwordConfirm } }) {
+export function* changePassword({
+  payload: { passwordCurrent, password, passwordConfirm },
+}) {
   try {
-    yield axios.post(`${origin}api/v1/users/updateMyPassword`, {
+    yield axios.patch(`${origin}api/v1/users/updateMyPassword`, {
+      passwordCurrent,
       password,
       passwordConfirm,
     });

@@ -67,9 +67,13 @@ export const changeInfoFailure = (error) => ({
   payload: error,
 });
 
-export const changePasswordStart = (password, passwordConfirm) => ({
+export const changePasswordStart = (
+  passwordCurrent,
+  password,
+  passwordConfirm
+) => ({
   type: UserActionTypes.CHANGE_PASSWORD_START,
-  payload: { password, passwordConfirm },
+  payload: { passwordCurrent, password, passwordConfirm },
 });
 
 export const changePasswordSuccess = (message) => ({

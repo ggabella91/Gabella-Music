@@ -10,7 +10,8 @@
   grid-template-columns: 1fr 1fr 1fr;
   justify-items: center;
   font-family: 'Roboto', sans-serif;
-  height: 150px;
+  height: 160px;
+  margin-bottom: 60px;
 
   @include respond-medium() {
     grid-template-columns: 1fr;
@@ -28,6 +29,8 @@
 
     @include respond-medium() {
       grid-column-start: 1;
+      margin-top: -10px;
+      margin-bottom: -15px;
     }
 
     &:hover,

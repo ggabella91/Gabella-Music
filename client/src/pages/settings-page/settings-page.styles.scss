@@ -3,7 +3,7 @@
   min-width: 200px;
   max-width: 250px;
   padding-top: 0px;
-  height: 1100px;
+  height: 1200px;
   display: flex;
   flex-direction: column;
   justify-items: center;
@@ -28,7 +28,7 @@
   background-color: #ffc107;
   color: white;
   border: none;
-  margin-top: 50px;
+  // margin-top: 20px;
   text-transform: capitalize;
   text-decoration: none;
   overflow: visible;
@@ -64,14 +64,19 @@
 }
 
 .home {
-  top: 40px;
+  min-height: 80px;
   padding-bottom: 20px;
   padding-bottom: 20px;
-  // margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .disconnect {
   min-width: 240px;
-  margin-top: 100px;
+  margin-top: 180px;
+  margin-bottom: 60px;
   padding-bottom: 20px;
+}
+
+.settings-alert {
+  // margin-left: 40px;
 }
