@@ -17,6 +17,26 @@ export const selectUserSignUpError = createSelector(
   (user) => user.signUpError
 );
 
+export const selectChangeInfoConfirm = createSelector(
+  [selectUser],
+  (user) => user.changeInfoConfirm
+);
+
+export const selectChangeInfoError = createSelector(
+  [selectUser],
+  (user) => user.changeInfoError
+);
+
+export const selectChangePasswordConfirm = createSelector(
+  [selectUser],
+  (user) => user.changePasswordConfirm
+);
+
+export const selectChangePasswordError = createSelector(
+  [selectUser],
+  (user) => user.changePasswordError
+);
+
 export const selectForgotOrResetError = createSelector(
   [selectUser],
   (user) => user.forgotOrResetError

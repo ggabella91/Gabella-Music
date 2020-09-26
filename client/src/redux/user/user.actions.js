@@ -52,6 +52,36 @@ export const signUpFailure = (error) => ({
   payload: error,
 });
 
+export const changeInfoStart = (name, email) => ({
+  type: UserActionTypes.CHANGE_INFO_START,
+  payload: { name, email },
+});
+
+export const changeInfoSuccess = (message) => ({
+  type: UserActionTypes.CHANGE_INFO_SUCCESS,
+  payload: message,
+});
+
+export const changeInfoFailure = (error) => ({
+  type: UserActionTypes.CHANGE_INFO_FAILURE,
+  payload: error,
+});
+
+export const changePasswordStart = (password, passwordConfirm) => ({
+  type: UserActionTypes.CHANGE_PASSWORD_START,
+  payload: { password, passwordConfirm },
+});
+
+export const changePasswordSuccess = (message) => ({
+  type: UserActionTypes.CHANGE_PASSWORD_SUCCESS,
+  payload: message,
+});
+
+export const changePasswordFailure = (error) => ({
+  type: UserActionTypes.CHANGE_PASSWORD_FAILURE,
+  payload: error,
+});
+
 export const forgotPasswordStart = (email) => ({
   type: UserActionTypes.FORGOT_PASSWORD_START,
   payload: email,

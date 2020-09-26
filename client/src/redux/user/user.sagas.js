@@ -10,6 +10,10 @@ import {
   signOutFailure,
   signUpSuccess,
   signUpFailure,
+  changeInfoSuccess,
+  changeInfoFailure,
+  changePasswordSuccess,
+  changePasswordFailure,
   forgotPasswordSuccess,
   forgotPasswordFailure,
   resetPasswordSuccess,
@@ -75,6 +79,32 @@ export function* signUp({
   }
 }
 
+export function* changeInfo({ payload: { name, email } }) {
+  try {
+    yield axios.post(`${origin}api/v1/users/updateMe`, {
+      name,
+      email,
+    });
+
+    yield put(changeInfoSuccess('Info changed successfully!'));
+  } catch (err) {
+    yield put(changeInfoFailure(err));
+  }
+}
+
+export function* changePassword({ payload: { password, passwordConfirm } }) {
+  try {
+    yield axios.post(`${origin}api/v1/users/updateMyPassword`, {
+      password,
+      passwordConfirm,
+    });
+
+    yield put(changePasswordSuccess('Password changed successfully!'));
+  } catch (err) {
+    yield put(changePasswordFailure(err));
+  }
+}
+
 export function* forgotPassword({ payload: email }) {
   try {
     yield axios.post(`${origin}api/v1/users/forgotPassword`, {
@@ -126,6 +156,14 @@ export function* onSignUpSuccess() {
   yield takeLatest(UserActionTypes.SIGN_UP_SUCCESS, signInAfterSignUp);
 }
 
+export function* onChangeInfoStart() {
+  yield takeLatest(UserActionTypes.CHANGE_INFO_START, changeInfo);
+}
+
+export function* onChangePasswordStart() {
+  yield takeLatest(UserActionTypes.CHANGE_PASSWORD_START, changePassword);
+}
+
 export function* onForgotPasswordStart() {
   yield takeLatest(UserActionTypes.FORGOT_PASSWORD_START, forgotPassword);
 }
@@ -141,6 +179,8 @@ export function* userSagas() {
     call(onSignOutStart),
     call(onSignUpStart),
     call(onSignUpSuccess),
+    call(onChangeInfoStart),
+    call(onChangePasswordStart),
     call(onForgotPasswordStart),
     call(onResetPasswordStart),
   ]);

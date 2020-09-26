@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { useHistory } from 'react-router-dom';
@@ -23,6 +23,34 @@ const SettingsPage = ({
   isConnected,
   disconnectStart,
 }) => {
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+  });
+
+  const [userPassword, setUserPassword] = useState({
+    passwordCurrent: '',
+    password: '',
+    passwordConfirm: '',
+  });
+
+  const handleSubmitInfo = async (event) => {
+    event.preventDefault();
+
+    // changeInfoStart(name, email);
+  };
+
+  const handleSubmitPassword = async (event) => {
+    event.preventDefault();
+
+    // changePasswordStart(name, email);
+  };
+
+  // const [show, setShow] = useState(true);
+
+  const { name, email } = userInfo;
+  const { passwordCurrent, password, passwordConfirm } = userPassword;
+
   useEffect(() => {
     checkUserSession();
   }, []);
@@ -53,6 +81,18 @@ const SettingsPage = ({
 
   const handleBackToHomePage = () => {
     history.push('/me');
+  };
+
+  const handleInfoChange = (event) => {
+    const { value, name } = event.target;
+
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const handlePasswordChange = (event) => {
+    const { value, name } = event.target;
+
+    setUserPassword({ ...userPassword, [name]: value });
   };
 
   return (
@@ -94,10 +134,18 @@ const SettingsPage = ({
         <span>Change your password</span>
         <FormInput
           type='password'
+          name='passwordCurrent'
+          value=''
+          onChange=''
+          label='current password'
+          required
+        />
+        <FormInput
+          type='password'
           name='password'
           value=''
           onChange=''
-          label='password'
+          label='new password'
           required
         />
         <FormInput
@@ -105,7 +153,7 @@ const SettingsPage = ({
           name='passwordConfirm'
           value=''
           onChange=''
-          label='confirm password'
+          label='confirm new password'
           required
         />
         <div className='button'>
