@@ -74,7 +74,7 @@ const SettingsPage = ({
   const handleSubmitPassword = async (event) => {
     event.preventDefault();
 
-    changePasswordStart(name, email);
+    changePasswordStart(passwordCurrent, password, passwordConfirm);
   };
 
   const { name, email } = userInfo;
@@ -297,10 +297,10 @@ const SettingsPage = ({
       </form>
       <div className='alert settings-alert'>
         {statusPass.error
-          ? handleRenderAlert('errorInfo', 'Error changing password.')
+          ? handleRenderAlert('errorPass', 'Error changing password.')
           : null}
         {statusPass.success
-          ? handleRenderAlert('successInfo', 'Password changed successfully!')
+          ? handleRenderAlert('successPass', 'Password changed successfully!')
           : null}
       </div>
       <div>{handleRenderDisconnectButton()}</div>
