@@ -145,7 +145,6 @@ const SettingsPage = ({
       setTimeout(() => {
         setUserInfo({ name: '', email: '' });
         setStatusInfo({ success: false, error: false });
-        setShowInfoAlert(false);
       }, 5000);
       return (
         <Alert
@@ -164,7 +163,6 @@ const SettingsPage = ({
           passwordConfirm: '',
         });
         setStatusPass({ success: false, error: false });
-        setShowPassAlert(false);
       }, 5000);
       return (
         <Alert
@@ -179,7 +177,6 @@ const SettingsPage = ({
       setTimeout(() => {
         setUserInfo({ name: '', email: '' });
         setStatusInfo({ success: false, error: false });
-        setShowInfoAlert(false);
       }, 5000);
       return (
         <Alert
@@ -198,7 +195,6 @@ const SettingsPage = ({
           passwordConfirm: '',
         });
         setStatusPass({ success: false, error: false });
-        setShowPassAlert(false);
       }, 5000);
       return (
         <Alert
@@ -251,7 +247,7 @@ const SettingsPage = ({
           </Button>
         </div>
       </form>
-      <div className='alert settings-alert'>
+      <div className='settings-alert'>
         {statusInfo.error
           ? handleRenderAlert('errorInfo', 'Error updating info.')
           : null}
@@ -295,7 +291,7 @@ const SettingsPage = ({
           </Button>
         </div>
       </form>
-      <div className='alert settings-alert'>
+      <div className='settings-alert bottom-alert'>
         {statusPass.error
           ? handleRenderAlert('errorPass', 'Error changing password.')
           : null}
