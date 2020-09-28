@@ -24,6 +24,7 @@ import {
 
 import FormInput from '../../components/form-input/form-input.component';
 import Button from '../../components/button/button.component';
+import CustomModal from '../../components/modal/modal.component';
 
 import Alert from 'react-bootstrap/Alert';
 
@@ -64,6 +65,8 @@ const SettingsPage = ({
     success: false,
     error: false,
   });
+
+  const [modalShow, setModalShow] = useState(false);
 
   const handleSubmitInfo = async (event) => {
     event.preventDefault();
@@ -301,10 +304,22 @@ const SettingsPage = ({
       </div>
       <div>{handleRenderDisconnectButton()}</div>
       <div>
-        <Button className='button settings-button' onClick=''>
+        <Button
+          className='button settings-button'
+          onClick={() => setModalShow(true)}
+        >
           <span>Delete Account</span>
         </Button>
       </div>
+      <CustomModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        header='Confirm Account Deletion'
+        subHead='Are you sure you want to delete your account?'
+        bodyText='This action cannot be done.'
+        actionLabel='Delete Account'
+        handleConfirm=''
+      />
     </div>
   );
 };
