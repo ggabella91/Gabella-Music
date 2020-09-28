@@ -300,6 +300,11 @@ const SettingsPage = ({
           : null}
       </div>
       <div>{handleRenderDisconnectButton()}</div>
+      <div>
+        <Button className='button settings-button' onClick=''>
+          <span>Delete Account</span>
+        </Button>
+      </div>
     </div>
   );
 };
