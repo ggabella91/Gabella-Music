@@ -11,7 +11,7 @@ const CustomModal = (props) => (
       </Modal.Title>
     </Modal.Header>
     <Modal.Body className='body-text'>
-      <h3>{props.subHeader}</h3>
+      <h4>{props.subHeader}</h4>
       <p>{props.bodyText}</p>
     </Modal.Body>
     <Modal.Footer>

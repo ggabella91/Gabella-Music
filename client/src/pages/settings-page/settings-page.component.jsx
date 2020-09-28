@@ -315,8 +315,8 @@ const SettingsPage = ({
         show={modalShow}
         onHide={() => setModalShow(false)}
         header='Confirm Account Deletion'
-        subHead='Are you sure you want to delete your account?'
-        bodyText='This action cannot be done.'
+        subHeader='Are you sure you want to delete your account?'
+        bodyText='This action cannot be undone.'
         actionLabel='Delete Account'
         handleConfirm=''
       />

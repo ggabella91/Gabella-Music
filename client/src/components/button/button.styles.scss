@@ -26,12 +26,12 @@
 }
 
 .modal-button {
-  width: auto;
+  width: 120px;
   height: 60px;
   display: flex;
   flex-direction: column;
   max-width: 120px;
-  padding: 0 20px 0 20px;
+  padding: 0 20px 0 35px;
   cursor: pointer;
   justify-content: center;
   background-color: #ffc107;
@@ -49,10 +49,6 @@
   background-color: #f44336;
   text-align: center;
   min-width: 180px;
-
-  // span {
-  //   text-align: center;
-  // }
 }
 
 .submit-button:hover {
