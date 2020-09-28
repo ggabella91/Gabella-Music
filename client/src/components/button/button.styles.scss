@@ -25,6 +25,36 @@
   text-decoration: none;
 }
 
+.modal-button {
+  width: auto;
+  height: 60px;
+  display: flex;
+  flex-direction: column;
+  max-width: 120px;
+  padding: 0 20px 0 20px;
+  cursor: pointer;
+  justify-content: center;
+  background-color: #ffc107;
+  color: white;
+  border: none;
+  text-transform: capitalize;
+  text-decoration: none;
+  span {
+    font-size: 14px;
+    font-weight: 380;
+  }
+}
+
+.delete-button {
+  background-color: #f44336;
+  text-align: center;
+  min-width: 180px;
+
+  // span {
+  //   text-align: center;
+  // }
+}
+
 .submit-button:hover {
   opacity: 0.9;
 }

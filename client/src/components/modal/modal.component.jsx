@@ -10,13 +10,20 @@ const CustomModal = (props) => (
         {props.header}
       </Modal.Title>
     </Modal.Header>
-    <Modal.Body bsPrefix='body-text'>
+    <Modal.Body className='body-text'>
       <h3>{props.subHeader}</h3>
       <p>{props.bodyText}</p>
     </Modal.Body>
     <Modal.Footer>
-      <Button onClick={props.onHide}>Cancel</Button>
-      <Button onClick={props.handleConfirm}>{props.actionLabel}</Button>
+      <Button className='button modal-button' onClick={props.onHide}>
+        Cancel
+      </Button>
+      <Button
+        className='button modal-button delete-button'
+        onClick={props.handleConfirm}
+      >
+        {props.actionLabel}
+      </Button>
     </Modal.Footer>
   </Modal>
 );
