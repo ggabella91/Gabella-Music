@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   changePasswordError: null,
   forgotOrResetConfirm: null,
   forgotOrResetError: null,
+  deleteAccountError: null,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
@@ -57,6 +58,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
         forgotOrResetConfirm: action.payload,
         forgotOrResetError: null,
       };
+    case UserActionTypes.DELETE_ACCOUNT_SUCCESS:
+      return {
+        ...state,
+        deleteAccountError: null,
+      };
     case UserActionTypes.SIGN_IN_FAILURE:
     case UserActionTypes.SIGN_OUT_FAILURE:
       return {
@@ -86,6 +92,11 @@ const userReducer = (state = INITIAL_STATE, action) => {
         ...state,
         forgotOrResetConfirm: null,
         forgotOrResetError: action.payload,
+      };
+    case UserActionTypes.DELETE_ACCOUNT_FAILURE:
+      return {
+        ...state,
+        deleteAccountError: action.payload,
       };
     default:
       return state;

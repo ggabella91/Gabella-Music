@@ -115,3 +115,15 @@ export const resetPasswordFailure = (error) => ({
   type: UserActionTypes.RESET_PASSWORD_FAILURE,
   payload: error,
 });
+
+export const deleteAccountStart = () => ({
+  type: UserActionTypes.DELETE_ACCOUNT_START,
+});
+
+export const deleteAccountSuccess = () => ({
+  type: UserActionTypes.DELETE_ACCOUNT_SUCCESS,
+});
+
+export const deleteAccountFailure = () => ({
+  type: UserActionTypes.DELETE_ACCOUNT_FAILURE,
+});
