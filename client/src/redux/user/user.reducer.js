@@ -61,6 +61,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case UserActionTypes.DELETE_ACCOUNT_SUCCESS:
       return {
         ...state,
+        currentUser: null,
         deleteAccountError: null,
       };
     case UserActionTypes.SIGN_IN_FAILURE:

@@ -18,6 +18,8 @@ import {
   forgotPasswordFailure,
   resetPasswordSuccess,
   resetPasswordFailure,
+  deleteAccountSuccess,
+  deleteAccountFailure,
 } from './user.actions';
 
 import axios from 'axios';
@@ -135,6 +137,16 @@ export function* resetPassword({
   }
 }
 
+export function* deleteAccount() {
+  try {
+    yield axios.delete(`${origin}api/v1/users/deleteMe`);
+
+    yield put(deleteAccountSuccess());
+  } catch (err) {
+    yield put(deleteAccountFailure(err));
+  }
+}
+
 export function* signInAfterSignUp({ payload: user }) {
   yield put(setCurrentUser(user));
 }
@@ -175,6 +187,10 @@ export function* onResetPasswordStart() {
   yield takeLatest(UserActionTypes.RESET_PASSWORD_START, resetPassword);
 }
 
+export function* onDeleteAccountStart() {
+  yield takeLatest(UserActionTypes.DELETE_ACCOUNT_START, deleteAccount);
+}
+
 export function* userSagas() {
   yield all([
     call(onSignInStart),
@@ -186,5 +202,6 @@ export function* userSagas() {
     call(onChangePasswordStart),
     call(onForgotPasswordStart),
     call(onResetPasswordStart),
+    call(onDeleteAccountStart),
   ]);
 }

@@ -120,10 +120,12 @@ export const deleteAccountStart = () => ({
   type: UserActionTypes.DELETE_ACCOUNT_START,
 });
 
-export const deleteAccountSuccess = () => ({
+export const deleteAccountSuccess = (message) => ({
   type: UserActionTypes.DELETE_ACCOUNT_SUCCESS,
+  payload: message,
 });
 
-export const deleteAccountFailure = () => ({
+export const deleteAccountFailure = (error) => ({
   type: UserActionTypes.DELETE_ACCOUNT_FAILURE,
+  payload: error,
 });

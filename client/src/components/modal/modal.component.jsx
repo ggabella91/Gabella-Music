@@ -11,8 +11,8 @@ const CustomModal = (props) => (
       </Modal.Title>
     </Modal.Header>
     <Modal.Body className='body-text'>
-      <h4>{props.subHeader}</h4>
-      <p>{props.bodyText}</p>
+      <h4>{props.subheader}</h4>
+      <p>{props.bodytext}</p>
     </Modal.Body>
     <Modal.Footer>
       <Button className='button modal-button' onClick={props.onHide}>
@@ -22,7 +22,7 @@ const CustomModal = (props) => (
         className='button modal-button delete-button'
         onClick={props.handleConfirm}
       >
-        {props.actionLabel}
+        {props.actionlabel}
       </Button>
     </Modal.Footer>
   </Modal>

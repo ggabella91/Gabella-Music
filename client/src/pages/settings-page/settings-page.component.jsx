@@ -14,6 +14,7 @@ import {
   checkUserSession,
   changeInfoStart,
   changePasswordStart,
+  deleteAccountStart,
 } from '../../redux/user/user.actions';
 
 import { selectIsConnected } from '../../redux/spotify/spotify.selectors';
@@ -42,6 +43,7 @@ const SettingsPage = ({
   changePassError,
   changePassConfirm,
   disconnectStart,
+  deleteAccountStart,
 }) => {
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -305,7 +307,11 @@ const SettingsPage = ({
       <div>{handleRenderDisconnectButton()}</div>
       <div>
         <Button
-          className='button settings-button'
+          className={
+            isConnected
+              ? 'button settings-button'
+              : 'button settings-button bottom-button'
+          }
           onClick={() => setModalShow(true)}
         >
           <span>Delete Account</span>
@@ -315,10 +321,12 @@ const SettingsPage = ({
         show={modalShow}
         onHide={() => setModalShow(false)}
         header='Confirm Account Deletion'
-        subHeader='Are you sure you want to delete your account?'
-        bodyText='This action cannot be undone.'
-        actionLabel='Delete Account'
-        handleConfirm=''
+        subheader='Are you sure you want to delete your account?'
+        bodytext='This action cannot be undone.'
+        actionlabel='Delete Account'
+        handleConfirm={() => {
+          deleteAccountStart();
+        }}
       />
     </div>
   );
@@ -340,6 +348,7 @@ const mapDispatchToProps = (dispatch) => ({
   changeInfoStart: (name, email) => dispatch(changeInfoStart(name, email)),
   changePasswordStart: (passwordCurrent, password, passwordConfirm) =>
     dispatch(changePasswordStart(passwordCurrent, password, passwordConfirm)),
+  deleteAccountStart: () => dispatch(deleteAccountStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
