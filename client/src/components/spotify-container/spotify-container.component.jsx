@@ -54,18 +54,30 @@ const SpotifyContainer = ({
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
-      fetchTopArtistsLongTermStart();
-      fetchTopArtistsMediumTermStart();
-      fetchTopArtistsShortTermStart();
+      if (!topArtistsLongTerm.data.items.length) {
+        fetchTopArtistsLongTermStart();
+      }
+      if (!topArtistsMediumTerm.data.items.length) {
+        fetchTopArtistsMediumTermStart();
+      }
+      if (!topArtistsShortTerm.data.items.length) {
+        fetchTopArtistsShortTermStart();
+      }
     }
   }, []);
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
       fetchUserInfoStart();
-      fetchTopTracksLongTermStart();
-      fetchTopTracksMediumTermStart();
-      fetchTopTracksShortTermStart();
+      if (!topTracksLongTerm.data.items.length) {
+        fetchTopTracksLongTermStart();
+      }
+      if (!topTracksMediumTerm.data.items.length) {
+        fetchTopTracksMediumTermStart();
+      }
+      if (!topTracksShortTerm.data.items.length) {
+        fetchTopTracksShortTermStart();
+      }
     }
   }, []);
 
@@ -80,19 +92,19 @@ const SpotifyContainer = ({
   useEffect(() => {
     if (artistsTimeRange === 'long-term') {
       if (topArtistsLongTerm.data) {
-        if (topArtistsLongTerm.data.items.length > 0) {
+        if (topArtistsLongTerm.data.items.length) {
           setArtists(topArtistsLongTerm.data.items);
         }
       }
     } else if (artistsTimeRange === 'medium-term') {
       if (topArtistsMediumTerm.data) {
-        if (topArtistsMediumTerm.data.items.length > 0) {
+        if (topArtistsMediumTerm.data.items.length) {
           setArtists(topArtistsMediumTerm.data.items);
         }
       }
     } else if (artistsTimeRange === 'short-term') {
       if (topArtistsShortTerm.data) {
-        if (topArtistsShortTerm.data.items.length > 0) {
+        if (topArtistsShortTerm.data.items.length) {
           setArtists(topArtistsShortTerm.data.items);
         }
       }
@@ -102,19 +114,19 @@ const SpotifyContainer = ({
   useEffect(() => {
     if (tracksTimeRange === 'long-term') {
       if (topTracksLongTerm.data) {
-        if (topTracksLongTerm.data.items.length > 0) {
+        if (topTracksLongTerm.data.items.length) {
           setTracks(topTracksLongTerm.data.items);
         }
       }
     } else if (tracksTimeRange === 'medium-term') {
       if (topTracksMediumTerm.data) {
-        if (topTracksMediumTerm.data.items.length > 0) {
+        if (topTracksMediumTerm.data.items.length) {
           setTracks(topTracksMediumTerm.data.items);
         }
       }
     } else if (tracksTimeRange === 'short-term') {
       if (topTracksShortTerm.data) {
-        if (topTracksShortTerm.data.items.length > 0) {
+        if (topTracksShortTerm.data.items.length) {
           setTracks(topTracksShortTerm.data.items);
         }
       }
