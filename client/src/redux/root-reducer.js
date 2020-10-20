@@ -1,19 +1,21 @@
 import { combineReducers } from 'redux';
-//import { persistReducer } from 'redux-persist';
-//import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 import userReducer from './user/user.reducer';
 import spotifyReducer from './spotify/spotify.reducer';
 
-// const persistConfig = {
-//   key: 'root',
-//   storage,
-//   whitelist: ['cart'],
-// };
+// Persist user and spotify portions of state
+// by adding their reducers to the whitelist array
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['user', 'spotifyState'],
+};
 
 const rootReducer = combineReducers({
   user: userReducer,
   spotifyState: spotifyReducer,
 });
 
-export default rootReducer;
+export default persistReducer(persistConfig, rootReducer);
