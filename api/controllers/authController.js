@@ -71,31 +71,10 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
+  res.clearCookie('jwt', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
   });
-
-  if (req.cookies.spotify_auth_state) {
-    res.clearCookie('spotify_auth_state', {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
-  }
-  if (req.cookies.spotifyAuthToken) {
-    console.log('Spotify auth token found.');
-    res.clearCookie('spotifyAuthToken', {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
-  }
-  if (req.cookies.spotifyRefreshToken) {
-    console.log('Spotify refresh token found.');
-    res.clearCookie('spotifyRefreshToken', {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
-  }
 
   res.status(200).json({ status: 'success' });
 };
@@ -174,6 +153,7 @@ exports.isLoggedIn = async (req, res, next) => {
         },
       });
     } catch (err) {
+      console.log(err);
       return next(new AppError('Internal server error', 500));
     }
   } else {
@@ -304,6 +284,5 @@ exports.isConnectedToSpotify = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'User is connected to Spotify!',
     lastRefresh: currentUser.lastSpotifyAuthToken,
-    photo: currentUser.photo,
   });
 });

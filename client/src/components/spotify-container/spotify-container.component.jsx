@@ -54,30 +54,18 @@ const SpotifyContainer = ({
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
-      if (!topArtistsLongTerm.data.items.length) {
-        fetchTopArtistsLongTermStart();
-      }
-      if (!topArtistsMediumTerm.data.items.length) {
-        fetchTopArtistsMediumTermStart();
-      }
-      if (!topArtistsShortTerm.data.items.length) {
-        fetchTopArtistsShortTermStart();
-      }
+      fetchTopArtistsLongTermStart();
+      fetchTopArtistsMediumTermStart();
+      fetchTopArtistsShortTermStart();
     }
   }, []);
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh !== null) {
       fetchUserInfoStart();
-      if (!topTracksLongTerm.data.items.length) {
-        fetchTopTracksLongTermStart();
-      }
-      if (!topTracksMediumTerm.data.items.length) {
-        fetchTopTracksMediumTermStart();
-      }
-      if (!topTracksShortTerm.data.items.length) {
-        fetchTopTracksShortTermStart();
-      }
+      fetchTopTracksLongTermStart();
+      fetchTopTracksMediumTermStart();
+      fetchTopTracksShortTermStart();
     }
   }, []);
 
@@ -91,44 +79,32 @@ const SpotifyContainer = ({
 
   useEffect(() => {
     if (artistsTimeRange === 'long-term') {
-      if (topArtistsLongTerm.data) {
-        if (topArtistsLongTerm.data.items.length) {
-          setArtists(topArtistsLongTerm.data.items);
-        }
+      if (topArtistsLongTerm.data && topArtistsLongTerm.data.items.length) {
+        setArtists(topArtistsLongTerm.data.items);
       }
     } else if (artistsTimeRange === 'medium-term') {
-      if (topArtistsMediumTerm.data) {
-        if (topArtistsMediumTerm.data.items.length) {
-          setArtists(topArtistsMediumTerm.data.items);
-        }
+      if (topArtistsMediumTerm.data && topArtistsMediumTerm.data.items.length) {
+        setArtists(topArtistsMediumTerm.data.items);
       }
     } else if (artistsTimeRange === 'short-term') {
-      if (topArtistsShortTerm.data) {
-        if (topArtistsShortTerm.data.items.length) {
-          setArtists(topArtistsShortTerm.data.items);
-        }
+      if (topArtistsShortTerm.data && topArtistsShortTerm.data.items.length) {
+        setArtists(topArtistsShortTerm.data.items);
       }
     }
   }, [artistsTimeRange]);
 
   useEffect(() => {
     if (tracksTimeRange === 'long-term') {
-      if (topTracksLongTerm.data) {
-        if (topTracksLongTerm.data.items.length) {
-          setTracks(topTracksLongTerm.data.items);
-        }
+      if (topTracksLongTerm.data && topTracksLongTerm.data.items.length) {
+        setTracks(topTracksLongTerm.data.items);
       }
     } else if (tracksTimeRange === 'medium-term') {
-      if (topTracksMediumTerm.data) {
-        if (topTracksMediumTerm.data.items.length) {
-          setTracks(topTracksMediumTerm.data.items);
-        }
+      if (topTracksMediumTerm.data && topTracksMediumTerm.data.items.length) {
+        setTracks(topTracksMediumTerm.data.items);
       }
     } else if (tracksTimeRange === 'short-term') {
-      if (topTracksShortTerm.data) {
-        if (topTracksShortTerm.data.items.length) {
-          setTracks(topTracksShortTerm.data.items);
-        }
+      if (topTracksShortTerm.data && topTracksShortTerm.data.items.length) {
+        setTracks(topTracksShortTerm.data.items);
       }
     }
   }, [tracksTimeRange]);
