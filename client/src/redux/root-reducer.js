@@ -10,7 +10,7 @@ import spotifyReducer from './spotify/spotify.reducer';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user', 'spotifyState'],
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({

@@ -19,6 +19,7 @@
 .spotify-element {
   min-width: 180px;
   width: auto;
+  max-height: 400px;
   letter-spacing: 0.5px;
   line-height: 50px;
   padding: 20px 35px;
@@ -49,29 +50,47 @@
     display: flex;
     flex-direction: column;
     max-width: 90%;
+    min-width: 140px;
+    max-height: 200px;
     margin-left: 20px;
+    overflow: hidden;
+    white-space: pre-wrap;
+    text-overflow: ellipsis;
 
     @include respond-extra-wide() {
       margin: 0px 0px;
       padding: none;
     }
 
+    @include respond-medium() {
+      margin-left: 0px;
+    }
+
     ul {
       padding: unset;
       line-height: 1.6;
+      min-width: 140px;
     }
 
     li {
       list-style: none;
     }
     .main-text {
-      font-size: 22px;
+      font-size: 20px;
       margin-bottom: 10px;
+
+      @include respond-medium() {
+        font-size: 18px;
+      }
     }
 
     .small-text {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 380;
+
+      @include respond-medium() {
+        font-size: 14px;
+      }
     }
   }
 
@@ -80,6 +99,10 @@
     font-weight: 400;
     padding: 0;
     margin: none;
+
+    @include respond-medium() {
+      font-size: 22px;
+    }
   }
 
   a,
