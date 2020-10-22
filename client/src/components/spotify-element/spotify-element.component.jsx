@@ -21,10 +21,21 @@ const SpotifyElement = ({ type, item }) => {
     );
   } else if (type === 'track') {
     const { album, artists, name, external_urls } = item;
+    const nameString =
+      name.length > 25 ? `${name.split('').slice(0, 25).join('')}...` : name;
     const artistString =
       artists.length > 1
-        ? artists.map((artist) => artist.name).join(', ')
+        ? artists.length > 2
+          ? `${artists
+              .map((artist) => artist.name)
+              .slice(0, 2)
+              .join(', ')}...`
+          : artists.map((artist) => artist.name).join(', ')
         : artists[0].name;
+    const albumString =
+      album.name.length > 25
+        ? `${album.name.split('').slice(0, 25).join('')}...`
+        : album.name;
 
     return (
       <div className='spotify-element'>
@@ -36,8 +47,8 @@ const SpotifyElement = ({ type, item }) => {
             href={external_urls.spotify}
           >
             <ul>
-              <li className='main-text'>{name}</li>
-              <li className='small-text'>{album.name}</li>
+              <li className='main-text'>{nameString}</li>
+              <li className='small-text'>{albumString}</li>
               <li className='small-text'>{artistString}</li>
             </ul>
           </a>
