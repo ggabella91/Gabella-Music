@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import SpotifyElement from '../spotify-element/spotify-element.component';
+import SpotifyDropdownContainer from '../spotify-dropdown/spotify-dropdown.component';
 
 import {
   selectIsConnected,
