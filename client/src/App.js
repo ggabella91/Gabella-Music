@@ -11,6 +11,7 @@ import SignUpAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-sign-up.com
 import ForgotPasswordPage from './pages/forgot-password/forgot-password.component';
 import ResetPasswordPage from './pages/reset-password/reset-password.component';
 import SettingsPage from './pages/settings-page/settings-page.component.jsx';
+import SpotifyExplorePage from './pages/spotify-explore-page/spotify-explore-page.component.jsx';
 import { checkUserSession } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,7 +28,13 @@ const App = ({ checkUserSession, currentUser }) => {
       <Header />
       <Switch>
         <Route exact path='/settings' render={() => <SettingsPage />} />
-
+        <Route
+          exact
+          path='/explore'
+          render={() =>
+            currentUser === null ? <Redirect to='/' /> : <SpotifyExplorePage />
+          }
+        />
         <Route
           exact
           path='/forgot-password'
