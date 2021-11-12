@@ -27,7 +27,13 @@ const App = ({ checkUserSession, currentUser }) => {
     <div className='App'>
       <Header />
       <Switch>
-        <Route exact path='/settings' render={() => <SettingsPage />} />
+        <Route
+          exact
+          path='/settings'
+          render={() =>
+            currentUser === null ? <Redirect to='/' /> : <SettingsPage />
+          }
+        />
         <Route
           exact
           path='/explore'

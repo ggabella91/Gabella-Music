@@ -4,14 +4,12 @@ import { createStructuredSelector } from 'reselect';
 import { useHistory } from 'react-router-dom';
 
 import {
-  selectCurrentUser,
   selectChangeInfoConfirm,
   selectChangeInfoError,
   selectChangePasswordConfirm,
   selectChangePasswordError,
 } from '../../redux/user/user.selectors';
 import {
-  checkUserSession,
   changeInfoStart,
   changePasswordStart,
   deleteAccountStart,
@@ -32,8 +30,6 @@ import Alert from 'react-bootstrap/Alert';
 import './settings-page.styles.scss';
 
 const SettingsPage = ({
-  checkUserSession,
-  currentUser,
   checkConnection,
   isConnected,
   changeInfoStart,
@@ -85,17 +81,7 @@ const SettingsPage = ({
   const { name, email } = userInfo;
   const { passwordCurrent, password, passwordConfirm } = userPassword;
 
-  useEffect(() => {
-    checkUserSession();
-  }, []);
-
   let history = useHistory();
-
-  useEffect(() => {
-    if (currentUser === null) {
-      history.push('/');
-    }
-  }, [currentUser]);
 
   useEffect(() => {
     if (isConnected) {
@@ -334,7 +320,6 @@ const SettingsPage = ({
 
 const mapStateToProps = createStructuredSelector({
   isConnected: selectIsConnected,
-  currentUser: selectCurrentUser,
   changeInfoConfirm: selectChangeInfoConfirm,
   changeInfoError: selectChangeInfoError,
   changePassConfirm: selectChangePasswordConfirm,
@@ -343,7 +328,6 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   disconnectStart: () => dispatch(disconnectStart()),
-  checkUserSession: () => dispatch(checkUserSession()),
   checkConnection: () => dispatch(checkConnection()),
   changeInfoStart: (name, email) => dispatch(changeInfoStart(name, email)),
   changePasswordStart: (passwordCurrent, password, passwordConfirm) =>
