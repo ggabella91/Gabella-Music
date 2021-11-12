@@ -31,7 +31,7 @@ const HomePage = ({
   }, []);
 
   useEffect(() => {
-    if (lastTokenRefresh !== null) {
+    if (isConnected && lastTokenRefresh) {
       if (lastTokenRefresh + 60 * 60 * 1000 < Date.now()) {
         refreshAuthTokenStart();
       }

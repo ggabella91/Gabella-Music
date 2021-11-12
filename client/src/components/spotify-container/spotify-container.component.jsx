@@ -54,21 +54,29 @@ const SpotifyContainer = ({
   const [tracksTimeRange, setTracksTimeRange] = useState('');
 
   useEffect(() => {
-    if (isConnected && lastTokenRefresh !== null) {
+    if (
+      isConnected &&
+      lastTokenRefresh &&
+      lastTokenRefresh + 60 * 60 * 1000 > Date.now()
+    ) {
       fetchTopArtistsLongTermStart();
       fetchTopArtistsMediumTermStart();
       fetchTopArtistsShortTermStart();
     }
-  }, []);
+  }, [isConnected, lastTokenRefresh]);
 
   useEffect(() => {
-    if (isConnected && lastTokenRefresh !== null) {
+    if (
+      isConnected &&
+      lastTokenRefresh &&
+      lastTokenRefresh + 60 * 60 * 1000 > Date.now()
+    ) {
       fetchUserInfoStart();
       fetchTopTracksLongTermStart();
       fetchTopTracksMediumTermStart();
       fetchTopTracksShortTermStart();
     }
-  }, []);
+  }, [isConnected, lastTokenRefresh]);
 
   useEffect(() => {
     if (userInfo.data) {

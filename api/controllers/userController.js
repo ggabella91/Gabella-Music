@@ -26,7 +26,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       )
     );
   }
-  // 2) Filter out unwanted fields names that are not allowed to be updated
+  // 2) Filter out unwanted field names that are not allowed to be updated
   const filteredBody = filterObj(req.body, 'name', 'email');
 
   // 3) Update user document

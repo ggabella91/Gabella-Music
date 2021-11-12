@@ -1,7 +1,6 @@
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
-const spotifyController = require('./spotifyController');
 const User = require('../models/userModel');
 const Email = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
