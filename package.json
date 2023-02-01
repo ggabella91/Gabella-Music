@@ -37,7 +37,7 @@
     "morgan": "^1.10.0",
     "node-sass": "^7.0.3",
     "nodemailer": "^6.6.1",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
