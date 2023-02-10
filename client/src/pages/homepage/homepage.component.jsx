@@ -36,7 +36,7 @@ const HomePage = ({
         refreshAuthTokenStart();
       }
     }
-  }, [isConnected]);
+  }, [isConnected, lastTokenRefresh]);
 
   const handleConnectToSpotifyButton = async () => {
     if (process.env.NODE_ENV === 'development') {
