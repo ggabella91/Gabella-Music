@@ -1,14 +1,46 @@
 import React from 'react';
+import { Grid, Paper, Typography } from '@mui/material';
 
 import './spotify-element.styles.scss';
+
+const spotifyElementStyles = {
+  minWidth: '180px',
+  width: 'auto',
+  maxHeight: '400px',
+  letterSpacing: '0.5px',
+  lineHeight: '50px',
+  padding: '20px 35px',
+  fontWeight: 420,
+  display: 'flex',
+  justifyContent: 'space-evenly',
+  borderRadius: '15px',
+  backgroundColor: '#ffc107',
+  color: 'white',
+  border: 'none',
+  marginTop: '20px',
+  textTransform: 'capitalize',
+  textDecoration: 'none',
+};
+
+const detailsContainerStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  maxWidth: '90%',
+  minWidth: '140px',
+  maxHeight: '200px',
+  marginLeft: '20px',
+  overflow: 'hidden',
+  whiteSpace: 'pre-wrap',
+  textOverflow: 'ellipsis',
+};
 
 const SpotifyElement = ({ type, item }) => {
   if (type === 'artist') {
     const { name, images, external_urls } = item;
     return (
-      <div className='spotify-element'>
+      <Paper className='spotify-element' sx={spotifyElementStyles}>
         <img className='artist-image' src={images[0].url} alt={name} />
-        <span>
+        <Typography>
           <a
             target='_blank'
             rel='noopener noreferrer'
@@ -16,8 +48,8 @@ const SpotifyElement = ({ type, item }) => {
           >
             {name}
           </a>
-        </span>
-      </div>
+        </Typography>
+      </Paper>
     );
   } else if (type === 'track') {
     const { album, artists, name, external_urls } = item;
@@ -38,9 +70,9 @@ const SpotifyElement = ({ type, item }) => {
         : album.name;
 
     return (
-      <div className='spotify-element'>
+      <Paper className='spotify-element' sx={spotifyElementStyles}>
         <img className='album-image' src={album.images[0].url} alt={name} />
-        <div className='details-container'>
+        <Grid className='details-container' sx={detailsContainerStyles}>
           <a
             target='_blank'
             rel='noopener noreferrer'
@@ -52,8 +84,8 @@ const SpotifyElement = ({ type, item }) => {
               <li className='small-text'>{artistString}</li>
             </ul>
           </a>
-        </div>
-      </div>
+        </Grid>
+      </Paper>
     );
   } else return;
 };
