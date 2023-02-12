@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const nocache = require('nocache');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
@@ -52,6 +53,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
+app.use(nocache());
 
 let origin;
 if (process.env.NODE_ENV === 'development') {

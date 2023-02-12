@@ -251,7 +251,12 @@ exports.getEndpointData = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
+    if (err.code) {
+      res.status(err.code).send({ message: err.message });
+    } else {
+      res.status(500).send({ message: err.message });
+    }
   }
 };
 
