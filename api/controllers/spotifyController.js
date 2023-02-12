@@ -211,11 +211,15 @@ exports.getRefreshToken = async (req, res, next) => {
         process.env.JWT_SECRET
       );
 
-      const user = await User.findByIdAndUpdate(decodedRefresh.id, {
-        isConnectedToSpotify: true,
-        lastSpotifyAuthToken: new Date(Date.now() + 10 * 1000),
-        spotifyRefreshToken: refreshToken,
-      });
+      const user = await User.findByIdAndUpdate(
+        decodedRefresh.id,
+        {
+          isConnectedToSpotify: true,
+          lastSpotifyAuthToken: new Date(Date.now()),
+          spotifyRefreshToken: refreshToken,
+        },
+        { new: true, runValidators: true }
+      );
 
       res.status(200).json({
         status: 'success',
