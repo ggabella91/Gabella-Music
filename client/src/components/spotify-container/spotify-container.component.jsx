@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import SpotifyElement from '../spotify-element/spotify-element.component';
-import SpotifyDropdownContainer from '../spotify-dropdown/spotify-dropdown.component';
+import SelectInput from '../select-input/select-input';
 
 import {
   selectIsConnected,
@@ -28,6 +28,12 @@ import {
 } from '../../redux/spotify/spotify.actions';
 
 import './spotify-container.styles.scss';
+
+const timeRangeOptions = [
+  { value: 'long-term', displayValue: 'Long-Term' },
+  { value: 'medium-term', displayValue: 'Medium-Term' },
+  { value: 'short-term', displayValue: 'Short-Term' },
+];
 
 const SpotifyContainer = ({
   isConnected,
@@ -63,6 +69,7 @@ const SpotifyContainer = ({
       fetchTopArtistsMediumTermStart();
       fetchTopArtistsShortTermStart();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, lastTokenRefresh]);
 
   useEffect(() => {
@@ -76,6 +83,7 @@ const SpotifyContainer = ({
       fetchTopTracksMediumTermStart();
       fetchTopTracksShortTermStart();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, lastTokenRefresh]);
 
   useEffect(() => {
@@ -100,6 +108,7 @@ const SpotifyContainer = ({
         setArtists(topArtistsShortTerm.data.items);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [artistsTimeRange]);
 
   useEffect(() => {
@@ -116,6 +125,7 @@ const SpotifyContainer = ({
         setTracks(topTracksShortTerm.data.items);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tracksTimeRange]);
 
   return (
@@ -129,38 +139,12 @@ const SpotifyContainer = ({
       <div className='spotify-container'>
         <h4>Time Range: {artistsTimeRange}</h4>
         <div className='dropdown-container'>
-          <Dropdown>
-            <Dropdown.Toggle as='dropdown' id='dropdown-artists'>
-              Select Time Range
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                value='long-term'
-                onClick={() => {
-                  setArtistsTimeRange('long-term');
-                }}
-              >
-                Long-term
-              </Dropdown.Item>
-              <Dropdown.Item
-                value='medium-term'
-                onClick={() => {
-                  setArtistsTimeRange('medium-term');
-                }}
-              >
-                Medium-term
-              </Dropdown.Item>
-              <Dropdown.Item
-                value='short-term'
-                onClick={() => {
-                  setArtistsTimeRange('short-term');
-                }}
-              >
-                Short-term
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <SelectInput
+            options={timeRangeOptions}
+            selectedValue={artistsTimeRange}
+            setSelectedValue={setArtistsTimeRange}
+            defaultValue='Select Time Range'
+          />
         </div>
         {artists
           ? artists.map((artist, idx) => (
@@ -176,40 +160,13 @@ const SpotifyContainer = ({
       <h2 className='top-artists'>Your Top Spotify Tracks</h2>
       <div className='spotify-container'>
         <h4>Time Range: {tracksTimeRange}</h4>
-
         <div className='dropdown-container'>
-          <Dropdown>
-            <Dropdown.Toggle as='dropdown' id='dropdown-tracks'>
-              Select Time Range
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <Dropdown.Item
-                value='long-term'
-                onClick={() => {
-                  setTracksTimeRange('long-term');
-                }}
-              >
-                Long-term
-              </Dropdown.Item>
-              <Dropdown.Item
-                value='medium-term'
-                onClick={() => {
-                  setTracksTimeRange('medium-term');
-                }}
-              >
-                Medium-term
-              </Dropdown.Item>
-              <Dropdown.Item
-                value='short-term'
-                onClick={() => {
-                  setTracksTimeRange('short-term');
-                }}
-              >
-                Short-term
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <SelectInput
+            options={timeRangeOptions}
+            selectedValue={tracksTimeRange}
+            setSelectedValue={setTracksTimeRange}
+            defaultValue='Select Time Range'
+          />
         </div>
         {tracks
           ? tracks.map((track, idx) => (
