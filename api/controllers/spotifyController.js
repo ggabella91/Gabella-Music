@@ -52,7 +52,10 @@ const stateKey = 'spotify_auth_state';
 
 exports.login = (req, res, next) => {
   const state = generateRandomString(16);
-  res.cookie(stateKey, state);
+  res.cookie(stateKey, state, {
+    httpOnly: true,
+    secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
+  });
 
   console.log(req.cookies);
 
@@ -88,6 +91,7 @@ exports.callback = async (req, res, next) => {
     res.cookie(stateKey, '', {
       expires: new Date(Date.now() + 1000),
       httpOnly: true,
+      secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
     });
 
     const postHeaders = {
@@ -137,11 +141,13 @@ exports.callback = async (req, res, next) => {
           res.cookie('spotifyAuthToken', accessToken, {
             httpOnly: true,
             expires: new Date(Date.now() + 1000 * 60 * 60),
+            secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
           });
 
           res.cookie('spotifyRefreshToken', refreshToken, {
             httpOnly: true,
             expires: new Date(Date.now() + 1000 * 60 * 60),
+            secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
           });
 
           const user = markConnectedToSpotify(jwtCookie, refreshToken);
@@ -203,6 +209,7 @@ exports.getRefreshToken = async (req, res, next) => {
       res.cookie('spotifyAuthToken', accessToken, {
         httpOnly: true,
         overwrite: true,
+        secure: req.secure || req.headers['x-forwarded-proto'] === 'https',
       });
 
       // Update lastSpotifyAuthToken user property
@@ -227,7 +234,8 @@ exports.getRefreshToken = async (req, res, next) => {
       });
     }
   } catch (err) {
-    console.log(err.message);
+    console.log(err.response);
+    res.status(err.response.status).send({ message: err.message });
   }
 };
 
