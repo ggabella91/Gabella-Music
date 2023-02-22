@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Select, MenuItem } from '@mui/material';
 
 const SelectInput = ({
