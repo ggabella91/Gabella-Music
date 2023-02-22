@@ -1,42 +1,29 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import { signOutStart } from '../../redux/user/user.actions';
 
-import Dropdown from 'react-bootstrap/Dropdown';
 import './header.styles.scss';
+import SelectInput from '../select-input/select-input';
+
+const settingsOptions = [
+  { value: 'settings', displayValue: 'Settings' },
+  { value: 'sign-out', displayValue: 'Sign Out' },
+];
 
 const Header = ({ currentUser, signOutStart }) => {
+  const [settingsOption, setSettingsOption] = useState('');
   let history = useHistory();
 
-  const handleRenderSettingsDropdown = () => {
-    return currentUser !== null ? (
-      <Dropdown>
-        <Dropdown.Toggle as='dropdown-settings' id='dropdown-my-account'>
-          My Account
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item
-            value='settings'
-            onClick={() => history.push('/settings')}
-          >
-            Settings
-          </Dropdown.Item>
-          <Dropdown.Item
-            value='sign-out'
-            onClick={() => {
-              signOutStart();
-            }}
-          >
-            Sign out
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    ) : null;
-  };
+  useEffect(() => {
+    if (settingsOption === 'settings') {
+      history.push('/settings');
+    } else if (settingsOption === 'sign-out') {
+      signOutStart();
+    }
+  }, [history, settingsOption, signOutStart]);
 
   return (
     <div className='header-container'>
@@ -44,7 +31,14 @@ const Header = ({ currentUser, signOutStart }) => {
         <h1>Gabella Music</h1>
       </NavLink>
       <div className='dropdown-settings-container'>
-        {handleRenderSettingsDropdown()}
+        {!!currentUser && (
+          <SelectInput
+            options={settingsOptions}
+            selectedValue={settingsOption}
+            setSelectedValue={setSettingsOption}
+            defaultValue='My Account'
+          />
+        )}
       </div>
     </div>
   );
