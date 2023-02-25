@@ -40,7 +40,7 @@ const SpotifyElement = ({ type, item }) => {
     return (
       <Paper className='spotify-element' sx={spotifyElementStyles}>
         <img className='artist-image' src={images[0].url} alt={name} />
-        <Typography sx={{ marginTop: 5 }}>
+        <Typography sx={{ marginTop: '5px' }}>
           <a
             target='_blank'
             rel='noopener noreferrer'
