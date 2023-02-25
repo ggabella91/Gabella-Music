@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
@@ -16,6 +16,7 @@ const settingsOptions = [
 const Header = ({ currentUser, signOutStart }) => {
   const [settingsOption, setSettingsOption] = useState('');
   let history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     if (settingsOption === 'settings') {
@@ -24,6 +25,10 @@ const Header = ({ currentUser, signOutStart }) => {
       signOutStart();
     }
   }, [history, settingsOption, signOutStart]);
+
+  useEffect(() => {
+    setSettingsOption('');
+  }, [location.pathname]);
 
   return (
     <div className='header-container'>
@@ -37,6 +42,7 @@ const Header = ({ currentUser, signOutStart }) => {
             selectedValue={settingsOption}
             setSelectedValue={setSettingsOption}
             defaultValue='My Account'
+            style={{ backgroundColor: '#FFC107' }}
           />
         )}
       </div>

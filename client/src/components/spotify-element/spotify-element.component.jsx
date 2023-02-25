@@ -40,7 +40,7 @@ const SpotifyElement = ({ type, item }) => {
     return (
       <Paper className='spotify-element' sx={spotifyElementStyles}>
         <img className='artist-image' src={images[0].url} alt={name} />
-        <Typography>
+        <Typography sx={{ marginTop: 5 }}>
           <a
             target='_blank'
             rel='noopener noreferrer'
@@ -78,7 +78,7 @@ const SpotifyElement = ({ type, item }) => {
             rel='noopener noreferrer'
             href={external_urls.spotify}
           >
-            <ul>
+            <ul style={{ marginTop: '5px' }}>
               <li className='main-text'>{nameString}</li>
               <li className='small-text'>{albumString}</li>
               <li className='small-text'>{artistString}</li>

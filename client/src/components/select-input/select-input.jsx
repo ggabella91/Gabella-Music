@@ -5,6 +5,7 @@ const SelectInput = ({
   selectedValue,
   setSelectedValue,
   defaultValue,
+  style,
 }) => {
   const handleOptionChange = (event) => {
     const { value } = event.target;
@@ -25,7 +26,7 @@ const SelectInput = ({
           horizontal: 'center',
         },
       }}
-      sx={{ width: 250 }}
+      sx={{ width: 250, ...style }}
     >
       <MenuItem key={defaultValue} value='select-option' disabled>
         {defaultValue}
