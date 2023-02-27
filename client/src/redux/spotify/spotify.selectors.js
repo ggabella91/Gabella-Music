@@ -46,3 +46,8 @@ export const selectTopTracksShortTerm = createSelector(
   [selectSpotifyState],
   (spotifyState) => spotifyState.topTracksShortTerm
 );
+
+export const selectSpotifyError = createSelector(
+  [selectSpotifyState],
+  (spotifyState) => spotifyState.error
+);

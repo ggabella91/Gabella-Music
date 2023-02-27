@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 import {
   selectIsConnected,
   selectLastTokenRefresh,
+  selectSpotifyError,
 } from '../../redux/spotify/spotify.selectors';
 import {
   checkConnection,
@@ -26,17 +27,19 @@ const HomePage = ({
   refreshAuthTokenStart,
   lastTokenRefresh,
 }) => {
+  const spotifyError = useSelector(selectSpotifyError);
+
   useEffect(() => {
     checkConnection();
   }, []);
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh) {
-      if (lastTokenRefresh + 60 * 60 * 1000 < Date.now()) {
+      if (lastTokenRefresh + 60 * 60 * 1000 < Date.now() || spotifyError) {
         refreshAuthTokenStart();
       }
     }
-  }, [isConnected, lastTokenRefresh]);
+  }, [isConnected, lastTokenRefresh, refreshAuthTokenStart, spotifyError]);
 
   const handleConnectToSpotifyButton = async () => {
     if (process.env.NODE_ENV === 'development') {
