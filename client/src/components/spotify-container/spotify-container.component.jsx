@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import Dropdown from 'react-bootstrap/Dropdown';
 import SpotifyElement from '../spotify-element/spotify-element.component';
 import SelectInput from '../select-input/select-input';
 
@@ -56,8 +55,12 @@ const SpotifyContainer = ({
   const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
-  const [artistsTimeRange, setArtistsTimeRange] = useState('');
-  const [tracksTimeRange, setTracksTimeRange] = useState('');
+  const [artistsTimeRange, setArtistsTimeRange] = useState(
+    timeRangeOptions[0].value
+  );
+  const [tracksTimeRange, setTracksTimeRange] = useState(
+    timeRangeOptions[0].value
+  );
 
   useEffect(() => {
     if (
