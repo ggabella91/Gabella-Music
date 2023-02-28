@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Link, Paper, Typography } from '@mui/material';
 
 import './spotify-element.styles.scss';
 
@@ -15,7 +15,7 @@ const spotifyElementStyles = {
   justifyContent: 'space-evenly',
   borderRadius: '15px',
   backgroundColor: '#ffc107',
-  color: 'white',
+  color: 'black',
   border: 'none',
   marginTop: '20px',
   textTransform: 'capitalize',
@@ -34,22 +34,30 @@ const detailsContainerStyles = {
   textOverflow: 'ellipsis',
 };
 
+const linkStyles = {
+  color: 'black',
+  textDecoration: 'none',
+  '&:hover': {
+    color: 'black',
+    textDecoration: 'none',
+  },
+};
+
 const SpotifyElement = ({ type, item }) => {
   if (type === 'artist') {
     const { name, images, external_urls } = item;
     return (
-      <Paper className='spotify-element' sx={spotifyElementStyles}>
-        <img className='artist-image' src={images[0].url} alt={name} />
-        <Typography sx={{ marginTop: '5px' }}>
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href={external_urls.spotify}
-          >
-            {name}
-          </a>
-        </Typography>
-      </Paper>
+      <Link
+        target='_blank'
+        rel='noopener noreferrer'
+        href={external_urls.spotify}
+        sx={linkStyles}
+      >
+        <Paper className='spotify-element' sx={spotifyElementStyles}>
+          <img className='artist-image' src={images[0].url} alt={name} />
+          <Typography sx={{ marginTop: '5px' }}>{name}</Typography>
+        </Paper>
+      </Link>
     );
   } else if (type === 'track') {
     const { album, artists, name, external_urls } = item;
@@ -70,22 +78,23 @@ const SpotifyElement = ({ type, item }) => {
         : album.name;
 
     return (
-      <Paper className='spotify-element' sx={spotifyElementStyles}>
-        <img className='album-image' src={album.images[0].url} alt={name} />
-        <Grid className='details-container' sx={detailsContainerStyles}>
-          <a
-            target='_blank'
-            rel='noopener noreferrer'
-            href={external_urls.spotify}
-          >
+      <Link
+        target='_blank'
+        rel='noopener noreferrer'
+        href={external_urls.spotify}
+        sx={linkStyles}
+      >
+        <Paper className='spotify-element' sx={spotifyElementStyles}>
+          <img className='album-image' src={album.images[0].url} alt={name} />
+          <Grid className='details-container' sx={detailsContainerStyles}>
             <ul style={{ marginTop: '5px' }}>
               <li className='main-text'>{nameString}</li>
               <li className='small-text'>{albumString}</li>
               <li className='small-text'>{artistString}</li>
             </ul>
-          </a>
-        </Grid>
-      </Paper>
+          </Grid>
+        </Paper>
+      </Link>
     );
   } else return;
 };

@@ -31,7 +31,7 @@ const HomePage = ({
 
   useEffect(() => {
     checkConnection();
-  }, []);
+  }, [checkConnection]);
 
   useEffect(() => {
     if (isConnected && lastTokenRefresh) {
