@@ -55,12 +55,8 @@ const SpotifyContainer = ({
   const [userPhoto, setUserPhoto] = useState('');
   const [artists, setArtists] = useState([]);
   const [tracks, setTracks] = useState([]);
-  const [artistsTimeRange, setArtistsTimeRange] = useState(
-    timeRangeOptions[0].value
-  );
-  const [tracksTimeRange, setTracksTimeRange] = useState(
-    timeRangeOptions[0].value
-  );
+  const [artistsTimeRange, setArtistsTimeRange] = useState('');
+  const [tracksTimeRange, setTracksTimeRange] = useState('');
 
   useEffect(() => {
     if (

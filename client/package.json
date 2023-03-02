@@ -2,7 +2,6 @@
   "name": "client",
   "version": "1.0.0",
   "private": true,
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "dependencies": {
     "@emotion/react": "^11.10.5",
