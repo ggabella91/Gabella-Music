@@ -22,10 +22,12 @@ import {
 } from '../../redux/spotify/spotify.actions.js';
 
 import FormInput from '../../components/form-input/form-input.component';
-import Button from '../../components/button/button.component';
+import CustomButton from '../../components/button/button.component';
 import CustomModal from '../../components/modal/modal.component';
 
 import Alert from 'react-bootstrap/Alert';
+
+import { Button } from '@mui/material';
 
 import './settings-page.styles.scss';
 
@@ -202,7 +204,13 @@ const SettingsPage = ({
   return (
     <div className='settings '>
       <Button
-        className='button settings-button home'
+        // className='button settings-button home'
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: '#ffc107',
+          color: 'black',
+        }}
         onClick={(e) => {
           e.preventDefault();
           handleBackToHomePage();
@@ -229,13 +237,13 @@ const SettingsPage = ({
           required
         />
         <div className='button'>
-          <Button
+          <CustomButton
             className='button settings-button'
             onSubmit={handleSubmitInfo}
             type='submit'
           >
             <span>Update Info</span>
-          </Button>
+          </CustomButton>
         </div>
       </form>
       <div className='settings-alert'>
@@ -273,13 +281,13 @@ const SettingsPage = ({
           required
         />
         <div className='button'>
-          <Button
+          <CustomButton
             className='button settings-button'
             onSubmit={handleSubmitPassword}
             type='submit'
           >
             <span>Change Password</span>
-          </Button>
+          </CustomButton>
         </div>
       </form>
       <div className='settings-alert bottom-alert'>
@@ -292,7 +300,7 @@ const SettingsPage = ({
       </div>
       <div>{handleRenderDisconnectButton()}</div>
       <div>
-        <Button
+        <CustomButton
           className={
             isConnected
               ? 'button settings-button'
@@ -301,7 +309,7 @@ const SettingsPage = ({
           onClick={() => setModalShow(true)}
         >
           <span>Delete Account</span>
-        </Button>
+        </CustomButton>
       </div>
       <CustomModal
         show={modalShow}
