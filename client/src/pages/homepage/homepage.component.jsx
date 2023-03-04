@@ -13,7 +13,7 @@ import {
   refreshAuthTokenStart,
 } from '../../redux/spotify/spotify.actions';
 
-import Button from '../../components/button/button.component';
+import { Grid, Button, Typography } from '@mui/material';
 import SpotifyContainer from '../../components/spotify-container/spotify-container.component';
 
 import axios from 'axios';
@@ -52,10 +52,20 @@ const HomePage = ({
   const handleRenderSpotifyButton = () => {
     return isConnected ? null : (
       <Button
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          backgroundColor: '#ffc107',
+          color: 'black',
+          textTransform: 'capitalize',
+          padding: '20px',
+          '&:hover': {
+            backgroundColor: '#ffc107',
+          },
+        }}
         onClick={handleConnectToSpotifyButton}
-        className='button submit-button'
       >
-        <span>Connect to Spotify</span>
+        <Typography>Connect to Spotify</Typography>
       </Button>
     );
   };
@@ -68,15 +78,19 @@ const HomePage = ({
 
   const firstName = currentUser.name.split(' ')[0];
   return (
-    <div className='homepage'>
-      <div>
+    <Grid className='homepage'>
+      <Grid>
         <h2>Welcome, {firstName}!</h2>
-        <div className='button-container'>
-          <div className='button'>{handleRenderSpotifyButton()}</div>
-          <div className='spotify'>{handleRenderSpotifyContainer()}</div>
-        </div>
-      </div>
-    </div>
+        <Grid className='button-container'>
+          <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+            {handleRenderSpotifyButton()}
+          </Grid>
+          <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
+            {handleRenderSpotifyContainer()}
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 

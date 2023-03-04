@@ -22,14 +22,33 @@ import {
 } from '../../redux/spotify/spotify.actions.js';
 
 import FormInput from '../../components/form-input/form-input.component';
-import CustomButton from '../../components/button/button.component';
 import CustomModal from '../../components/modal/modal.component';
 
 import Alert from 'react-bootstrap/Alert';
 
-import { Button } from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 
 import './settings-page.styles.scss';
+
+const settingsButtonStyles = {
+  display: 'flex',
+  justifyContent: 'center',
+  backgroundColor: '#ffc107',
+  color: 'black',
+  textTransform: 'capitalize',
+  padding: '20px',
+  '&:hover': {
+    backgroundColor: '#ffc107',
+  },
+};
+
+const settingsAlertStyles = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  width: '350px',
+  marginTop: '20px',
+};
 
 const SettingsPage = ({
   checkConnection,
@@ -94,10 +113,15 @@ const SettingsPage = ({
   const handleRenderDisconnectButton = () =>
     isConnected ? (
       <Button
-        className='button settings-button disconnect'
+        sx={{
+          ...settingsButtonStyles,
+          minWidth: '240px',
+          marginTop: '120px',
+          marginBottom: '20px',
+        }}
         onClick={disconnectStart}
       >
-        <span>Disconnect From Spotify</span>
+        <Typography>Disconnect From Spotify</Typography>
       </Button>
     ) : null;
 
@@ -202,24 +226,34 @@ const SettingsPage = ({
   };
 
   return (
-    <div className='settings '>
+    <Grid
+      sx={{
+        width: '2vw',
+        minWidth: '200px',
+        maxWidth: '250px',
+        paddingTop: '0px',
+        height: '1350px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyItems: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: '60px',
+        marginLeft: '50%',
+        transform: 'translate(-50%)',
+      }}
+    >
       <Button
-        // className='button settings-button home'
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          backgroundColor: '#ffc107',
-          color: 'black',
-        }}
+        sx={{ ...settingsButtonStyles, width: '180px' }}
         onClick={(e) => {
           e.preventDefault();
           handleBackToHomePage();
         }}
       >
-        <span>Back to Home</span>
+        <Typography>Back to Home</Typography>
       </Button>
       <form className='change-info' onSubmit={handleSubmitInfo}>
-        <span>Update your info</span>
+        <Typography>Update your info</Typography>
         <FormInput
           type='text'
           name='name'
@@ -236,26 +270,26 @@ const SettingsPage = ({
           label='email'
           required
         />
-        <div className='button'>
-          <CustomButton
+        <Grid sx={{ display: 'flex' }}>
+          <Button
             className='button settings-button'
+            sx={{ ...settingsButtonStyles, width: '220px', height: '60px' }}
             onSubmit={handleSubmitInfo}
-            type='submit'
           >
-            <span>Update Info</span>
-          </CustomButton>
-        </div>
+            <Typography>Update Info</Typography>
+          </Button>
+        </Grid>
       </form>
-      <div className='settings-alert'>
+      <Grid sx={settingsAlertStyles}>
         {statusInfo.error
           ? handleRenderAlert('errorInfo', 'Error updating info.')
           : null}
         {statusInfo.success
           ? handleRenderAlert('successInfo', 'Info updated successfully!')
           : null}
-      </div>
+      </Grid>
       <form className='change-info' onSubmit={handleSubmitPassword}>
-        <span>Change your password</span>
+        <Typography>Change your password</Typography>
         <FormInput
           type='password'
           name='passwordCurrent'
@@ -280,37 +314,33 @@ const SettingsPage = ({
           label='confirm new password'
           required
         />
-        <div className='button'>
-          <CustomButton
-            className='button settings-button'
+        <Grid sx={{ display: 'flex' }}>
+          <Button
+            sx={{ ...settingsButtonStyles, width: '220px' }}
             onSubmit={handleSubmitPassword}
-            type='submit'
           >
-            <span>Change Password</span>
-          </CustomButton>
-        </div>
+            <Typography>Change Password</Typography>
+          </Button>
+        </Grid>
       </form>
-      <div className='settings-alert bottom-alert'>
+      <Grid sx={{ ...settingsAlertStyles, marginTop: '100px' }}>
         {statusPass.error
           ? handleRenderAlert('errorPass', 'Error changing password.')
           : null}
         {statusPass.success
           ? handleRenderAlert('successPass', 'Password changed successfully!')
           : null}
-      </div>
-      <div>{handleRenderDisconnectButton()}</div>
-      <div>
-        <CustomButton
-          className={
-            isConnected
-              ? 'button settings-button'
-              : 'button settings-button bottom-button'
-          }
+      </Grid>
+      <Grid>{handleRenderDisconnectButton()}</Grid>
+      <Grid>
+        <Button
+          sx={settingsButtonStyles}
+          style={!isConnected ? { marginTop: '120px' } : {}}
           onClick={() => setModalShow(true)}
         >
-          <span>Delete Account</span>
-        </CustomButton>
-      </div>
+          <Typography>Delete Account</Typography>
+        </Button>
+      </Grid>
       <CustomModal
         show={modalShow}
         onHide={() => setModalShow(false)}
@@ -322,7 +352,7 @@ const SettingsPage = ({
           deleteAccountStart();
         }}
       />
-    </div>
+    </Grid>
   );
 };
 

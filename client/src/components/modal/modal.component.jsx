@@ -1,7 +1,23 @@
 import React from 'react';
 
 import Modal from 'react-bootstrap/Modal';
-import Button from '../button/button.component';
+import { Button } from '@mui/material';
+
+const modalButtonStyles = {
+  width: '120px',
+  height: '60px',
+  maxWidth: '120px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  color: 'black',
+  backgroundColor: '#ffc107',
+  textTransform: 'capitalize',
+  textAlign: 'center',
+  '&:hover': {
+    backgroundColor: '#ffc107',
+  },
+};
 
 const CustomModal = (props) => (
   <Modal {...props} dialogClassName='custom-modal' centered>
@@ -15,11 +31,20 @@ const CustomModal = (props) => (
       <p>{props.bodytext}</p>
     </Modal.Body>
     <Modal.Footer>
-      <Button className='button modal-button' onClick={props.onHide}>
+      <Button sx={modalButtonStyles} onClick={props.onHide}>
         Cancel
       </Button>
       <Button
-        className='button modal-button delete-button'
+        sx={{
+          ...modalButtonStyles,
+          minWidth: '180px',
+          marginLeft: '15px',
+          color: 'white',
+          backgroundColor: '#f44336',
+          '&:hover': {
+            backgroundColor: '#f44336',
+          },
+        }}
         onClick={props.handleConfirm}
       >
         {props.actionlabel}
