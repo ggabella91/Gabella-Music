@@ -49,7 +49,7 @@ const HomePage = ({
     }
   };
 
-  const handleRenderSpotifyButton = () => {
+  const renderSpotifyButton = () => {
     return isConnected ? null : (
       <Button
         sx={{
@@ -70,7 +70,7 @@ const HomePage = ({
     );
   };
 
-  const handleRenderSpotifyContainer = () => {
+  const renderSpotifyContainer = () => {
     return isConnected && lastTokenRefresh !== null ? (
       <SpotifyContainer />
     ) : null;
@@ -83,10 +83,10 @@ const HomePage = ({
         <h2>Welcome, {firstName}!</h2>
         <Grid className='button-container'>
           <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-            {handleRenderSpotifyButton()}
+            {renderSpotifyButton()}
           </Grid>
           <Grid sx={{ display: 'flex', justifyContent: 'center' }}>
-            {handleRenderSpotifyContainer()}
+            {renderSpotifyContainer()}
           </Grid>
         </Grid>
       </Grid>
